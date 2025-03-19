@@ -87,6 +87,47 @@ table {
     flex-grow: 4;
 }
 
+.vertical-align {
+    vertical-align: bottom;
+}
+
+/*******
+
+
+MARGIN
+
+********/
+
+.margin-y-5 {
+    margin: 5px 0;
+}
+
+/*******
+
+
+PADDING
+
+********/
+
+.padding-top-10 {
+    padding-top: 10px;
+}
+
+.padding-y-10 {
+    padding: 10px 0;
+}
+
+.padding-y-5 {
+    padding: 5px 0;
+}
+
+/*******
+
+
+WIDTH
+
+********/
+
 .width-40 {
     width: 40%;
 }
@@ -114,4 +155,20 @@ table {
 .text-justify {
     text-align: justify;
 }
+
+.bg-white {
+    background: #ffffff;
+}
+
+/*******
+
+
+WIDTH
+
+********/
+
+.border-none {
+    border: none;
+}
+
 
