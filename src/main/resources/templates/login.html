@@ -3,9 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
+
+  <link th:rel="stylesheet" th:href="@{/css/index.css}">
+  <link th:rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h1>Acesse a área administrativa</h1>
+<body class="overflow-y-hidden">
+<div class="flex flex-row flex-justify-start flex-align-stretch height-1100">
+  <div class="escuro flex-grow-4 flex flex-justify-center">
+    <div class="flex-align-center">um</div>
+  </div>
+  <div class="claro flex-grow-6 flex flex-justify-center">
+    <div class="flex-align-center">
+      <h1>Agir - Mai Dai</h1>
+
+      <div>
+        <form th:action="@{/login}" th:object="${user}" method="post">
+          <input type="text" name="username" placeholder="Email" require>
+          <input type="password" name="password" placeholder="Senha" require>
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
