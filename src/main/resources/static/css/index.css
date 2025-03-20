@@ -28,8 +28,8 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
-body {
-    line-height: 1;
+html {
+    line-height: 1.5;
 }
 ol, ul {
     list-style: none;
@@ -46,6 +46,49 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
+html {
+    font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 20px 0;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.6rem;
+}
+
+h4 {
+    font-size: 1.4rem;
+}
+
+h5 {
+    font-size: 1.2rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+/*******
+
+
+FLEX
+
+********/
 
 .flex {
     display: flex;
@@ -79,6 +122,10 @@ table {
     align-items: stretch;
 }
 
+.flex-grow-8 {
+    flex-grow: 8;
+}
+
 .flex-grow-6 {
     flex-grow: 6;
 }
@@ -87,10 +134,9 @@ table {
     flex-grow: 4;
 }
 
-.vertical-align {
-    vertical-align: bottom;
+.flex-grow-2 {
+    flex-grow: 2;
 }
-
 /*******
 
 
@@ -104,25 +150,51 @@ MARGIN
 
 /*******
 
-
 PADDING
 
 ********/
 
+.padding-top-100 {
+    padding-top: 100px;
+}
+
 .padding-top-10 {
     padding-top: 10px;
+}
+
+.padding-y-20 {
+    padding: 20px 0;
+}
+
+.padding-y-15 {
+    padding: 15px 0;
 }
 
 .padding-y-10 {
     padding: 10px 0;
 }
 
+.padding-x-20 {
+    padding: 0px 20px;
+}
+
 .padding-y-5 {
     padding: 5px 0;
 }
 
-/*******
+.padding-20 {
+    padding: 20px;
+}
 
+.padding-15 {
+    padding: 15px;
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+/*******
 
 WIDTH
 
@@ -140,20 +212,14 @@ WIDTH
     height: 1100px;
 }
 
+/*******
+
+OVERFLOW
+
+********/
+
 .overflow-y-hidden {
     overflow-y: hidden;
-}
-
-.text-right {
-    text-align: right;
-}
-
-.text-left {
-    text-align: left;
-}
-
-.text-justify {
-    text-align: justify;
 }
 
 .bg-white {
@@ -162,8 +228,7 @@ WIDTH
 
 /*******
 
-
-WIDTH
+BORDER
 
 ********/
 
@@ -171,4 +236,23 @@ WIDTH
     border: none;
 }
 
+/*******
 
+TEXT
+
+********/
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}

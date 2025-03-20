@@ -2,8 +2,9 @@ package com.agir.maidai.entity;
 
 import jakarta.persistence.*;
 
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +35,9 @@ public class User {
 
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Role> roles;
 
     public User() {
     }
@@ -102,6 +106,24 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void addRoles(Role tempRoles) {
+        if(roles == null) {
+            roles = new ArrayList<>();
+        }
+
+        roles.add(tempRoles);
+
+        tempRoles.setUser(this);
     }
 
     @Override

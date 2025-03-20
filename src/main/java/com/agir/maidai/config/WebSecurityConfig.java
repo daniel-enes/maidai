@@ -22,15 +22,17 @@ public class WebSecurityConfig {
     }
 
     private final String[] publicUrl = {
-            "/global-search/**",
             //"/users",
             //"/users/create",
             "/webjars/**",
             "/resources/**",
+            "/static/**",
             "/assets/**",
             "/css/**",
             "/summernote/**",
             "/js/**",
+            "/*.jpg",
+            "/*.png",
             "/*.css",
             "/*.js",
             "/*.js.map",

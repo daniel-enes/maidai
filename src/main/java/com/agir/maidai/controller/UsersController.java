@@ -11,8 +11,10 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -25,12 +27,33 @@ public class UsersController {
         this.userService = userService;
     }
 
+    @GetMapping("/users")
+    public String index(Model model) {
+
+        List<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "users/users";
+    }
+
+    @GetMapping("/users/{id}")
+    public String show(@PathVariable int id, Model model) {
+
+        Optional<User> userOptional = userService.getUserById(id);
+
+        if(userOptional.isPresent()) {
+            User user = userOptional.get();
+            model.addAttribute("user", user);
+            return "users/user";
+        }
+        return "redirect:/";
+    }
+
     @GetMapping("/users/create")
     public String create(Model model) {
 
         model.addAttribute("user", new User());
 
-        return "form-user";
+        return "users/form-user";
     }
 
     @PostMapping("/users")
