@@ -23,7 +23,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-
     @Column(name = "name")
     private String name;
 
@@ -36,8 +35,13 @@ public class User {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "user")
-    private List<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name ="users_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }
@@ -116,14 +120,14 @@ public class User {
         this.roles = roles;
     }
 
-    public void addRoles(Role tempRoles) {
-        if(roles == null) {
-            roles = new ArrayList<>();
-        }
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
 
-        roles.add(tempRoles);
-
-        tempRoles.setUser(this);
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     @Override

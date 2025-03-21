@@ -4,6 +4,8 @@ import com.agir.maidai.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +23,25 @@ public class WebSecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
     }
 
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+        hierarchy.setHierarchy("administrador > colaborador");
+        return hierarchy;
+    }
+
+    private final String[] adminUrls = {
+            "/users",
+            "/users/**"
+    };
+
+    private final String[] collaboratorUrls = {
+            "/",
+            "/access-denied",
+            "/teste",
+            "/templates/**",
+    };
+
     private final String[] publicUrl = {
             //"/users",
             //"/users/create",
@@ -29,14 +50,13 @@ public class WebSecurityConfig {
             "/static/**",
             "/assets/**",
             "/css/**",
-            "/summernote/**",
             "/js/**",
-            "/*.jpg",
-            "/*.png",
-            "/*.css",
-            "/*.js",
-            "/*.js.map",
-            "/fonts**", "/favicon.ico", "/resources/**", "/error"};
+            "/fonts/**",
+            "/favicon.ico",
+            "/error",
+            "/templates/**", // Allow access to Thymeleaf templates
+            "/fragments/**"  // Allow access to Thymeleaf fragments
+             };
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,7 +65,10 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests(auth -> {
                 auth.requestMatchers(publicUrl).permitAll();
-                auth.anyRequest().authenticated();
+                auth
+                        .requestMatchers(collaboratorUrls).hasAnyAuthority("colaborador")
+                        .requestMatchers(adminUrls).hasAnyAuthority("administrador")
+                        .anyRequest().authenticated();
             }
         );
 
@@ -55,6 +78,10 @@ public class WebSecurityConfig {
                 logout.logoutUrl("/logout");
                 logout.logoutSuccessUrl("/");
         });
+
+        http.exceptionHandling(configurer ->
+                configurer.accessDeniedPage("/access-denied")
+        );
 
 
         return http.build();

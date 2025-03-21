@@ -2,7 +2,7 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Formulário de usuário</title>
+    <title>Acesso negado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:rel="stylesheet" th:href="@{/css/index.css}">
     <link th:rel="stylesheet" th:href="@{/css/style.css}">
@@ -51,50 +51,8 @@
         </div>
     </div>
     <div class="light flex-grow-8 padding-20">
-        <h1>Cadastre um novo usuário</h1>
-        <fieldset>
-            <legend>Dados do usuário</legend>
-            <form th:action="@{/users}" th:object="${user}" method="post">
-                <div>
-                    <label for="name">Nome: </label>
-                    <input type="text" name="name" id="name" th:field="*{name}" required>
-                </div>
-
-                <div>
-                    <label for="email">E-mail:</label>
-                    <input type="email" name="email" id="email" th:field="*{email}" required>
-                </div>
-
-                <div>
-                    <label for="password">Senha:</label>
-                    <input type="password" name="password" id="password" th:field="*{password}" required>
-                </div>
-                <div>
-                    <label for="roles">Função: </label>
-                    <select id="roles" name="roles" th:field="*{roles}" required>
-                        <option th:each="role : ${roles}"
-                                th:value="${role.id}"
-                                th:text="${role.name}">
-                        </option>
-                    </select>
-                    <!--
-                    <div th:each="role : ${roles}">
-                        <input type="checkbox"
-                               th:field="*{roles}"
-                               th:value="${role.id}"
-                               th:id="${'role-'+role.id}"
-                        >
-                        <label th:for="${'role-'+role.id}" th:text="${role.name}"></label>
-                    </div>
-                    -->
-                </div>
-
-                <div>
-                    <button type="submit">Cadastrar usuário</button>
-                </div>
-
-            </form>
-        </fieldset>
+        <h1>Acesso negado</h1>
+        <p>Lamento, mas você não está autorizado a acessar essa página.</p>
     </div>
 </div>
 

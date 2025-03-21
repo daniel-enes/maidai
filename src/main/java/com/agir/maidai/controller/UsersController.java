@@ -1,6 +1,8 @@
 package com.agir.maidai.controller;
 
+import com.agir.maidai.entity.Role;
 import com.agir.maidai.entity.User;
+import com.agir.maidai.service.RoleService;
 import com.agir.maidai.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,10 +23,11 @@ import java.util.Optional;
 public class UsersController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public UsersController(UserService userService) {
-
+    public UsersController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/users")
@@ -52,7 +55,8 @@ public class UsersController {
     public String create(Model model) {
 
         model.addAttribute("user", new User());
-
+        List<Role> roles = roleService.getAllRoles();
+        model.addAttribute("roles", roles);
         return "users/form-user";
     }
 
@@ -70,8 +74,6 @@ public class UsersController {
         }
 
         User newUser = userService.createUser(user);
-
-        System.out.println(newUser);
 
         return "redirect:/";
     }
@@ -92,4 +94,10 @@ public class UsersController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "users/access-denied";
+    }
+
 }
