@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{components/layout}">
+<head>
+    <title>Configurações</title>
+</head>
+
+<body>
+<main class="light flex-grow-8 padding-20" layout:fragment="content">
+    <h1>Configurações</h1>
+    <fieldset>
+        <legend>Alterar senha</legend>
+        <form method="post" class="max-width-500px">
+            <div>
+                <label for="password">Senha atual:</label>
+                <input type="password" name="" id="password" required>
+            </div>
+            <div>
+                <label for="new-password">Nova senha:</label>
+                <input type="password" name="password" id="new-password" required>
+            </div>
+            <div>
+                <label for="repeat-password">Repetir senha:</label>
+                <input type="password" name="" id="repeat-password" required>
+            </div>
+
+            <div>
+                <button type="submit" class="button success font-light">Alterar senha</button>
+            </div>
+        </form>
+    </fieldset>
+    <div sec:authorize="hasAuthority('administrador')">
+        <h2>Usuários</h2>
+        <p >
+            <svg class="vertical-align-middle" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#03a696" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg>
+            <a th:href="@{/users/create}">Cadastrar novo usuário.</a>
+        </p>
+    </div>
+</main>
+</body>
+</html>

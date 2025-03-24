@@ -37,9 +37,10 @@ public class WebSecurityConfig {
 
     private final String[] collaboratorUrls = {
             "/",
+            "/settings",
             "/access-denied",
-            "/teste",
             "/templates/**",
+
     };
 
     private final String[] publicUrl = {

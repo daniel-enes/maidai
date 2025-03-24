@@ -51,7 +51,7 @@ html {
     font-size: 16px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, legend, select {
     margin: 20px 0;
 }
 
@@ -79,8 +79,20 @@ h6 {
     font-size: 1rem;
 }
 
+legend {
+    font-size: 1.4rem;
+    text-decoration: underline;
+}
+
 a {
     text-decoration: none;
+    color: #03A696;
+}
+
+input {
+    width: 100%;
+    display: inline;
+    margin: 0 0 20px 0;
 }
 
 /*******
@@ -144,6 +156,10 @@ MARGIN
 
 ********/
 
+.margin-y-20 {
+    margin: 20px 0;
+}
+
 .margin-y-5 {
     margin: 5px 0;
 }
@@ -200,6 +216,10 @@ WIDTH
 
 ********/
 
+.max-width-500px {
+    max-width: 500px;
+}
+
 .width-40 {
     width: 40%;
 }
@@ -255,4 +275,8 @@ TEXT
 
 .text-justify {
     text-align: justify;
+}
+
+.vertical-align-middle {
+    vertical-align: middle;
 }

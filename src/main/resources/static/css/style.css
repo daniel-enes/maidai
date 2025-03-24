@@ -127,11 +127,11 @@ FONTS
   font-style: normal;
 }
 
-html {
+* {
     font-family: "Jost", sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, legend {
     font-family: "Poppins", sans-serif;
     color: #2D3940;
 }
@@ -150,6 +150,10 @@ CORES
     background: #F2F2F2;
 }
 
+.success {
+    background: #03A696;
+}
+
 .font-dark {
     color: #2D3940;
 }
@@ -164,6 +168,26 @@ CORES
 
 /*******
 
+FORM
+
+********/
+
+input {
+    box-sizing: border-box;
+    font-size: 1.2rem;
+    padding: 10px 5px 0 5px;
+    border: none;
+    border-bottom: 2px solid #2D3940;
+    outline: none;
+    background: none;
+}
+
+input:focus {
+    background: #fff;
+}
+
+/*******
+
 LOGIN FORM
 
 ********/
@@ -172,7 +196,6 @@ LOGIN FORM
     width: 300px;
     height: auto;
     margin: 40px 0 0 0;
-    /*background: #ccc;*/
 }
 
 .input-container {
@@ -184,30 +207,14 @@ LOGIN FORM
 
 .input-container svg {
     position: absolute;
-    z-index: 1;
     bottom: 0;
 }
 
 .input-container input {
-    position: absolute;
-    box-sizing: border-box;
     margin-left: 35px;
-    z-index: 0;
     width: 265px;
-    font-size: 1.2rem;
-    font-family: "Jost", sans-serif;
-    /*height: 34px;*/
-    vertical-align: bottom;
-    padding: 10px 5px 0 5px;
-    border: none;
-    border-bottom: 2px solid #2D3940;
-    outline: none;
-    background: none;
 }
 
-.input-container input:focus {
-    background: #fff;
-}
 /*******
 
 SIDEBAR
@@ -254,7 +261,7 @@ BUTTON
 .button {
     box-sizing: border-box;
     min-width: 100px;
-    padding: 5px 10px;
+    padding: 8px 15px;
     border: none;
     font-weight: normal;
     font-size: 1rem;
