@@ -1,7 +1,6 @@
 package com.agir.maidai.entity;
 
 import com.agir.maidai.validation.CompanyEmail;
-import com.agir.maidai.validation.UniqueEmail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,15 +19,13 @@ public class User {
     @Column(name = "id")
     private int id;
 
-    //@UniqueEmail
     @CompanyEmail(message = "O email deve ser escrito com @id.uff.br")
     @Email(message = "Informe um e-mail válido.")
     @NotBlank(message = "O campo \"E-mail\" não pode estar vazio.")
-    //@Column(name = "email")
     @Column(name = "email", unique = true)
     private String email;
 
-    @NotBlank(message = "O cmapo \"Senha\" não pode estar vazio.")
+    @NotBlank(message = "O campo \"Senha\" não pode estar vazio.")
     @Size(min = 8, message = "A senha deve possuir pelo menos 8 caracteres.")
     @Column(name = "password")
     private String password;
