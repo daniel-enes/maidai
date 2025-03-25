@@ -51,8 +51,12 @@ html {
     font-size: 16px;
 }
 
-h1, h2, h3, h4, h5, h6, legend, select {
+h1, h2, h3, h4, h5, h6, legend, select{
     margin: 20px 0;
+}
+
+p {
+    margin: 10px 0;
 }
 
 h1 {
@@ -91,9 +95,13 @@ a {
 
 input {
     width: 100%;
-    display: inline;
     margin: 0 0 20px 0;
 }
+
+select {
+    padding: 5px 10px;
+}
+
 
 /*******
 
@@ -279,4 +287,8 @@ TEXT
 
 .vertical-align-middle {
     vertical-align: middle;
+}
+
+.font-bold {
+    font-weight: bold;
 }

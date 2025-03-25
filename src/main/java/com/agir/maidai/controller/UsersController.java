@@ -12,10 +12,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,21 +64,27 @@ public class UsersController {
     }
 
     @PostMapping("/users")
-    public String store(@Valid User user, Model model) {
+    public String store(@Valid User user, BindingResult bindingResult, Model model) {
 
-        Optional<User> optionalUser = userService.getUserByEmail(user.getEmail());
+        List<Role> roles = roleService.getAllRoles();
+        model.addAttribute("roles", roles);
 
-        if(optionalUser.isPresent()) {
-
-            model.addAttribute("error", "Informe outro email.");
-            model.addAttribute("user", new User());
-
-            return "/users/create";
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "users/form-user";
         }
 
-        User newUser = userService.createUser(user);
+        try {
+            User newUser = userService.createUser(user);
+            return "redirect:/users/" + newUser.getId();
+        } catch (Exception e) {
 
-        return "redirect:/";
+            List<ObjectError> errors = new ArrayList<>();
+            errors.add(new ObjectError("globalError", e.getMessage()));
+            model.addAttribute("errors", errors);
+
+            return "users/form-user";
+        }
     }
 
     @GetMapping("/login")

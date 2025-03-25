@@ -9,22 +9,38 @@
 <body>
 <main class="light flex-grow-8 padding-20" layout:fragment="content">
     <h1>Cadastre um novo usuário</h1>
-    <fieldset>
+    <fieldset  class="max-width-500px">
         <legend>Dados do usuário</legend>
-        <form class="max-width-500px" th:action="@{/users}" th:object="${user}" method="post">
+        <div class="form-error" th:if="${not #lists.isEmpty(errors)}">
+            <p class="font-bold">Erro!</p>
+            <p>Alguns erros foram encontrados:</p>
+            <ul>
+                <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
+            </ul>
+        </div>
+        <div th:if="${error != null}">
+            <p class="error-message" th:text="${error}"></p>
+        </div>
+        <form th:action="@{/users}" th:object="${user}" method="post">
             <div>
                 <label for="name">Nome: </label>
-                <input type="text" name="name" id="name" th:field="*{name}" required>
+                <!--<input type="text" name="name" id="name" th:field="*{name}">-->
+                <input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>
             </div>
 
             <div>
-                <label for="email">E-mail:</label>
-                <input type="email" name="email" id="email" th:field="*{email}" required>
+                <label for="email">E-mail:
+                    <p class="input-description">O e-mail deve ser escrito com @id.uff.br.</p>
+                </label>
+                <!--<input type="text" name="email" id="email" th:field="*{email}">-->
+                <input type="email" name="email" id="email" th:field="*{email}" maxlength="255" required>
             </div>
 
             <div>
-                <label for="password">Senha:</label>
-                <input type="password" name="password" id="password" th:field="*{password}" required>
+                <label for="password">Senha:
+                    <p class="input-description">A senha deve possuir pelo menos 8 caracteres.</p>
+                </label>
+                <input type="password" name="password" id="password" th:field="*{password}" maxlength="100" required>
             </div>
             <div class="margin-y-20">
                 <label for="roles">Função: </label>

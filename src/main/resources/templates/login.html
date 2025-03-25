@@ -25,13 +25,13 @@
   <div class="light flex-grow-6 flex flex-justify-center padding-top-100">
     <div class="flex-align-center">
       <div id="login-form">
-        <div th:if="${error}">
-
-        </div>
         <h1 class="poppins-bold text-center font-dark">
           <img id="logo-agir" th:src="@{/assets/logo-agir.svg}" alt="Agir - Agência de Inovação da Universidade Federal Fluminense">
-
         </h1>
+        <div th:if="${param.error}" class="form-error">
+          <p class="font-bold">Erro!</p>
+          <p>Usuário ou senha inválido</p>
+        </div>
         <form th:action="@{/login}" th:object="${user}" method="post" class="">
 
           <div class="input-container">

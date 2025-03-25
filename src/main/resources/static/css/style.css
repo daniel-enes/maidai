@@ -136,6 +136,11 @@ h1, h2, h3, h4, h5, h6, legend {
     color: #2D3940;
 }
 
+p, label, legend, input, select, option, ul, ol {
+    font-family: "Jost", sans-serif;
+    color: #2D3940;
+}
+
 /*******
 
 CORES
@@ -198,6 +203,10 @@ LOGIN FORM
     margin: 40px 0 0 0;
 }
 
+#login-form h1, #login-form h2 {
+    margin: 0;
+}
+
 .input-container {
     display: block;
     position: relative;
@@ -213,6 +222,10 @@ LOGIN FORM
 .input-container input {
     margin-left: 35px;
     width: 265px;
+}
+
+.input-description {
+    font-size: 0.9rem;
 }
 
 /*******
@@ -245,11 +258,42 @@ NAV MENU
     line-height: 40px;
 }
 
+#nav-menu a:hover {
+    text-decoration: underline;
+}
+
 #nav-menu svg {
     wdith: 20px;
     height: 20px;
     vertical-align: middle;
     margin-right: 10px;
+}
+
+/*******
+
+FORM'S ERROR
+
+********/
+
+.form-error {
+    background: rgba(242,87,97, 0.5);
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    /*border-top: #F25757 solid 1px;
+    border-left: #F25757 solid 1px;
+    border-bottom: #910F0F solid 1px;
+    border-right: #910F0F solid 1px;*/
+}
+
+.form-error p {
+    color: #4D0808;
+}
+
+.form-error li {
+    list-style: inside square;
+    margin: 15px 0;
 }
 
 /*******

@@ -2,6 +2,7 @@ package com.agir.maidai.service;
 
 import com.agir.maidai.entity.User;
 import com.agir.maidai.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -21,6 +23,10 @@ public class UserService {
     }
 
     public User createUser(User user) {
+
+        if(userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Tente usar outro endereço de e-mail");
+        }
 
         user.setActive(true);
         user.setCreatedAt(new Date(System.currentTimeMillis()));
@@ -45,4 +51,5 @@ public class UserService {
     public Optional<User> getUserById(Integer id) {
         return userRepository.findById(id);
     }
+
 }

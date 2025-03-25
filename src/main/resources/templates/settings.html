@@ -15,15 +15,17 @@
         <form method="post" class="max-width-500px">
             <div>
                 <label for="password">Senha atual:</label>
-                <input type="password" name="" id="password" required>
+                <input type="password" name="" id="password" maxlength="100" required>
             </div>
             <div>
-                <label for="new-password">Nova senha:</label>
-                <input type="password" name="password" id="new-password" required>
+                <label for="new-password">Nova senha:
+                    <p class="input-description">A senha deve possuir pelo menos 8 caracteres.</p>
+                </label>
+                <input type="password" name="password" id="new-password" maxlength="100" required>
             </div>
             <div>
                 <label for="repeat-password">Repetir senha:</label>
-                <input type="password" name="" id="repeat-password" required>
+                <input type="password" name="" id="repeat-password" maxlength="100" required>
             </div>
 
             <div>
