@@ -1,3 +1,14 @@
+:root {
+    --alert-danger-bg-color: rgba(242,87,97, 0.5);
+    --alert-danger-text-color: #4D0808;
+    --alert-success-bg-color: rgba(3,166,150, 0.5);
+    --alert-success-text-color: #24524E;
+
+    --success: #03A696;
+    --dark: #2D3940;
+    --light: #F2F2F2;
+}
+
 /*******
 
 ASSETS
@@ -133,13 +144,18 @@ FONTS
 
 h1, h2, h3, h4, h5, h6, legend {
     font-family: "Poppins", sans-serif;
-    color: #2D3940;
+    color: var(--dark);
 }
 
 p, label, legend, input, select, option, ul, ol {
     font-family: "Jost", sans-serif;
-    color: #2D3940;
+    color: var(--dark);
 }
+
+a {
+    color: var(--success);
+}
+
 
 /*******
 
@@ -148,27 +164,52 @@ CORES
 ********/
 
 .dark {
-    background: #2D3940;
+    background: var(--dark);
 }
 
 .light {
-    background: #F2F2F2;
+    background: var(--light);
 }
 
 .success {
-    background: #03A696;
+    background: var(--success);
 }
 
 .font-dark {
-    color: #2D3940;
+    color: var(--dark);
 }
 
 .font-light {
-    color: #F2F2F2;
+    color: var(--light);
 }
 
 .border-bottom {
-    border-bottom: solid 1px #2D3940;
+    border-bottom: solid 1px var(--dark);
+}
+
+/*******
+
+TABLE
+
+********/
+
+thead {
+    background: var(--dark);
+    color: var(--light);
+    text-align: left;
+    font-weight: bold;
+}
+
+tr {
+    border-bottom: solid 1px var(--dark)
+}
+
+tbody tr:nth-child(even) {
+background: white;
+}
+
+th, td {
+    padding: 5px 10px;
 }
 
 /*******
@@ -182,7 +223,7 @@ input {
     font-size: 1.2rem;
     padding: 10px 5px 0 5px;
     border: none;
-    border-bottom: 2px solid #2D3940;
+    border-bottom: 2px solid var(--dark);
     outline: none;
     background: none;
 }
@@ -271,27 +312,34 @@ NAV MENU
 
 /*******
 
-FORM'S ERROR
+ALERTS
 
 ********/
 
-.form-error {
-    background: rgba(242,87,97, 0.5);
+.alert {
     box-sizing: border-box;
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
-    /*border-top: #F25757 solid 1px;
-    border-left: #F25757 solid 1px;
-    border-bottom: #910F0F solid 1px;
-    border-right: #910F0F solid 1px;*/
 }
 
-.form-error p {
-    color: #4D0808;
+.alert-danger {
+    background: var(--alert-danger-bg-color);
 }
 
-.form-error li {
+.alert-danger * {
+    color: var(--alert-danger-text-color);
+}
+
+.alert-success {
+    background: var(--alert-success-bg-color);
+}
+
+.alert-success * {
+    color: var(--alert-success-text-color);
+}
+
+.alert li {
     list-style: inside square;
     margin: 15px 0;
 }

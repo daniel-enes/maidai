@@ -25,7 +25,7 @@ public class UserService {
     public User createUser(User user) {
 
         if(userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Tente usar outro endereço de e-mail");
+            throw new IllegalArgumentException("Tente usar outro endereço de e-mail.");
         }
 
         user.setActive(true);
@@ -36,6 +36,11 @@ public class UserService {
         User createdUser = userRepository.save(user);
 
         return createdUser;
+    }
+
+    public User updateUser(User user) {
+        user.setUpdatedAt(new Date(System.currentTimeMillis()));
+        return userRepository.save(user);
     }
 
     public Optional<User> getUserByEmail(String email) {

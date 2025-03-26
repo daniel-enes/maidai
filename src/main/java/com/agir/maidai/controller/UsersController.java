@@ -17,12 +17,14 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/users")
 public class UsersController {
 
     private final UserService userService;
@@ -33,15 +35,14 @@ public class UsersController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public String index(Model model) {
-
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "users/users";
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public String show(@PathVariable int id, Model model) {
 
         Optional<User> userOptional = userService.getUserById(id);
@@ -54,7 +55,7 @@ public class UsersController {
         return "redirect:/";
     }
 
-    @GetMapping("/users/create")
+    @GetMapping("/create")
     public String create(Model model) {
 
         model.addAttribute("user", new User());
@@ -63,11 +64,11 @@ public class UsersController {
         return "users/form-user";
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public String store(@Valid User user, BindingResult bindingResult, Model model) {
 
-        List<Role> roles = roleService.getAllRoles();
-        model.addAttribute("roles", roles);
+        //List<Role> roles = roleService.getAllRoles();
+        //model.addAttribute("roles", roles);
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
@@ -87,26 +88,40 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/login")
-    public String login(Model model) {
-        return "login";
+    @GetMapping("/{id}/edit")
+    /*public String edit(@PathVariable int id, Model model) {*/
+    public String edit(@PathVariable int id, Model model) {
+        Optional<User> userOptional = userService.getUserById(id);
+        User user = userOptional.get();
+        List<Role> roles = roleService.getAllRoles();
+        model.addAttribute("user", user);
+        model.addAttribute("roles", roles);
+        return "users/form-user";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
+    @PostMapping("/{id}")
+    public String update(@Valid User user, @PathVariable int id, BindingResult bindingResult, Model model){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(authentication != null) {
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "users/form-user";
         }
 
-        return "redirect:/";
+        try {
+            User userUpdated = userService.updateUser(user);
+            return "redirect:/users/" + userUpdated.getId();
+        } catch (Exception e) {
+
+            List<ObjectError> errors = new ArrayList<>();
+            errors.add(new ObjectError("globalError", e.getMessage()));
+            model.addAttribute("errors", errors);
+
+            return "users/form-user";
+        }
     }
 
-    @GetMapping("/access-denied")
-    public String accessDenied() {
-        return "users/access-denied";
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable int id) {
+        return "/";
     }
-
 }

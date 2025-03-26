@@ -8,20 +8,23 @@
 
 <body>
 <main class="light flex-grow-8 padding-20" layout:fragment="content">
-    <h1>Cadastre um novo usuário</h1>
+    <h1 th:text="${user.id != null ? 'Atualizar usuário' : 'Cadastre um novo usuário'}"></h1>
     <fieldset  class="max-width-500px">
         <legend>Dados do usuário</legend>
-        <div class="form-error" th:if="${not #lists.isEmpty(errors)}">
+        <div class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
             <p class="font-bold">Erro!</p>
             <p>Alguns erros foram encontrados:</p>
             <ul>
                 <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
             </ul>
         </div>
-        <div th:if="${error != null}">
-            <p class="error-message" th:text="${error}"></p>
-        </div>
-        <form th:action="@{/users}" th:object="${user}" method="post">
+        <form th:action="${user.id != null} ? @{/users/{id}(id=${user.id})} : @{/users}"
+              th:object="${user}"
+              method="post">
+
+            <!-- Hide field fot PUT method if updating -->
+            <input type="hidden" name="_method" th:if="${user.id != null}" value="put">
+
             <div>
                 <label for="name">Nome: </label>
                 <!--<input type="text" name="name" id="name" th:field="*{name}">-->
@@ -33,10 +36,12 @@
                     <p class="input-description">O e-mail deve ser escrito com @id.uff.br.</p>
                 </label>
                 <!--<input type="text" name="email" id="email" th:field="*{email}">-->
-                <input type="email" name="email" id="email" th:field="*{email}" maxlength="255" required>
+                <!--<input type="text" name="email" id="email" th:field="*{email}" maxlength="255" required>-->
+                <input type="email" name="email" id="email" th:field="*{email}" maxlength="255"
+                       th:readonly="${user.id != null}" required>
             </div>
 
-            <div>
+            <div th:unless="${user.id != null}">
                 <label for="password">Senha:
                     <p class="input-description">A senha deve possuir pelo menos 8 caracteres.</p>
                 </label>
@@ -63,7 +68,9 @@
             </div>
 
             <div>
-                <button type="submit" class="button success font-light">Cadastrar usuário</button>
+                <button type="submit" class="button success font-light">
+                    <span th:text="${user.id != null} ? 'Atualizar' : 'Cadastrar'"></span>
+                </button>
             </div>
 
         </form>
