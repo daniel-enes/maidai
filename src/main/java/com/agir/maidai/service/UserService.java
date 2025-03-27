@@ -39,8 +39,27 @@ public class UserService {
     }
 
     public User updateUser(User user) {
+
+        // When the password is altered by setting
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setUpdatedAt(new Date(System.currentTimeMillis()));
+            return userRepository.save(user);
+        }
+
+        // When the user is edited by the form
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
         user.setUpdatedAt(new Date(System.currentTimeMillis()));
+        user.setActive(existingUser.isActive());
+        user.setCreatedAt(existingUser.getCreatedAt());
+        user.setPassword(existingUser.getPassword());
+
         return userRepository.save(user);
+    }
+
+    public void delete(int id) {
+        userRepository.deleteById(id);
     }
 
     public Optional<User> getUserByEmail(String email) {

@@ -8,8 +8,9 @@
 
 <body>
 <main class="light flex-grow-8 padding-20" layout:fragment="content">
+
     <h1 th:text="${user.id != null ? 'Atualizar usuário' : 'Cadastre um novo usuário'}"></h1>
-    <fieldset  class="max-width-500px">
+    <fieldset class="max-width-500px">
         <legend>Dados do usuário</legend>
         <div class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
             <p class="font-bold">Erro!</p>
@@ -23,7 +24,7 @@
               method="post">
 
             <!-- Hide field fot PUT method if updating -->
-            <input type="hidden" name="_method" th:if="${user.id != null}" value="put">
+            <input type="hidden" name="_method" th:if="${user.id != null}" value="patch">
 
             <div>
                 <label for="name">Nome: </label>

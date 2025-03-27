@@ -197,7 +197,7 @@ thead {
     background: var(--dark);
     color: var(--light);
     text-align: left;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 tr {
@@ -209,7 +209,7 @@ background: white;
 }
 
 th, td {
-    padding: 5px 10px;
+    padding: 12px 15px;
 }
 
 /*******
@@ -319,7 +319,7 @@ ALERTS
 .alert {
     box-sizing: border-box;
     padding: 10px;
-    margin: 10px 0;
+    margin: 15px 0;
     border-radius: 5px;
 }
 

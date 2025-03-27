@@ -4,7 +4,9 @@ import com.agir.maidai.validation.CompanyEmail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.groups.Default;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,20 +19,20 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
-    @CompanyEmail(message = "O email deve ser escrito com @id.uff.br")
-    @Email(message = "Informe um e-mail válido.")
-    @NotBlank(message = "O campo \"E-mail\" não pode estar vazio.")
+    @CompanyEmail(groups = CreateGroup.class, message = "O email deve ser escrito com @id.uff.br")
+    @Email(groups = CreateGroup.class, message = "Informe um e-mail válido.")
+    @NotBlank(groups = CreateGroup.class, message = "O campo \"E-mail\" não pode estar vazio.")
     @Column(name = "email", unique = true)
     private String email;
 
-    @NotBlank(message = "O campo \"Senha\" não pode estar vazio.")
+    @NotBlank(groups = CreateGroup.class, message = "O campo \"Senha\" não pode estar vazio.")
     @Size(min = 8, message = "A senha deve possuir pelo menos 8 caracteres.")
     @Column(name = "password")
     private String password;
 
-    @NotBlank(message = "Nome não pode estar vazio.")
+    @NotBlank(groups = {CreateGroup.class, UpdateGroup.class},message = "Nome não pode estar vazio.")
     @Column(name = "name")
     private String name;
 
@@ -51,10 +53,13 @@ public class User {
     )
     private List<Role> roles = new ArrayList<>();
 
+    public interface CreateGroup {} // For create operations
+    public interface UpdateGroup {}// For update operations
+
     public User() {
     }
 
-    public User(int id, String email, String password, String name, boolean isActive, Date createdAt, Date updatedAt) {
+    public User(Integer id, String email, String password, String name, boolean isActive, Date createdAt, Date updatedAt) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -64,11 +69,11 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

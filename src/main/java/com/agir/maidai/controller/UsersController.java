@@ -4,20 +4,14 @@ import com.agir.maidai.entity.Role;
 import com.agir.maidai.entity.User;
 import com.agir.maidai.service.RoleService;
 import com.agir.maidai.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import jakarta.validation.groups.Default;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +23,7 @@ public class UsersController {
 
     private final UserService userService;
     private final RoleService roleService;
+
 
     public UsersController(UserService userService, RoleService roleService) {
         this.userService = userService;
@@ -57,7 +52,6 @@ public class UsersController {
 
     @GetMapping("/create")
     public String create(Model model) {
-
         model.addAttribute("user", new User());
         List<Role> roles = roleService.getAllRoles();
         model.addAttribute("roles", roles);
@@ -65,10 +59,13 @@ public class UsersController {
     }
 
     @PostMapping
-    public String store(@Valid User user, BindingResult bindingResult, Model model) {
+    public String store(@Validated({User.CreateGroup.class, Default.class}) User user,
+                        BindingResult bindingResult,
+                        Model model,
+                        RedirectAttributes redirectAttributes) {
 
-        //List<Role> roles = roleService.getAllRoles();
-        //model.addAttribute("roles", roles);
+        List<Role> roles = roleService.getAllRoles();
+        model.addAttribute("roles", roles);
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
@@ -77,7 +74,9 @@ public class UsersController {
 
         try {
             User newUser = userService.createUser(user);
-            return "redirect:/users/" + newUser.getId();
+            redirectAttributes.addFlashAttribute("success", "O usuário foi cadastrado");
+            return "redirect:/users";
+            //return "redirect:/users/" + newUser.getId();
         } catch (Exception e) {
 
             List<ObjectError> errors = new ArrayList<>();
@@ -100,7 +99,11 @@ public class UsersController {
     }
 
     @PostMapping("/{id}")
-    public String update(@Valid User user, @PathVariable int id, BindingResult bindingResult, Model model){
+    public String update(@Validated(User.UpdateGroup.class) User user,
+                         @PathVariable int id,
+                         BindingResult bindingResult,
+                         Model model,
+                         RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
@@ -108,8 +111,11 @@ public class UsersController {
         }
 
         try {
+            //user.setId(id);
             User userUpdated = userService.updateUser(user);
-            return "redirect:/users/" + userUpdated.getId();
+            redirectAttributes.addFlashAttribute("success", "As alterações foram bem-sucedidas.");
+            return "redirect:/users";
+            //return "redirect:/users/" + userUpdated.getId();
         } catch (Exception e) {
 
             List<ObjectError> errors = new ArrayList<>();
@@ -120,8 +126,9 @@ public class UsersController {
         }
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable int id) {
-        return "/";
+        userService.delete(id);
+        return "redirect:/users";
     }
 }
