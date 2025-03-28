@@ -16,15 +16,13 @@ public class Person {
     private int id;
 
     @NotBlank
-    @Column(name = "nome")
+    @Column(name = "nome", unique = true)
     private String name;
 
-    @NotBlank
     @Column(name = "telefone")
     private String phone;
 
     @Email
-    @NotBlank
     @Column(name = "email")
     private String email;
 

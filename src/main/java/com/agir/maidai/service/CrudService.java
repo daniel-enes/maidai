@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CrudService<T, ID> {
 
-    List<T> getAll();
+    List<T> findAll();
     T find(ID id);
     void create(T entity);
     void delete(ID id);

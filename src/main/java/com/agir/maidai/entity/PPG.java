@@ -15,7 +15,7 @@ public class PPG {
     private int id;
 
     @NotBlank
-    @Column(name = "nome")
+    @Column(name = "nome", unique = true)
     private String name;
 
     @Column(name = "created_at")

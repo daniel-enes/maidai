@@ -11,8 +11,8 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    @Column(name = "id", unique = true)
+    private Integer id;
 
     @NotBlank
     @Column(name = "nome")
@@ -34,11 +34,11 @@ public class Company {
         this.updatedAt = updatedAt;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

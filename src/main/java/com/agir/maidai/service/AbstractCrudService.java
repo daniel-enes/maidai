@@ -14,7 +14,7 @@ public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
     }
 
     @Override
-    public List<T> getAll() {
+    public List<T> findAll() {
         return repository.findAll();
     }
 

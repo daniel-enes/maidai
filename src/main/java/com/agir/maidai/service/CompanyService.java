@@ -4,13 +4,6 @@ import com.agir.maidai.entity.Company;
 
 import java.util.List;
 
-public interface CompanyService {
+public interface CompanyService extends CrudService<Company, Integer> {
 
-    List<Company> getAll();
-
-    Company find(int id);
-
-    void create(Company company);
-
-    void delete(int id);
 }

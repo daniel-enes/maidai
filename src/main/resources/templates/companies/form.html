@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{components/layout}">
+<head>
+    <title>Formulário de empresa</title>
+</head>
+
+<body>
+<main class="light flex-grow-8 padding-20" layout:fragment="content">
+    <h1 th:text="${company.id != null ? 'Atualizar usuário' : 'Cadastre um novo usuário'}"></h1>
+    <fieldset class="max-width-500px">
+        <legend>Dados da empresa</legend>
+        <div class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
+            <p class="font-bold">Erro!</p>
+            <p>Alguns erros foram encontrados:</p>
+            <ul>
+                <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
+            </ul>
+        </div>
+        <form th:action="@{/companies}"
+              th:object="${company}"
+              method="post">
+
+            <!-- Hide field fot PUT method if updating -->
+            <input type="hidden" name="_method" th:if="${company.id != null}" value="put">
+
+            <div>
+                <label for="name">Nome: </label>
+                <input type="text" name="name" id="name" th:field="*{name}">
+                <!--<input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>-->
+            </div>
+
+            <div>
+                <button type="submit" class="button success font-light">
+                    <span th:text="${company.id != null} ? 'Atualizar' : 'Cadastrar'"></span>
+                </button>
+            </div>
+
+        </form>
+    </fieldset>
+</main>
+</body>
+</html>
