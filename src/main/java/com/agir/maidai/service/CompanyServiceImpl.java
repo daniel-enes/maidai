@@ -19,9 +19,10 @@ public class CompanyServiceImpl extends AbstractCrudService<Company, Integer> im
 
     public void create(Company company) {
 
+        /*
         company.setCreatedAt(new Date(System.currentTimeMillis()));
         company.setUpdatedAt(new Date(System.currentTimeMillis()));
-
+        */
         super.create(company);
     }
 

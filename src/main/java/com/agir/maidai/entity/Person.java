@@ -8,12 +8,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "pessoas")
-public class Person {
+public class Person extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @NotBlank
     @Column(name = "nome", unique = true)
@@ -25,30 +25,31 @@ public class Person {
     @Email
     @Column(name = "email")
     private String email;
-
+/*
     @Column(name = "created_at")
     private Date createdAt;
 
     @Column(name = "updated_at")
     private Date updatedAt;
-
+*/
     public Person() {
     }
 
-    public Person(int id, String name, String phone, String email, Date createdAt, Date updatedAt) {
+    /*public Person(Integer id, String name, String phone, String email, Date createdAt, Date updatedAt) {*/
+    public Person(Integer id, String name, String phone, String email) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        /*this.createdAt = createdAt;
+        this.updatedAt = updatedAt;*/
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -76,6 +77,7 @@ public class Person {
         this.email = email;
     }
 
+    /*
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -91,6 +93,7 @@ public class Person {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+    */
 
     @Override
     public String toString() {
@@ -99,8 +102,6 @@ public class Person {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

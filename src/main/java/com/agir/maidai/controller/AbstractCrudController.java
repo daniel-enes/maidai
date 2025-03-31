@@ -2,12 +2,11 @@ package com.agir.maidai.controller;
 
 import com.agir.maidai.service.CrudService;
 import com.agir.maidai.util.ModelAttributes;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -85,15 +84,18 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         return baseViewPath + "/form";
     }
 
-    @PutMapping("/{id}")
     @Override
+    @PutMapping("/{id}")
     public String update(ID id,
                          T entity,
                          BindingResult bindingResult,
                          Model model,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            //addFormAttributes(model);
+            new ModelAttributes(model)
+                    .add("errors", bindingResult.getAllErrors())
+                    .add(entityName, entity)
+                    .apply();
             return baseViewPath + "/form";
         }
         try {
@@ -101,13 +103,21 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
             redirectAttributes.addFlashAttribute("success", getUpdateSuccessMessage());
             return "redirect:/" + baseViewPath;
         } catch (Exception e) {
-            //model.addAttribute("error", e.getMessage());
-            //addFormAttributes(model);
+            List<ObjectError> errors = new ArrayList<>();
+            errors.add(new ObjectError("globalError", e.getMessage()));
+
+            new ModelAttributes(model)
+                    .add("errors", errors)
+                    .add(entityName, entity)
+                    .apply();
+
             return baseViewPath + "/form";
         }
     }
 
     @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
     public String delete(ID id, RedirectAttributes redirectAttributes) {
         service.delete(id);
         redirectAttributes.addFlashAttribute("success", getDeleteSuccessMessage());
