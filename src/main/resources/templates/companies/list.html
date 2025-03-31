@@ -48,10 +48,11 @@
                 <a th:href="@{/companies/create}">Cadastrar nova empresa.</a>
             </p>
         </div>
-        <div th:if="${success}" class="alert alert-success">
+        <div th:replace="~{components/alert :: alert}"></div>
+        <!--<div th:if="${success}" class="alert alert-success">
             <p class="font-bold">Sucesso!</p>
             <p th:text="${success}"></p>
-        </div>
+        </div>-->
         <table>
             <thead>
             <tr>

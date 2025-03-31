@@ -12,19 +12,23 @@
     <h1 th:text="${user.id != null ? 'Atualizar usuário' : 'Cadastre um novo usuário'}"></h1>
     <fieldset class="max-width-500px">
         <legend>Dados do usuário</legend>
-        <div class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
+        <div th:replace="~{components/alert :: alert}"></div>
+        <!--<div class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
             <p class="font-bold">Erro!</p>
             <p>Alguns erros foram encontrados:</p>
             <ul>
                 <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
             </ul>
-        </div>
+        </div>-->
         <form th:action="${user.id != null} ? @{/users/{id}(id=${user.id})} : @{/users}"
               th:object="${user}"
               method="post">
 
             <!-- Hide field fot PUT method if updating -->
-            <input type="hidden" name="_method" th:if="${user.id != null}" value="patch">
+            <input type="hidden" name="_method" th:if="${user.id != null}" value="put">
+
+            <!-- CSRF token for security -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
             <div>
                 <label for="name">Nome: </label>

@@ -41,6 +41,8 @@ public class WebSecurityConfig {
             "/settings/change-password",
             "/companies",
             "/companies/**",
+            "/ppgs",
+            "/ppgs/**",
             "/access-denied",
             "/templates/**",
     };

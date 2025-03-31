@@ -1,5 +1,6 @@
 package com.agir.maidai.entity;
 
+import com.agir.maidai.validation.UniqueName;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "empresas")
-public class Company extends AuditableEntity {
+public class Company extends AuditableEntity implements NameUniqueEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,24 +16,15 @@ public class Company extends AuditableEntity {
     private Integer id;
 
     @NotBlank
-    @Column(name = "nome")
+    @Column(name = "nome", unique = true)
     private String name;
 
-    /*
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
-    */
     public Company() {
     }
 
     public Company(int id, String name) {
         this.id = id;
         this.name = name;
-        /*this.createdAt = createdAt;
-        this.updatedAt = updatedAt;*/
     }
 
     public Integer getId() {
@@ -50,23 +42,7 @@ public class Company extends AuditableEntity {
     public void setName(String name) {
         this.name = name;
     }
-    /*
-    public Date getCreatedAt() {
-        return createdAt;
-    }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    */
 
     @Override
     public String toString() {

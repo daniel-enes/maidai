@@ -1,7 +1,12 @@
 package com.agir.maidai.service;
 
 import com.agir.maidai.entity.AuditableEntity;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -9,6 +14,7 @@ import java.util.List;
 public abstract class AbstractCrudService<T extends AuditableEntity, ID> implements CrudService<T, ID> {
 
     protected final JpaRepository<T, ID> repository;
+
 
     protected AbstractCrudService(JpaRepository<T, ID> repository) {
         this.repository = repository;

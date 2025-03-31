@@ -1,0 +1,32 @@
+<!-- src/main/resources/templates/components/alert.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Mensagem de alerta</title>
+</head>
+<body>
+<!-- Start the fragment -->
+<div id="alert" th:fragment="alert">
+
+  <!-- ERROR MESSAGE -->
+
+  <div id="error" class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
+    <p class="font-bold">Erro!</p>
+    <p>Alguns erros foram encontrados:</p>
+    <ul>
+      <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
+    </ul>
+  </div>
+
+  <!-- SUCCESS MESSAGE -->
+
+  <div id="success" th:if="${success}" class="alert alert-success">
+    <p class="font-bold">Sucesso!</p>
+    <p th:text="${success}"></p>
+  </div>
+</div>
+</body>
+</html>

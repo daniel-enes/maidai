@@ -4,4 +4,6 @@ import com.agir.maidai.entity.PPG;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PPGRepository extends JpaRepository<PPG, Integer> {
+
+    boolean existsByName(String name);
 }

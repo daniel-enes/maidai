@@ -97,8 +97,8 @@ public class UsersController {
         model.addAttribute("roles", roles);
         return "users/form-user";
     }
-
-    @PostMapping("/{id}")
+    
+    @PutMapping("/{id}")
     public String update(@Validated(User.UpdateGroup.class) User user,
                          @PathVariable int id,
                          BindingResult bindingResult,
