@@ -13,6 +13,7 @@ public interface CrudController<T, ID> {
 
     String show(@PathVariable ID id,
                 Model model);
+
     String create(Model model);
 
     String store(@Validated @ModelAttribute T entity,
@@ -32,14 +33,4 @@ public interface CrudController<T, ID> {
     String delete(@PathVariable ID id,
                   RedirectAttributes redirectAttributes);
 
-    /*
-    // Optional configuration methods
-    default String getBaseViewPath() {
-        return "crud";
-    }
-
-    default String getEntityName() {
-        return "entity";
-    }
-    */
 }

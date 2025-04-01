@@ -25,7 +25,8 @@ DROP TABLE IF EXISTS `tipos_bolsa`;
 CREATE TABLE `tipos_bolsa` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `tipo` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tipo_UNIQUE` (`tipo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-27 18:11:52
+-- Dump completed on 2025-04-01 14:09:26

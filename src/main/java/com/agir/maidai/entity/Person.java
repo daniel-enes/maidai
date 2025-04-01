@@ -25,24 +25,28 @@ public class Person extends AuditableEntity {
     @Email
     @Column(name = "email")
     private String email;
-/*
-    @Column(name = "created_at")
-    private Date createdAt;
 
-    @Column(name = "updated_at")
-    private Date updatedAt;
-*/
+    @ManyToOne
+    @JoinColumn(name = "tipos_pessoa_id", referencedColumnName = "id")
+    private PersonType personType;
+
+    public PersonType getPersonType() {
+        return personType;
+    }
+
+    public void setPersonType(PersonType personType) {
+        this.personType = personType;
+    }
+
     public Person() {
     }
 
-    /*public Person(Integer id, String name, String phone, String email, Date createdAt, Date updatedAt) {*/
     public Person(Integer id, String name, String phone, String email) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        /*this.createdAt = createdAt;
-        this.updatedAt = updatedAt;*/
+
     }
 
     public Integer getId() {
@@ -76,24 +80,6 @@ public class Person extends AuditableEntity {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    /*
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    */
 
     @Override
     public String toString() {

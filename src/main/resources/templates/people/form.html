@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{components/layout}">
+<head>
+    <title>Formulário de Pessoas</title>
+</head>
+
+<body>
+<main class="light flex-grow-8 padding-20" layout:fragment="content">
+    <h1 th:text="${person.id != null ? 'Atualizar dados da pessoa' : 'Cadastre uma nova pessoa'}"></h1>
+    <fieldset class="max-width-500px">
+        <legend>Dados da Pessoa</legend>
+        <div th:replace="~{components/alert :: alert}"></div>
+
+        <form th:action="${person.id != null} ? @{/people/{id}(id=${person.id})} : @{/people}"
+              th:object="${person}"
+              method="post">
+
+            <!-- Hide field fot PUT method if updating -->
+            <input type="hidden" name="_method" th:if="${person.id != null}" value="put">
+
+            <!-- CSRF token for security -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div>
+                <label for="name">Nome: </label>
+                <input type="text" name="name" id="name" th:field="*{name}" maxlength="255">
+                <!--<input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>-->
+            </div>
+            <div>
+                <label for="phone">Telefone:
+                    <p class="input-description">Campo opcional</p>
+                </label>
+                <input type="number" name="phone" id="phone" th:field="*{phone}" maxlength="20">
+                <!--<input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>-->
+            </div>
+            <div>
+                <label for="email">E-mail:
+                    <p class="input-description">Campo opcional</p>
+                </label>
+                <input type="email" name="email" id="email" th:field="*{email}" maxlength="255">
+                <!--<input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>-->
+            </div>
+
+            <div class="margin-y-20">
+                <label for="personTypes">Tipos: </label>
+                <select id="personTypes" name="personTypes" th:field="*{personType}" required>
+                    <option th:each="personType : ${personTypeList}"
+                            th:value="${personType.id}"
+                            th:text="${personType.type}">
+                    </option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="button success font-light">
+                    <span th:text="${person.id != null} ? 'Atualizar' : 'Cadastrar'"></span>
+                </button>
+            </div>
+
+        </form>
+    </fieldset>
+</main>
+</body>
+</html>

@@ -1,16 +1,21 @@
 package com.agir.maidai.service;
 
 import com.agir.maidai.entity.PersonType;
+import com.agir.maidai.repository.PersonTypeRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface PersonTypeService {
+@Service
+public class PersonTypeService {
 
-    List<PersonType> getAll();
+    private PersonTypeRepository personTypeRepository;
 
-    PersonType find(int id);
+    public PersonTypeService(PersonTypeRepository personTypeRepository) {
+        this.personTypeRepository = personTypeRepository;
+    }
 
-    void create(PersonType personType);
-
-    void delete(int id);
+    public List<PersonType> findAll() {
+        return personTypeRepository.findAll();
+    }
 }

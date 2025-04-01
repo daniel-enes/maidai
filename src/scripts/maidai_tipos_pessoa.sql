@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS `tipos_pessoa`;
 CREATE TABLE `tipos_pessoa` (
   `id` int NOT NULL AUTO_INCREMENT,
   `tipo` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tipo_UNIQUE` (`tipo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,6 +36,7 @@ CREATE TABLE `tipos_pessoa` (
 
 LOCK TABLES `tipos_pessoa` WRITE;
 /*!40000 ALTER TABLE `tipos_pessoa` DISABLE KEYS */;
+INSERT INTO `tipos_pessoa` VALUES (2,'bolsista'),(1,'orientador');
 /*!40000 ALTER TABLE `tipos_pessoa` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -47,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-27 18:11:53
+-- Dump completed on 2025-04-01 14:09:26

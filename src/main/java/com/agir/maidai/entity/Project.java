@@ -3,29 +3,28 @@ package com.agir.maidai.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "empresas")
-public class Company extends AuditableEntity implements NameUniqueEntity {
+@Table(name="projetos")
+public class Project extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
+    @Column(name = "id")
     private Integer id;
 
     @NotBlank
     @Column(name = "nome", unique = true)
     private String name;
 
-    @OneToMany(targetEntity = Project.class, mappedBy ="company", cascade = CascadeType.ALL)
-    private List<Project> projectListList = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "empresas_id", referencedColumnName = "id")
+    private Company company;
 
-    public Company() {
+    public Project() {
     }
 
-    public Company(int id, String name) {
+    public Project(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -46,17 +45,17 @@ public class Company extends AuditableEntity implements NameUniqueEntity {
         this.name = name;
     }
 
-    public List<Project> getProjectListList() {
-        return projectListList;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setProjectListList(List<Project> projectListList) {
-        this.projectListList = projectListList;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     @Override
     public String toString() {
-        return "Company{" +
+        return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

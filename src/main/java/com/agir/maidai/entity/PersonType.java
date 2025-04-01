@@ -2,31 +2,37 @@ package com.agir.maidai.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "tipos_pessoas")
+@Table(name = "tipos_pessoa")
 public class PersonType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "tipo")
     private String type;
 
+    @OneToMany(targetEntity = Person.class, mappedBy ="personType", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Person> personList = new ArrayList<>();
+
     public PersonType() {
     }
 
-    public PersonType(int id, String type) {
+    public PersonType(Integer id, String type) {
         this.id = id;
         this.type = type;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -36,6 +42,14 @@ public class PersonType {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<Person> getPersonList() {
+        return personList;
+    }
+
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
 
     @Override

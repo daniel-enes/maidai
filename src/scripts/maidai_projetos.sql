@@ -27,6 +27,7 @@ CREATE TABLE `projetos` (
   `nome` varchar(255) NOT NULL,
   `empresas_id` int unsigned NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `nome_UNIQUE` (`nome`),
   KEY `fk_projetos_empresas1_idx` (`empresas_id`),
   CONSTRAINT `fk_projetos_empresas1` FOREIGN KEY (`empresas_id`) REFERENCES `empresas` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-27 18:11:52
+-- Dump completed on 2025-04-01 14:09:26
