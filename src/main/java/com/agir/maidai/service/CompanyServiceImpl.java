@@ -15,14 +15,18 @@ public class CompanyServiceImpl extends AbstractCrudService<Company, Integer> im
     }
 
     public void create(Company company) {
-        if(companyRepository.existsByName(company.getName())) {
+        String trimmedName = company.getName().trim();
+        company.setName(trimmedName);
+        if(companyRepository.existsByName(trimmedName)) {
             throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
         }
         super.create(company);
     }
 
     public void update(Company company) {
-        if(companyRepository.existsByName(company.getName())) {
+        String trimmedName = company.getName().trim();
+        company.setName(trimmedName);
+        if(companyRepository.existsByName(trimmedName)) {
             throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
         }
         super.update(company);

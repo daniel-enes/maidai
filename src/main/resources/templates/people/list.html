@@ -55,6 +55,7 @@
                 <th>Nome</th>
                 <th>Telefone</th>
                 <th>Email</th>
+                <th>Tipo</th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
@@ -67,6 +68,7 @@
                 <td th:text="${person.name}">Nome</td>
                 <td th:text="${person.phone}">Telefone</td>
                 <td th:text="${person.email}">Email</td>
+                <td th:text="${person.personType.type}">Tipo</td>
                 <td class="text-center">
                     <a th:href="@{/people/{id}/edit(id=${person.id})}"
                        role="button"

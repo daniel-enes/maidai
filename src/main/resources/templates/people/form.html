@@ -44,8 +44,8 @@
             </div>
 
             <div class="margin-y-20">
-                <label for="personTypes">Tipos: </label>
-                <select id="personTypes" name="personTypes" th:field="*{personType}" required>
+                <label for="personTypes">Tipo: <span th:text="${person.id != null ? person.personType.type : null}"></span></label>
+                <select th:hidden="${person.id != null}" id="personTypes" name="personTypes" th:field="*{personType}" required>
                     <option th:each="personType : ${personTypeList}"
                             th:value="${personType.id}"
                             th:text="${personType.type}">

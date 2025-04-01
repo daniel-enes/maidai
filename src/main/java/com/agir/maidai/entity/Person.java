@@ -26,6 +26,9 @@ public class Person extends AuditableEntity {
     @Column(name = "email")
     private String email;
 
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Advisor advisor;
+
     @ManyToOne
     @JoinColumn(name = "tipos_pessoa_id", referencedColumnName = "id")
     private PersonType personType;
@@ -79,6 +82,14 @@ public class Person extends AuditableEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Advisor getAdvisor() {
+        return advisor;
+    }
+
+    public void setAdvisor(Advisor advisor) {
+        this.advisor = advisor;
     }
 
     @Override

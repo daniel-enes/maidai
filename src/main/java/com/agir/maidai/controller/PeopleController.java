@@ -1,5 +1,6 @@
 package com.agir.maidai.controller;
 
+import com.agir.maidai.entity.Advisor;
 import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.PersonType;
 import com.agir.maidai.service.PersonService;
@@ -44,9 +45,11 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
     public String store(Person entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         List<PersonType> personTypeList = personTypeService.findAll();
+
         new ModelAttributes(model)
                 .add("personTypeList", personTypeList)
                 .apply();
+
         return super.store(entity, bindingResult, model, redirectAttributes);
     }
 
