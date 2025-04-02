@@ -40,7 +40,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         new ModelAttributes(model)
                 .add(entityName, service.find(id))
                 .apply();
-        //model.addAttribute(entityName, service.find(id));
         return baseViewPath + "/view";
     }
 

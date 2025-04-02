@@ -32,9 +32,8 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         super.create(person);
 
         PersonType personType = person.getPersonType();
-        System.out.println(personType.getType());
+
         if("orientador".equals(personType.getType())) {
-            System.out.println("Chegou aqui");
             createAdvisorRecord(person);
         }
     }

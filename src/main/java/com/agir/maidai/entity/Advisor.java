@@ -23,10 +23,10 @@ public class Advisor {
     public Advisor() {
     }
 
-    public Advisor(Person person, PPG ppg) {
+    public Advisor(Person person) {
         this.personId = person != null ? person.getId() : null;
         this.person = person;
-        this.ppg = ppg;
+        //this.ppg = ppg;
     }
 
     public Integer getPersonId() {

@@ -29,6 +29,27 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
         this.personTypeService = personTypeService;
     }
 
+
+    @Override
+    @GetMapping("/{id}")
+    public String show(@PathVariable Integer id, Model model) {
+        Person person = personService.find(id);
+        if(person.getId() != null) {
+            PersonType personType = person.getPersonType();
+            if("orientador".equals(personType.getType())) {
+                Advisor advisor = new Advisor(person);
+                new ModelAttributes(model)
+                    .add("advisor", advisor)
+                    .apply();
+            }
+            if("bolsista".equals(personType.getType())) {
+                return null;
+            }
+            return super.show(id, model);
+        }
+        return super.show(id, model);
+    }
+
     @Override
     @GetMapping("/create")
     public String create(Model model) {

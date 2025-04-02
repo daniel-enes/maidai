@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{components/layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pessoa</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
 </head>
 <body>
-
+<main class="light flex-grow-8 padding-20"  layout:fragment="content">
+    <h1>Pessoa : </h1>
+    <div class="max-width-800px" th:if="${person.id != null}">
+        <dl th:object="${person}">
+            <dt>Nome:</dt>
+            <dd th:text="*{name}"></dd>
+            <dt>Telefone:</dt>
+            <dd th:text="*{phone}"></dd>
+            <dt>E-mail:</dt>
+            <dd th:text="*{email}"></dd>
+            <dt>Tipo:</dt>
+            <dd th:text="*{personType.type}"></dd>
+            <dd th:if="*{advisor.ppg == null}">
+                <a href="#">Cadastrar em um PPG</a>
+            </dd>
+        </dl>
+    </div>
+</main>
 </body>
 </html>
