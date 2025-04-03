@@ -12,8 +12,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class AdvisorServiceImpl {
+public class AdvisorServiceImpl implements AdvisorService {
 
     private final PersonRepository personRepository;
     private final PPGRepository ppgRepository;
@@ -31,33 +33,48 @@ public class AdvisorServiceImpl {
         this.personTypeRepository = personTypeRepository;
     }
 
-    @Transactional
-    public void assignPersonToPPG(Integer personId, Integer ppgId) {
-        Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new EntityNotFoundException("Person not found"));
-
-        PPG ppg = ppgRepository.findById(ppgId)
-                .orElseThrow(() -> new EntityNotFoundException("PPG not found"));
-
-        //validatePersonIsOrientador(person);
-
-        /*
-        // Remove existing advisor relationship if exists
-        if (person.getAdvisor() != null) {
-            advisorRepository.delete(person.getAdvisor());
-        }*/
-
-        Advisor advisor = new Advisor(person, ppg);
-        person.setAdvisor(advisor);
-        advisorRepository.save(advisor);
-    }
-
-    /*private void validatePersonIsOrientador(Person person) {
-        PersonType adviserType = personTypeRepository.findByNameIgnoreCase("orientador")
-                .orElseThrow(() -> new IllegalStateException("Pessoa do tipo 'orientador' não foi encontrado."));
-
-        if (!adviserType.equals(person.getPersonType())) {
+    private void validatePersonIsAdvisor(Person person) {
+        PersonType personType = person.getPersonType();
+        if(!"orientador".equals(personType.getType())) {
             throw new IllegalArgumentException("Apenas pessoas assinadas como 'orientador' podem estar em um PPG");
         }
-    }*/
+    }
+
+    @Override
+    public List<Advisor> findAll() {
+        return advisorRepository.findAll();
+    }
+
+    @Override
+    public Advisor find(Integer integer) {
+        return advisorRepository.findById(integer).orElseThrow(() -> new EntityNotFoundException("ID não encontrado: " + integer));
+    }
+
+    @Override
+    public void create(Advisor entity) {
+        advisorRepository.save(entity);
+    }
+
+    @Override
+    public void delete(Integer integer) {
+        advisorRepository.deleteById(integer);
+    }
+
+    @Override
+    @Transactional
+    public void update(Advisor entity) {
+
+        Advisor existingAdvisor = advisorRepository.findById(entity.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Advisor not found with id: " + entity.getId()));
+
+        if (entity.getPpg() != null) {
+
+            PPG ppg = ppgRepository.findById(entity.getPpg().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("PPG not found"));
+            existingAdvisor.setPpg(ppg);
+        }
+
+        advisorRepository.save(existingAdvisor);
+
+    }
 }

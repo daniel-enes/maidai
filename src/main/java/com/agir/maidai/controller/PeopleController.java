@@ -1,8 +1,11 @@
 package com.agir.maidai.controller;
 
 import com.agir.maidai.entity.Advisor;
+import com.agir.maidai.entity.PPG;
 import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.PersonType;
+import com.agir.maidai.service.AdvisorService;
+import com.agir.maidai.service.PPGService;
 import com.agir.maidai.service.PersonService;
 import com.agir.maidai.service.PersonTypeService;
 import com.agir.maidai.util.ModelAttributes;
@@ -21,30 +24,42 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
 
     private PersonService personService;
     private PersonTypeService personTypeService;
+    private PPGService ppgService;
+    private AdvisorService advisorService;
 
     @Autowired
-    public PeopleController(PersonService personService, PersonTypeService personTypeService) {
+    public PeopleController(PersonService personService, PersonTypeService personTypeService, PPGService ppgService, AdvisorService advisorService) {
         super(personService, "person", "people");
         this.personService = personService;
         this.personTypeService = personTypeService;
+        this.ppgService = ppgService;
+        this.advisorService = advisorService;
     }
 
 
     @Override
     @GetMapping("/{id}")
     public String show(@PathVariable Integer id, Model model) {
+
         Person person = personService.find(id);
+        Advisor advisor = advisorService.find(id);
+
         if(person.getId() != null) {
+
             PersonType personType = person.getPersonType();
+
             if("orientador".equals(personType.getType())) {
-                Advisor advisor = new Advisor(person);
+
+                List<PPG> ppgList = ppgService.findAll();
+
                 new ModelAttributes(model)
+                    .add("ppgList", ppgList)
                     .add("advisor", advisor)
                     .apply();
             }
-            if("bolsista".equals(personType.getType())) {
+            /*if("bolsista".equals(personType.getType())) {
                 return null;
-            }
+            }*/
             return super.show(id, model);
         }
         return super.show(id, model);
@@ -87,6 +102,10 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
     @Override
     @PutMapping("/{id}")
     public String update(@PathVariable Integer id, Person entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+
+        //System.out.println(entity);
+        PersonType personType = entity.getPersonType();
+        //System.out.println(personType.getType());
 
         List<PersonType> personTypeList = personTypeService.findAll();
         new ModelAttributes(model)

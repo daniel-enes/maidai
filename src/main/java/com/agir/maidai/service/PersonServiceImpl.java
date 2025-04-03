@@ -28,6 +28,7 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     @Override
     @Transactional
     public void create(Person person) {
+
         validatePersonType(person);
         super.create(person);
 
@@ -37,6 +38,19 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
             createAdvisorRecord(person);
         }
     }
+
+    /*@Override
+    @Transactional
+    public void update(Person person) {
+
+        super.update(person);
+
+        PersonType personType = person.getPersonType();
+
+        if("orientador".equals(personType.getType())) {
+            createAdvisorRecord(person);
+        }
+    }*/
 
     private void validatePersonType(Person person) {
         if (person.getPersonType() == null) {

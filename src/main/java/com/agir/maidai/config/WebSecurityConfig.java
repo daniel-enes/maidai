@@ -43,6 +43,8 @@ public class WebSecurityConfig {
             "/companies/**",
             "/projects",
             "/projects/**",
+            "/advisors",
+            "/advisors/**",
             "/people",
             "/people/**",
             "/ppgs",

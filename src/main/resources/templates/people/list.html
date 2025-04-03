@@ -65,7 +65,7 @@
                 <td colspan="2">Nenhuma pessoa encontrada</td>
             </tr>
             <tr th:each="person : ${personList}">
-                <td th:text="${person.name}">Nome</td>
+                <td><a th:text="${person.name}" th:href="@{/people/{id}(id=${person.id})}">Nome</a></td>
                 <td th:text="${person.phone}">Telefone</td>
                 <td th:text="${person.email}">Email</td>
                 <td th:text="${person.personType.type}">Tipo</td>

@@ -9,7 +9,7 @@ public class Advisor {
 
     @Id
     @Column(name = "pessoas_id")
-    private Integer personId;
+    private Integer id;
 
     @OneToOne
     @MapsId
@@ -24,13 +24,23 @@ public class Advisor {
     }
 
     public Advisor(Person person) {
-        this.personId = person != null ? person.getId() : null;
+        this.id = person != null ? person.getId() : null;
         this.person = person;
-        //this.ppg = ppg;
+        this.ppg = null;
     }
 
-    public Integer getPersonId() {
-        return personId;
+    public Advisor(Person person, PPG ppg) {
+        this.id = person != null ? person.getId() : null;
+        this.person = person;
+        this.ppg = ppg;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Person getPerson() {
@@ -47,5 +57,12 @@ public class Advisor {
 
     public void setPpg(PPG ppg) {
         this.ppg = ppg;
+    }
+
+    @Override
+    public String toString() {
+        return "Advisor{" +
+                "id=" + id +
+                '}';
     }
 }

@@ -92,6 +92,10 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 input {
     width: 100%;
     margin: 0 0 20px 0;
@@ -101,7 +105,14 @@ select {
     padding: 5px 10px;
 }
 
+dt {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
 
+dt, dd {
+    margin: 15px 0;
+}
 /*******
 
 
