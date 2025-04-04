@@ -18,14 +18,13 @@
             <dt>Nome:</dt>
             <dd th:text="*{name}"></dd>
             <dt>Telefone:</dt>
-            <dd th:text="*{phone}"></dd>
+            <dd th:text="*{phone} ?: 'Nenhum número registrado'"></dd>
             <dt>E-mail:</dt>
-            <dd th:text="*{email}"></dd>
+            <dd th:text="*{email} ?: 'Nenhum e-mail registrado'"></dd>
             <dt>Tipo:</dt>
             <dd th:text="*{personType.type}"></dd>
-            <!--<dd th:if="*{advisor.ppg == null}">   EXIBIR O PPG, caso esteja cadastrado
-                <a href="#">Cadastrar em um PPG</a>
-            </dd>-->
+            <dt>PPG</dt>
+            <dd th:if="*{advisor.ppg != null}" th:text="*{advisor.ppg.name}"></dd>
         </dl>
         <div th:object="${person}" th:if="${person.advisor != null}">
             <fieldset th:if="*{advisor.ppg == null}">

@@ -1,10 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{components/layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Projeto</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
 </head>
 <body>
+<main class="light flex-grow-8 padding-20"  layout:fragment="content">
+    <h1>Projeto</h1>
+    <div th:replace="~{components/alert :: alert}"></div>
+    <div class="max-width-800px" th:if="${project.id != null}">
+        <dl th:object="${project}">
+            <dt>Nome:</dt>
+            <dd th:text="*{name}"></dd>
+            <dt>Empresa</dt>
+            <dd th:text="*{company.name}"></dd>
+        </dl>
+        <div th:object="" th:if="">
+            <fieldset th:if="">
+                <legend>Cadastrar Orientador e Coorientador</legend>
 
+                <form th:object="" th:if="" method="post" th:action="">
+
+                    <input type="hidden" name="_method" value="put">
+
+                    <!-- CSRF token for security -->
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                    <div>
+                        <select id="" name="" required th:field="">
+                            <option value="">--- Selecione um orientador ---</option>
+                            <option th:each=""
+                                    th:value=""
+                                    th:text="">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <select id="" name="" required th:field="">
+                            <option value="">--- Selecione um coorientador ---</option>
+                            <option th:each=""
+                                    th:value=""
+                                    th:text="">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="button success font-light">
+                            Cadastrar
+                        </button>
+                    </div>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+</main>
 </body>
 </html>

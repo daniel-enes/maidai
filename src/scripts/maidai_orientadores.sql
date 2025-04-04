@@ -23,12 +23,12 @@ DROP TABLE IF EXISTS `orientadores`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orientadores` (
-  `id` int unsigned NOT NULL,
-  `ppg_id` int unsigned NOT NULL,
-  PRIMARY KEY (`id`),
+  `pessoas_id` int unsigned NOT NULL,
+  `ppg_id` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`pessoas_id`),
   KEY `fk_orientadores_ppg1_idx` (`ppg_id`),
-  CONSTRAINT `fk_orientadores_ppg1` FOREIGN KEY (`ppg_id`) REFERENCES `ppg` (`id`),
-  CONSTRAINT `fk_orientadores_usuarios1` FOREIGN KEY (`id`) REFERENCES `pessoas` (`id`)
+  CONSTRAINT `fk_orientadores_pessoas1` FOREIGN KEY (`pessoas_id`) REFERENCES `pessoas` (`id`),
+  CONSTRAINT `fk_orientadores_ppg1` FOREIGN KEY (`ppg_id`) REFERENCES `ppg` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-01 14:09:26
+-- Dump completed on 2025-04-04 17:06:16

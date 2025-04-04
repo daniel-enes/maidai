@@ -16,14 +16,14 @@ public class Person extends AuditableEntity {
     private Integer id;
 
     @NotBlank
-    @Column(name = "nome", unique = true)
+    @Column(name = "nome")
     private String name;
 
-    @Column(name = "telefone")
+    @Column(name = "telefone", nullable = true )
     private String phone;
 
     @Email
-    @Column(name = "email")
+    @Column(name = "email", nullable = true)
     private String email;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -33,14 +33,6 @@ public class Person extends AuditableEntity {
     @JoinColumn(name = "tipos_pessoa_id", referencedColumnName = "id")
     private PersonType personType;
 
-    public PersonType getPersonType() {
-        return personType;
-    }
-
-    public void setPersonType(PersonType personType) {
-        this.personType = personType;
-    }
-
     public Person() {
     }
 
@@ -49,7 +41,6 @@ public class Person extends AuditableEntity {
         this.name = name;
         this.phone = phone;
         this.email = email;
-
     }
 
     public Integer getId() {
@@ -73,7 +64,7 @@ public class Person extends AuditableEntity {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone =(phone == null || phone.trim().isEmpty()) ? null : phone.trim();
     }
 
     public String getEmail() {
@@ -81,7 +72,15 @@ public class Person extends AuditableEntity {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = (email == null || email.trim().isEmpty()) ? null : email.trim();
+    }
+
+    public PersonType getPersonType() {
+        return personType;
+    }
+
+    public void setPersonType(PersonType personType) {
+        this.personType = personType;
     }
 
     public Advisor getAdvisor() {

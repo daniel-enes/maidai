@@ -26,14 +26,17 @@ CREATE TABLE `bolsas` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `inicio` date DEFAULT NULL,
   `fim` date DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   `projetos_id` int unsigned NOT NULL,
   `tipos_bolsa_id` int unsigned NOT NULL,
-  `bolsistas_id` int unsigned NOT NULL,
+  `pessoas_id` int unsigned NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `pessoas_id_UNIQUE` (`pessoas_id`),
   KEY `fk_bolsas_projetos1_idx` (`projetos_id`),
   KEY `fk_bolsas_tipos_bolsa1_idx` (`tipos_bolsa_id`),
-  KEY `fk_bolsas_bolsistas1_idx` (`bolsistas_id`),
-  CONSTRAINT `fk_bolsas_bolsistas1` FOREIGN KEY (`bolsistas_id`) REFERENCES `bolsistas` (`id`),
+  KEY `fk_bolsas_pessoas1_idx` (`pessoas_id`),
+  CONSTRAINT `fk_bolsas_pessoas1` FOREIGN KEY (`pessoas_id`) REFERENCES `pessoas` (`id`),
   CONSTRAINT `fk_bolsas_projetos1` FOREIGN KEY (`projetos_id`) REFERENCES `projetos` (`id`),
   CONSTRAINT `fk_bolsas_tipos_bolsa1` FOREIGN KEY (`tipos_bolsa_id`) REFERENCES `tipos_bolsa` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -57,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-01 14:09:26
+-- Dump completed on 2025-04-04 17:06:17

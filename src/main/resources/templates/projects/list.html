@@ -62,7 +62,7 @@
                 <td colspan="2">Nenhum projeto encontrado</td>
             </tr>
             <tr th:each="project : ${projectList}">
-                <td th:text="${project.name}">Nome</td>
+                <td><a th:text="${project.name}" th:href="@{/projects/{id}(id=${project.id})}">Nome</a></td>
 
                 <td class="text-center">
                     <a th:href="@{/projects/{id}/edit(id=${project.id})}"

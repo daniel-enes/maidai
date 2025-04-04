@@ -23,13 +23,16 @@ DROP TABLE IF EXISTS `orientadores_projetos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orientadores_projetos` (
-  `orientadores_id` int unsigned NOT NULL,
+  `orientadores_pessoas_id` int unsigned NOT NULL,
   `projetos_id` int unsigned NOT NULL,
-  PRIMARY KEY (`orientadores_id`,`projetos_id`),
+  `coorientador` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`orientadores_pessoas_id`,`projetos_id`),
   KEY `fk_orientadores_has_projetos_projetos1_idx` (`projetos_id`),
-  KEY `fk_orientadores_has_projetos_orientadores1_idx` (`orientadores_id`),
-  CONSTRAINT `fk_orientadores_has_projetos_orientadores1` FOREIGN KEY (`orientadores_id`) REFERENCES `orientadores` (`id`),
-  CONSTRAINT `fk_orientadores_has_projetos_projetos1` FOREIGN KEY (`projetos_id`) REFERENCES `projetos` (`id`)
+  KEY `fk_orientadores_has_projetos_orientadores1_idx` (`orientadores_pessoas_id`),
+  KEY `fk_orientadores_projetos_orientadores1_idx` (`coorientador`),
+  CONSTRAINT `fk_orientadores_has_projetos_orientadores1` FOREIGN KEY (`orientadores_pessoas_id`) REFERENCES `orientadores` (`pessoas_id`),
+  CONSTRAINT `fk_orientadores_has_projetos_projetos1` FOREIGN KEY (`projetos_id`) REFERENCES `projetos` (`id`),
+  CONSTRAINT `fk_orientadores_projetos_orientadores1` FOREIGN KEY (`coorientador`) REFERENCES `orientadores` (`pessoas_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-01 14:09:26
+-- Dump completed on 2025-04-04 17:06:16

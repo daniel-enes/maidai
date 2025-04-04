@@ -31,7 +31,6 @@ CREATE TABLE `pessoas` (
   `updated_at` datetime(6) DEFAULT NULL,
   `tipos_pessoa_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email_UNIQUE` (`email`),
   KEY `fk_pessoas_tipos_pessoa1_idx` (`tipos_pessoa_id`),
   CONSTRAINT `fk_pessoas_tipos_pessoa1` FOREIGN KEY (`tipos_pessoa_id`) REFERENCES `tipos_pessoa` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -55,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-01 14:09:26
+-- Dump completed on 2025-04-04 17:06:17

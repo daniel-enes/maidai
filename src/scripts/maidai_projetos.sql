@@ -25,6 +25,8 @@ DROP TABLE IF EXISTS `projetos`;
 CREATE TABLE `projetos` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
   `empresas_id` int unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome_UNIQUE` (`nome`),
@@ -51,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-01 14:09:26
+-- Dump completed on 2025-04-04 17:06:16

@@ -37,6 +37,9 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         if("orientador".equals(personType.getType())) {
             createAdvisorRecord(person);
         }
+        /*if("bolsista".equals(personType.getType())) {
+
+        }*/
     }
 
     /*@Override

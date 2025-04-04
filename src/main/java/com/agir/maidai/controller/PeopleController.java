@@ -103,9 +103,7 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
     @PutMapping("/{id}")
     public String update(@PathVariable Integer id, Person entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
-        //System.out.println(entity);
         PersonType personType = entity.getPersonType();
-        //System.out.println(personType.getType());
 
         List<PersonType> personTypeList = personTypeService.findAll();
         new ModelAttributes(model)

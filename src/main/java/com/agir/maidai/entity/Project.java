@@ -3,6 +3,9 @@ package com.agir.maidai.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name="projetos")
@@ -20,6 +23,9 @@ public class Project extends AuditableEntity {
     @ManyToOne
     @JoinColumn(name = "empresas_id", referencedColumnName = "id")
     private Company company;
+
+    @OneToMany(mappedBy = "project")
+    private List<AdvisorProject> advisorProjects = new ArrayList<>();
 
     public Project() {
     }
@@ -42,7 +48,7 @@ public class Project extends AuditableEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public Company getCompany() {
@@ -51,6 +57,14 @@ public class Project extends AuditableEntity {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public List<AdvisorProject> getAdvisorProjects() {
+        return advisorProjects;
+    }
+
+    public void setAdvisorProjects(List<AdvisorProject> advisorProjects) {
+        this.advisorProjects = advisorProjects;
     }
 
     @Override

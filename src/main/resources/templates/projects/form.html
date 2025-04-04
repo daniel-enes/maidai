@@ -31,7 +31,9 @@
 
             <div class="margin-y-20">
                 <label for="personTypes">Empresas: </label>
-                <select id="personTypes" name="personTypes" th:field="*{company}" required>
+                <p th:if="${companyList.isEmpty()}"><b>Nenhuma empresa encontrada</b>. <a th:href="@{/companies}">Certifique-se
+                    de ter cadastado alguma empresas</a>.</p>
+                <select id="personTypes" name="personTypes" th:field="*{company}" th:if="${!companyList.isEmpty()}" required>
                     <option th:each="company : ${companyList}"
                             th:value="${company.id}"
                             th:text="${company.name}">

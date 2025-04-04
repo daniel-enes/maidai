@@ -3,6 +3,9 @@ package com.agir.maidai.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "orientadores")
 public class Advisor {
@@ -19,6 +22,12 @@ public class Advisor {
     @ManyToOne
     @JoinColumn(name = "ppg_id", nullable = false)
     private PPG ppg;
+
+    @OneToMany(mappedBy = "advisor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<AdvisorProject> advisorProjects = new ArrayList<>();
+
+    @OneToMany(mappedBy = "coAdvisor")
+    private List<AdvisorProject> coAdvisorProjects = new ArrayList<>();
 
     public Advisor() {
     }
@@ -57,6 +66,22 @@ public class Advisor {
 
     public void setPpg(PPG ppg) {
         this.ppg = ppg;
+    }
+
+    public List<AdvisorProject> getAdvisorProjects() {
+        return advisorProjects;
+    }
+
+    public void setAdvisorProjects(List<AdvisorProject> advisorProjects) {
+        this.advisorProjects = advisorProjects;
+    }
+
+    public List<AdvisorProject> getCoAdvisorProjects() {
+        return coAdvisorProjects;
+    }
+
+    public void setCoAdvisorProjects(List<AdvisorProject> coAdvisorProjects) {
+        this.coAdvisorProjects = coAdvisorProjects;
     }
 
     @Override

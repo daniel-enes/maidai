@@ -113,6 +113,10 @@ dt {
 dt, dd {
     margin: 15px 0;
 }
+
+b {
+    font-weight: bold;
+}
 /*******
 
 

@@ -1,7 +1,9 @@
 package com.agir.maidai.controller;
 
+import com.agir.maidai.entity.Advisor;
 import com.agir.maidai.entity.Company;
 import com.agir.maidai.entity.Project;
+import com.agir.maidai.service.AdvisorService;
 import com.agir.maidai.service.CompanyServiceImpl;
 import com.agir.maidai.service.ProjectServiceImpl;
 import com.agir.maidai.util.ModelAttributes;
@@ -20,12 +22,25 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
 
     private final ProjectServiceImpl projectServiceImpl;
     private final CompanyServiceImpl companyService;
+    private final AdvisorService advisorService;
 
     @Autowired
-    public ProjectsController(ProjectServiceImpl projectServiceImpl, CompanyServiceImpl companyService) {
+    public ProjectsController(ProjectServiceImpl projectServiceImpl, CompanyServiceImpl companyService, AdvisorService advisorService) {
         super(projectServiceImpl, "project", "projects");
         this.projectServiceImpl = projectServiceImpl;
         this.companyService = companyService;
+        this.advisorService = advisorService;
+    }
+
+    @Override
+    @GetMapping("/{id}")
+    public String show(@PathVariable Integer id, Model model) {
+
+        List<Advisor> advisorList = advisorService.findAll();
+        new ModelAttributes(model)
+                .add("advisorList", advisorList)
+                .apply();
+        return super.show(id, model);
     }
 
     @Override
