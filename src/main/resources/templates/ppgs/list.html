@@ -60,7 +60,7 @@
             </thead>
             <tbody>
             <tr th:if="${#lists.isEmpty(ppgList)}">
-                <td colspan="2">Nenhuma empresa encontrada</td>
+                <td colspan="2">Nenhum PPG foi encontrado</td>
             </tr>
             <tr th:each="ppg : ${ppgList}">
                 <td th:text="${ppg.name}">Nome</td>

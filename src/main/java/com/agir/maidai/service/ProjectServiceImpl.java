@@ -1,5 +1,6 @@
 package com.agir.maidai.service;
 
+import com.agir.maidai.entity.Company;
 import com.agir.maidai.entity.Project;
 import com.agir.maidai.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,18 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
     }
 
     public void create(Project project) {
+
         String trimmedName = project.getName().trim();
         project.setName(trimmedName);
         if(projectRepository.existsByName(trimmedName)) {
             throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
         }
+
+        Company company = project.getCompany();
+        if(company == null) {
+            throw new IllegalArgumentException("É necessário definir uma empresa para o projeto.");
+        }
+
         super.create(project);
     }
 

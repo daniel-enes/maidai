@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/advisors")
 public class AdvisorsController extends AbstractCrudController<Advisor, Integer>  implements CrudController<Advisor, Integer>{

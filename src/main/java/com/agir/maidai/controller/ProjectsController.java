@@ -1,19 +1,18 @@
 package com.agir.maidai.controller;
 
-import com.agir.maidai.entity.Advisor;
-import com.agir.maidai.entity.Company;
-import com.agir.maidai.entity.Project;
-import com.agir.maidai.service.AdvisorService;
-import com.agir.maidai.service.CompanyServiceImpl;
-import com.agir.maidai.service.ProjectServiceImpl;
+import com.agir.maidai.entity.*;
+import com.agir.maidai.service.*;
 import com.agir.maidai.util.ModelAttributes;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,14 +22,22 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     private final ProjectServiceImpl projectServiceImpl;
     private final CompanyServiceImpl companyService;
     private final AdvisorService advisorService;
+    private final AdvisorProjectServiceImpl advisorProjectService;
 
     @Autowired
-    public ProjectsController(ProjectServiceImpl projectServiceImpl, CompanyServiceImpl companyService, AdvisorService advisorService) {
+    public ProjectsController(ProjectServiceImpl projectServiceImpl,
+                              CompanyServiceImpl companyService,
+                              AdvisorService advisorService, AdvisorProjectServiceImpl advisorProjectService) {
         super(projectServiceImpl, "project", "projects");
         this.projectServiceImpl = projectServiceImpl;
         this.companyService = companyService;
         this.advisorService = advisorService;
+
+        this.advisorProjectService = advisorProjectService;
     }
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     @GetMapping("/{id}")
@@ -48,21 +55,71 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     public String create(Model model) {
 
         List<Company> companyList  = companyService.findAll();
+        List<Advisor> advisorList = advisorService.findAll();
+
         new ModelAttributes(model)
                 .add("companyList", companyList)
+                .add("advisorList", advisorList)
                 .apply();
         return super.create(model);
     }
 
     @Override
     @PostMapping
-    public String store(Project entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+    public String store(Project entity,
+                        BindingResult bindingResult,
+                        Model model,
+                        RedirectAttributes redirectAttributes) {
 
+        Integer advisorId = Integer.valueOf(request.getParameter("advisorId"));
+        Integer coAdvisorId = request.getParameter("coAdvisorId") != null ? Integer.valueOf(request.getParameter("coAdvisorId"))
+                : null;
+
+        // Send the lists to the model case occurs a error
         List<Company> companyList = companyService.findAll();
         new ModelAttributes(model)
                 .add("companyList", companyList)
                 .apply();
-        return super.store(entity, bindingResult, model, redirectAttributes);
+
+        if(bindingResult.hasErrors()) {
+            new ModelAttributes(model)
+                    .add("errors", bindingResult.getAllErrors())
+                    .add(entityName, entity)
+                    .apply();
+            return baseViewPath + "/form";
+        }
+
+        try {
+            projectServiceImpl.create(entity);
+
+            AdvisorProjectId id = new AdvisorProjectId();
+            id.setProjectId(entity.getId());
+            id.setAdvisorId(advisorId);
+
+            Advisor advisor = advisorService.find(advisorId);
+            Advisor coAdvisor = (coAdvisorId != null) ? advisorService.find(coAdvisorId) : null;
+
+            AdvisorProject relationship = new AdvisorProject();
+            relationship.setId(id);
+            relationship.setProject(entity);
+            relationship.setAdvisor(advisor);
+            relationship.setCoAdvisor(coAdvisor);
+
+            advisorProjectService.create(relationship);
+
+            redirectAttributes.addFlashAttribute("success", "Projeto cadastado com sucesso.");
+            return "redirect:/" + baseViewPath;
+        } catch (Exception e) {
+            List<ObjectError> errors = new ArrayList<>();
+            errors.add(new ObjectError("globalError", e.getMessage()));
+
+            new ModelAttributes(model)
+                    .add("errors", errors)
+                    .add(entityName, entity)
+                    .apply();
+
+            return baseViewPath + "/form";
+        }
     }
 
     @Override

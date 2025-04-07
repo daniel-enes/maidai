@@ -84,6 +84,9 @@ public class AdvisorProjectServiceImpl implements AdvisorProjectService {
     @Transactional
     public AdvisorProject createRelationship(Integer projectId, Integer advisorId, Integer coAdvisorId) {
         Project project = projectService.find(projectId);
+        if(advisorId == coAdvisorId) {
+            throw new IllegalStateException("Cadastre o Orientador diferente do Coorientador.");
+        }
         Advisor advisor = advisorService.find(advisorId);
         Advisor coAdvisor = (coAdvisorId != null) ? advisorService.find(coAdvisorId) : null;
 
