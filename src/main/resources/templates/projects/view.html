@@ -19,28 +19,12 @@
             <dd th:text="*{name}"></dd>
             <dt>Empresa:</dt>
             <dd th:text="*{company.name}"></dd>
-            <!-- Main Advisor -->
             <dt>Orientador:</dt>
-            <dd th:if="*{advisorProjects.size() > 0}">
-                <span th:each="rel, iterStat : *{advisorProjects}"
-                      th:text="${rel.advisor.person.name}">
-                </span>
-            </dd>
-            <dd th:unless="*{advisorProjects.size() > 0}">
-                Nenhum orientador associado
-            </dd>
-
-            <!-- Co-Advisor -->
-            <dt>Coorientador:</dt>
-            <dd th:if="*{advisorProjects.size() > 0}">
-                <span th:each="rel : *{advisorProjects}"
-                      th:if="${rel.coAdvisor != null}"
-                      th:text="${rel.coAdvisor.person.name}">
-                </span>
-                <span th:if="${#lists.isEmpty(project.advisorProjects.?[coAdvisor != null])}">
-                    Nenhum coorientador associado
-                </span>
-            </dd>
+            <dd th:text="*{advisor.person.name}"></dd>
+            <th:block th:if="*{coAdvisor != null}">
+                <dt>Coorientador:</dt>
+                <dd  th:text="*{coAdvisor.person.name}"></dd>
+            </th:block>
         </dl>
 
     </div>

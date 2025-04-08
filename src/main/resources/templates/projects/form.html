@@ -29,11 +29,21 @@
                 <input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>
             </div>
 
+            <div>
+                <label for="start">Data de início:</label> <br>
+                <input type="date" name="start" id="start" th:field="*{start}">
+            </div>
+
+            <div>
+                <label for="end">Data do fim:</label> <br>
+                <input type="date" name="end" id="end" th:field="*{end}">
+            </div>
+
             <div class="margin-y-20">
-                <label for="personTypes">Empresa: </label> <br>
+                <label for="company">Empresa: </label> <br>
                 <p th:if="${companyList.isEmpty()}"><b>Nenhuma empresa encontrada</b>. <a th:href="@{/companies}">Certifique-se
                     de ter cadastado alguma empresas</a>.</p>
-                <select id="personTypes" name="personTypes" th:field="*{company}" th:if="${!companyList.isEmpty()}" >
+                <select id="company" name="company" th:field="*{company}" th:if="${!companyList.isEmpty()}" >
 
                     <option value="">--- Selecione uma empresa ---</option>
                     <option th:each="company : ${companyList}"
@@ -45,9 +55,9 @@
 
             <div class="margin-y-20">
                 <label for="advisorId">Orientador: </label> <br>
-                <p th:if="${advisorList.isEmpty()}"><b>Nenhum orientador encontrado</b>. <a th:href="@{/people/create}">Certifique-se
+                <p th:if="${advisorList.isEmpty()}"><b>Nenhum orientador encontrado</b>. <a th:href="@{/people}">Certifique-se
                     de ter já ter cadastado algum orientador</a>.</p>
-                <select id="advisorId" name="advisorId" th:if="${!advisorList.isEmpty()}" >
+                <select id="advisorId" name="advisorId" th:field="*{advisorId}" th:if="${!advisorList.isEmpty()}" >
 
                     <option value="">--- Selecione um orientador ---</option>
                     <option th:each="advisor : ${advisorList}"
@@ -56,12 +66,10 @@
                     </option>
                 </select>
             </div>
-            <div class="margin-y-20">
-                <label for="coAdvisorId">Coorientador: </label> <br>
-                <p th:if="${advisorList.isEmpty()}"><b>Nenhum orientador encontrado</b>. <a th:href="@{/people/create}">Certifique-se
-                    de ter já ter cadastado algum orientador</a> para registro de coorientadores.</p>
-                <select id="coAdvisorId" name="coAdvisorId" th:if="${!advisorList.isEmpty()}" >
 
+            <div class="margin-y-20" th:if="${!advisorList.isEmpty()}">
+                <label for="coAdvisorId">Coorientador: </label> <br>
+                <select id="coAdvisorId" name="coAdvisorId" th:field="*{coAdvisorId}">
                     <option value="">--- Selecione um coorientador ---</option>
                     <option th:each="advisor : ${advisorList}"
                             th:value="${advisor.id}"

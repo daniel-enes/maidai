@@ -3,7 +3,6 @@ package com.agir.maidai.controller;
 import com.agir.maidai.entity.*;
 import com.agir.maidai.service.*;
 import com.agir.maidai.util.ModelAttributes;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,22 +21,17 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     private final ProjectServiceImpl projectServiceImpl;
     private final CompanyServiceImpl companyService;
     private final AdvisorService advisorService;
-    private final AdvisorProjectServiceImpl advisorProjectService;
+
 
     @Autowired
     public ProjectsController(ProjectServiceImpl projectServiceImpl,
                               CompanyServiceImpl companyService,
-                              AdvisorService advisorService, AdvisorProjectServiceImpl advisorProjectService) {
+                              AdvisorService advisorService) {
         super(projectServiceImpl, "project", "projects");
         this.projectServiceImpl = projectServiceImpl;
         this.companyService = companyService;
         this.advisorService = advisorService;
-
-        this.advisorProjectService = advisorProjectService;
     }
-
-    @Autowired
-    private HttpServletRequest request;
 
     @Override
     @GetMapping("/{id}")
@@ -71,14 +65,14 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
                         Model model,
                         RedirectAttributes redirectAttributes) {
 
-        Integer advisorId = Integer.valueOf(request.getParameter("advisorId"));
-        Integer coAdvisorId = request.getParameter("coAdvisorId") != null ? Integer.valueOf(request.getParameter("coAdvisorId"))
-                : null;
 
         // Send the lists to the model case occurs a error
         List<Company> companyList = companyService.findAll();
+        List<Advisor> advisorList = advisorService.findAll();
+
         new ModelAttributes(model)
                 .add("companyList", companyList)
+                .add("advisorList", advisorList)
                 .apply();
 
         if(bindingResult.hasErrors()) {
@@ -91,22 +85,6 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
 
         try {
             projectServiceImpl.create(entity);
-
-            AdvisorProjectId id = new AdvisorProjectId();
-            id.setProjectId(entity.getId());
-            id.setAdvisorId(advisorId);
-
-            Advisor advisor = advisorService.find(advisorId);
-            Advisor coAdvisor = (coAdvisorId != null) ? advisorService.find(coAdvisorId) : null;
-
-            AdvisorProject relationship = new AdvisorProject();
-            relationship.setId(id);
-            relationship.setProject(entity);
-            relationship.setAdvisor(advisor);
-            relationship.setCoAdvisor(coAdvisor);
-
-            advisorProjectService.create(relationship);
-
             redirectAttributes.addFlashAttribute("success", "Projeto cadastado com sucesso.");
             return "redirect:/" + baseViewPath;
         } catch (Exception e) {
@@ -126,8 +104,10 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Integer id, Model model) {
         List<Company> companyList = companyService.findAll();
+        List<Advisor> advisorList = advisorService.findAll();
         new ModelAttributes(model)
                 .add("companyList", companyList)
+                .add("advisorList", advisorList)
                 .apply();
         return super.edit(id, model);
     }
@@ -136,9 +116,13 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     @PutMapping("/{id}")
     public String update(@PathVariable Integer id, Project entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
+        // Send the lists to the model case occurs a error
         List<Company> companyList = companyService.findAll();
+        List<Advisor> advisorList = advisorService.findAll();
+
         new ModelAttributes(model)
                 .add("companyList", companyList)
+                .add("advisorList", advisorList)
                 .apply();
         return super.update(id, entity, bindingResult, model, redirectAttributes);
     }

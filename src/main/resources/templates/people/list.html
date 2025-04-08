@@ -56,6 +56,7 @@
                 <th>Telefone</th>
                 <th>Email</th>
                 <th>Tipo</th>
+                <th>Status</th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
@@ -69,6 +70,14 @@
                 <td th:text="${person.phone}">Telefone</td>
                 <td th:text="${person.email}">Email</td>
                 <td th:text="${person.personType.type}">Tipo</td>
+                <td>
+                    <th:block th:if="${person.advisor}">
+                        <span th:switch="${person.advisor.ppg == null}">
+                            <a th:case="true" th:href="@{/people/{id}(id=${person.id})}">Cadastrar PPG</a>
+                            <span th:case="false">sem pendência</span>
+                        </span>
+                    </th:block>
+                </td>
                 <td class="text-center">
                     <a th:href="@{/people/{id}/edit(id=${person.id})}"
                        role="button"

@@ -20,14 +20,14 @@ public class Advisor {
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "ppg_id", nullable = false)
+    @JoinColumn(name = "ppg_id", nullable = true)
     private PPG ppg;
 
-    @OneToMany(mappedBy = "advisor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<AdvisorProject> advisorProjects = new ArrayList<>();
+    @OneToMany(mappedBy = "advisor")
+    private List<Project> advisorProjectList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "coAdvisor")
-    private List<AdvisorProject> coAdvisorProjects = new ArrayList<>();
+    @OneToMany(targetEntity = Project.class, mappedBy = "coAdvisor")
+    private List<Project> coAdvisorProjectList = new ArrayList<>();
 
     public Advisor() {
     }
@@ -68,20 +68,20 @@ public class Advisor {
         this.ppg = ppg;
     }
 
-    public List<AdvisorProject> getAdvisorProjects() {
-        return advisorProjects;
+    public List<Project> getAdvisorProjectList() {
+        return advisorProjectList;
     }
 
-    public void setAdvisorProjects(List<AdvisorProject> advisorProjects) {
-        this.advisorProjects = advisorProjects;
+    public void setAdvisorProjectList(List<Project> advisorProjectList) {
+        this.advisorProjectList = advisorProjectList;
     }
 
-    public List<AdvisorProject> getCoAdvisorProjects() {
-        return coAdvisorProjects;
+    public List<Project> getCoAdvisorProjectList() {
+        return coAdvisorProjectList;
     }
 
-    public void setCoAdvisorProjects(List<AdvisorProject> coAdvisorProjects) {
-        this.coAdvisorProjects = coAdvisorProjects;
+    public void setCoAdvisorProjectList(List<Project> coAdvisorProjectList) {
+        this.coAdvisorProjectList = coAdvisorProjectList;
     }
 
     @Override

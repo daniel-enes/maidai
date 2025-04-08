@@ -3,6 +3,9 @@ package com.agir.maidai.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "ppg")
 public class PPG extends AuditableEntity {
@@ -16,6 +19,8 @@ public class PPG extends AuditableEntity {
     @Column(name = "nome", unique = true)
     private String name;
 
+    @OneToMany(targetEntity = Advisor.class, mappedBy ="ppg")
+    private List<Advisor> advisorList = new ArrayList<>();
 
     public PPG() {
     }
@@ -39,6 +44,14 @@ public class PPG extends AuditableEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Advisor> getAdvisorList() {
+        return advisorList;
+    }
+
+    public void setAdvisorList(List<Advisor> advisorList) {
+        this.advisorList = advisorList;
     }
 
     @Override

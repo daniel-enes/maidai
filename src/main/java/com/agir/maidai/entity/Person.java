@@ -26,7 +26,8 @@ public class Person extends AuditableEntity {
     @Column(name = "email", nullable = true)
     private String email;
 
-    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Advisor advisor;
 
     @ManyToOne

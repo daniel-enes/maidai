@@ -101,6 +101,10 @@ input {
     margin: 0 0 20px 0;
 }
 
+input[type="date"] {
+    width: 170px;
+}
+
 select {
     padding: 5px 10px;
 }
