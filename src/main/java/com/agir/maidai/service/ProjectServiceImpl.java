@@ -40,6 +40,18 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
             }
         }
 
+        if(project.getStart() == null) {
+            throw new IllegalArgumentException("É necessário definir a data que o projeto inicia.");
+        }
+
+        if (project.getEnd() == null) {
+            throw new IllegalArgumentException("É necessário definir a data que o projeto termina.");
+        }
+
+        if (project.getEnd().isBefore(project.getStart())) {
+            throw new IllegalArgumentException("A data que termina não deve ser anterior a data que inicia.");
+        }
+
         Company company = project.getCompany();
         if(company == null) {
             throw new IllegalArgumentException("É necessário definir uma empresa para o projeto.");

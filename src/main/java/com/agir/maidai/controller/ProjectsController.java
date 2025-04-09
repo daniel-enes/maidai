@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -64,7 +65,6 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
                         BindingResult bindingResult,
                         Model model,
                         RedirectAttributes redirectAttributes) {
-
 
         // Send the lists to the model case occurs a error
         List<Company> companyList = companyService.findAll();
@@ -126,6 +126,9 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
                 .apply();
         return super.update(id, entity, bindingResult, model, redirectAttributes);
     }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {}
 
     @Override
     protected Project createNewEntity() {

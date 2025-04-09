@@ -17,12 +17,18 @@
         <dl th:object="${project}">
             <dt>Nome:</dt>
             <dd th:text="*{name}"></dd>
+            <dt>Inicío em:</dt>
+            <dd th:text="*{start}"></dd>
+            <dt>Término em:</dt>
+            <dd th:text="*{end}"></dd>
             <dt>Empresa:</dt>
             <dd th:text="*{company.name}"></dd>
             <dt>Orientador:</dt>
+            <dd th:text="*{advisor.ppg.name}"></dd>
             <dd th:text="*{advisor.person.name}"></dd>
             <th:block th:if="*{coAdvisor != null}">
                 <dt>Coorientador:</dt>
+                <dd th:text="*{coAdvisor.ppg.name}"></dd>
                 <dd  th:text="*{coAdvisor.person.name}"></dd>
             </th:block>
         </dl>

@@ -34,6 +34,9 @@ public class Person extends AuditableEntity {
     @JoinColumn(name = "tipos_pessoa_id", referencedColumnName = "id")
     private PersonType personType;
 
+    @OneToOne(targetEntity = Scholarship.class, mappedBy = "person", cascade = {CascadeType.REMOVE})
+    private Scholarship scholarship;
+
     public Person() {
     }
 

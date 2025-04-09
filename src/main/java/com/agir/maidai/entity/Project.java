@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="projetos")
@@ -21,21 +23,34 @@ public class Project extends AuditableEntity {
 
     @NotNull
     @Column(name = "inicio")
-    private Date start;
+    private LocalDate start;
 
     @NotNull
     @Column(name = "fim")
-    private Date end;
+    private LocalDate end;
 
     @ManyToOne
     @JoinColumn(name = "empresas_id", referencedColumnName = "id", nullable = false)
     private Company company;
+
+    @OneToMany(targetEntity = Scholarship.class, mappedBy = "project", cascade = {CascadeType.REMOVE})
+    private List<Scholarship> scholarshipList = new ArrayList<>();
 
     @Transient
     private Integer advisorId;
 
     @Transient
     private Integer coAdvisorId;
+
+    @PostLoad
+    private void populateTransientFields() {
+        if (advisor != null) {
+            this.advisorId = advisor.getId();
+        }
+        if (coAdvisor != null) {
+            this.coAdvisorId = coAdvisor.getId();
+        }
+    }
 
     @ManyToOne
     @JoinColumn(name = "orientador", referencedColumnName = "pessoas_id", nullable = false)
@@ -49,17 +64,12 @@ public class Project extends AuditableEntity {
     public Project() {
     }
 
-    public Project(Integer id, String name, Date start, Date end) {
+    public Project(Integer id, String name, @NotNull LocalDate start, @NotNull LocalDate end) {
         this.id = id;
         this.name = name;
         this.start = start;
         this.end = end;
     }
-
-    /*public Project(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }*/
 
     public Integer getId() {
         return id;
@@ -77,19 +87,19 @@ public class Project extends AuditableEntity {
         this.name = name.trim();
     }
 
-    public Date getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 
@@ -99,6 +109,14 @@ public class Project extends AuditableEntity {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public List<Scholarship> getScholarshipList() {
+        return scholarshipList;
+    }
+
+    public void setScholarshipList(List<Scholarship> scholarshipList) {
+        this.scholarshipList = scholarshipList;
     }
 
     public Advisor getAdvisor() {
