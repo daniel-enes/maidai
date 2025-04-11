@@ -12,13 +12,7 @@
     <fieldset class="max-width-500px">
         <legend>Dados da empresa</legend>
         <div th:replace="~{components/alert :: alert}"></div>
-        <!--<div class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
-            <p class="font-bold">Erro!</p>
-            <p>Alguns erros foram encontrados:</p>
-            <ul>
-                <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
-            </ul>
-        </div>-->
+
         <form th:action="${company.id != null} ? @{/companies/{id}(id=${company.id})} : @{/companies}"
               th:object="${company}"
               method="post">
@@ -31,7 +25,6 @@
 
             <div>
                 <label for="name">Nome: </label>
-                <!--<input type="text" name="name" id="name" th:field="*{name}">-->
                 <input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>
             </div>
 

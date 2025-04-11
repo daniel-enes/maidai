@@ -7,6 +7,8 @@ import com.agir.maidai.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> implements ProjectService{
 
@@ -31,14 +33,27 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
     }
 
     public void validateSave(Project project) {
+
         String trimmedName = project.getName().trim();
         project.setName(trimmedName);
+
+        Optional<Company> projectWithSameName = projectRepository.findByName(trimmedName);
+
+        String sameNameError = "Esse nome já está sendo usado por outro projeto.";
+
+        if(projectWithSameName.isPresent()) {
+            if(project.getId() == null || !projectWithSameName.get().getId().equals(project.getId())) {
+                throw new IllegalArgumentException(sameNameError);
+            }
+        }
+
+        /*
         if(projectRepository.existsByName(trimmedName)) {
-            System.out.println("Chegou para verificar o id: " + project.getId());
             if(project.getId() == null) {
                 throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
             }
         }
+        */
 
         if(project.getStart() == null) {
             throw new IllegalArgumentException("É necessário definir a data que o projeto inicia.");
@@ -50,6 +65,10 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
 
         if (project.getEnd().isBefore(project.getStart())) {
             throw new IllegalArgumentException("A data que termina não deve ser anterior a data que inicia.");
+        }
+
+        if (project.getEnd().equals(project.getStart())) {
+            throw new IllegalArgumentException("A data que termina não deve ser igual a data que inicia.");
         }
 
         Company company = project.getCompany();

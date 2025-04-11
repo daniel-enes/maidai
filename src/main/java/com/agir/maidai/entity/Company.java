@@ -19,7 +19,7 @@ public class Company extends AuditableEntity implements NameUniqueEntity {
     @Column(name = "nome", unique = true)
     private String name;
 
-    @OneToMany(targetEntity = Project.class, mappedBy ="company", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Project.class, mappedBy ="company")
     private List<Project> projectListList = new ArrayList<>();
 
     public Company() {

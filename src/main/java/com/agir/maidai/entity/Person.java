@@ -15,7 +15,7 @@ public class Person extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank
+    //@NotBlank
     @Column(name = "nome")
     private String name;
 

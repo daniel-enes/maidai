@@ -9,13 +9,14 @@ import com.agir.maidai.service.ProjectService;
 import com.agir.maidai.service.ScholarshipService;
 import com.agir.maidai.service.ScholarshipTypeService;
 import com.agir.maidai.util.ModelAttributes;
+import com.agir.maidai.util.RedirectAttributesWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
 
     @Override
     @GetMapping("/create")
-    public String create(Model model) {
+    public String create(Model model, RedirectAttributes redirectAttributes) {
 
         List<Project> projectList = projectService.findAll();
         List<Person> personList = personService.findAll();
@@ -50,7 +51,25 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
                 .add("personList", personList)
                 .add("scholarshipTypeList", scholarshipTypeList)
                 .apply();
-        return super.create(model);
+
+
+        return super.create(model, redirectAttributes);
+    }
+
+    @Override
+    @GetMapping("/{id}/edit")
+    public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
+
+        List<Project> projectList = projectService.findAll();
+        List<Person> personList = personService.findAll();
+        List<ScholarshipType> scholarshipTypeList = scholarshipTypeService.findAll();
+
+        new ModelAttributes(model)
+                .add("projectList", projectList)
+                .add("personList", personList)
+                .add("scholarshipTypeList", scholarshipTypeList)
+                .apply();
+        return super.edit(id, model, redirectAttributes);
     }
 
     @InitBinder

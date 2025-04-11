@@ -14,7 +14,7 @@ public interface CrudController<T, ID> {
     String show(@PathVariable ID id,
                 Model model);
 
-    String create(Model model);
+    String create(Model model, RedirectAttributes redirectAttributes);
 
     String store(@Validated @ModelAttribute T entity,
                  BindingResult bindingResult,
@@ -22,7 +22,8 @@ public interface CrudController<T, ID> {
                  RedirectAttributes redirectAttributes);
 
     String edit(@PathVariable ID id,
-                Model model);
+                Model model,
+                RedirectAttributes redirectAttributes);
 
     String update(@PathVariable ID id,
                   @Validated @ModelAttribute T entity,

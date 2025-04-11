@@ -2,6 +2,7 @@ package com.agir.maidai.controller;
 
 import com.agir.maidai.service.CrudService;
 import com.agir.maidai.util.ModelAttributes;
+import com.agir.maidai.util.RedirectAttributesWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +31,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         new ModelAttributes(model)
                 .add(entityName + "List", service.findAll())
                 .apply();
-        //model.addAttribute(entityName + "List", service.findAll());
         return baseViewPath + "/list";
     }
 
@@ -45,11 +45,14 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
 
     @Override
     @GetMapping("/create")
-    public String create(Model model) {
-        new ModelAttributes(model)
-                .add(entityName, createNewEntity())
-                .apply();
-        //model.addAttribute(entityName, createNewEntity());
+    public String create(Model model, RedirectAttributes redirectAttributes) {
+
+        if(!model.containsAttribute(entityName)) {
+            new ModelAttributes(model)
+                    .add(entityName, createNewEntity())
+                    .apply();
+        }
+
         return baseViewPath + "/form";
     }
 
@@ -60,11 +63,12 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
                         Model model,
                         RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()) {
-            new ModelAttributes(model)
+
+            new RedirectAttributesWrapper(redirectAttributes)
                     .add("errors", bindingResult.getAllErrors())
                     .add(entityName, entity)
                     .apply();
-            return baseViewPath + "/form";
+            return "redirect:/" + baseViewPath + "/create";
         }
 
         try {
@@ -75,20 +79,22 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
             List<ObjectError> errors = new ArrayList<>();
             errors.add(new ObjectError("globalError", e.getMessage()));
 
-            new ModelAttributes(model)
+            new RedirectAttributesWrapper(redirectAttributes)
                     .add("errors", errors)
                     .add(entityName, entity)
                     .apply();
-
-            return baseViewPath + "/form";
+            return "redirect:/" + baseViewPath + "/create";
         }
     }
 
     @Override
     @GetMapping("/{id}/edit")
-    public String edit(ID id,
-                       Model model) {
-        model.addAttribute(entityName, service.find(id));
+    public String edit(ID id, Model model, RedirectAttributes redirectAttributes) {
+        if(!model.containsAttribute(entityName)) {
+            new ModelAttributes(model)
+                    .add(entityName, service.find(id))
+                    .apply();
+        }
         return baseViewPath + "/form";
     }
 
@@ -100,27 +106,28 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
                          Model model,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            new ModelAttributes(model)
+
+            new RedirectAttributesWrapper(redirectAttributes)
                     .add("errors", bindingResult.getAllErrors())
                     .add(entityName, entity)
                     .apply();
-
-            return baseViewPath + "/form";
+            return "redirect:/" + baseViewPath + "/"+id+"/edit";
         }
         try {
+
             service.update(entity);
             redirectAttributes.addFlashAttribute("success", getUpdateSuccessMessage());
             return "redirect:/" + baseViewPath;
         } catch (Exception e) {
+
             List<ObjectError> errors = new ArrayList<>();
             errors.add(new ObjectError("globalError", e.getMessage()));
 
-            new ModelAttributes(model)
+            new RedirectAttributesWrapper(redirectAttributes)
                     .add("errors", errors)
                     .add(entityName, entity)
                     .apply();
-
-            return baseViewPath + "/form";
+            return "redirect:/" + baseViewPath + "/"+id+"/edit";
         }
     }
 

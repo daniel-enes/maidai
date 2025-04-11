@@ -34,6 +34,11 @@ public class HomeController {
         return "redirect:/";
     }
 
+    @GetMapping("/scholarshipPage")
+    public String scholarshipPage() {
+        return "scholarship-page";
+    }
+
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "users/access-denied";

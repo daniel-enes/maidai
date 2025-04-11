@@ -12,7 +12,6 @@ import com.agir.maidai.util.ModelAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -67,49 +66,25 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
 
     @Override
     @GetMapping("/create")
-    public String create(Model model) {
+    public String create(Model model, RedirectAttributes redirectAttributes) {
 
         List<PersonType> personTypeList = personTypeService.findAll();
         new ModelAttributes(model)
                 .add("personTypeList", personTypeList)
                 .apply();
-        return super.create(model);
-    }
 
-    @Override
-    @PostMapping
-    public String store(Person entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        return super.create(model, redirectAttributes);
 
-        List<PersonType> personTypeList = personTypeService.findAll();
-
-        new ModelAttributes(model)
-                .add("personTypeList", personTypeList)
-                .apply();
-
-        return super.store(entity, bindingResult, model, redirectAttributes);
     }
 
     @Override
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable Integer id, Model model) {
+    public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         List<PersonType> personTypeList = personTypeService.findAll();
         new ModelAttributes(model)
                 .add("personTypeList", personTypeList)
                 .apply();
-        return super.edit(id, model);
-    }
-
-    @Override
-    @PutMapping("/{id}")
-    public String update(@PathVariable Integer id, Person entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
-
-        PersonType personType = entity.getPersonType();
-
-        List<PersonType> personTypeList = personTypeService.findAll();
-        new ModelAttributes(model)
-                .add("personTypeList", personTypeList)
-                .apply();
-        return super.update(id, entity, bindingResult, model, redirectAttributes);
+        return super.edit(id, model, redirectAttributes);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Project extends AuditableEntity {
     @JoinColumn(name = "empresas_id", referencedColumnName = "id", nullable = false)
     private Company company;
 
-    @OneToMany(targetEntity = Scholarship.class, mappedBy = "project", cascade = {CascadeType.REMOVE})
+    @OneToMany(targetEntity = Scholarship.class, mappedBy = "project")
     private List<Scholarship> scholarshipList = new ArrayList<>();
 
     @Transient

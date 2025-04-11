@@ -29,7 +29,7 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     @Transactional
     public void create(Person person) {
 
-        validatePersonType(person);
+        validateSave(person);
         super.create(person);
 
         PersonType personType = person.getPersonType();
@@ -55,7 +55,23 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         }
     }*/
 
-    private void validatePersonType(Person person) {
+    private void validateSave(Person person) {
+
+        String trimmedName = person.getName().trim();
+        person.setName(trimmedName);
+
+        if(person.getName().isEmpty()) {
+            throw new IllegalArgumentException("Nome não pode estar em branco.");
+        }
+
+        if(person.getPhone() != null) {
+            String trimmedNumber = person.getPhone().trim();
+            person.setPhone(trimmedNumber);
+            if (!person.getPhone().matches("\\d+")) {
+                throw new IllegalArgumentException("O telefone deve conter apenas números.");
+            }
+        }
+
         if (person.getPersonType() == null) {
             throw new IllegalArgumentException("É necessário definir o tipo de pessoa");
         }
