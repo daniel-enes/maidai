@@ -14,11 +14,11 @@ public class Scholarship extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull
+    //@NotNull
     @Column(name = "inicio")
     private LocalDate start;
 
-    @NotNull
+    //@NotNull
     @Column(name = "fim")
     private LocalDate end;
 

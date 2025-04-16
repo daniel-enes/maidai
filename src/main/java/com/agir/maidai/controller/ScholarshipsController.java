@@ -41,18 +41,8 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
     @Override
     @GetMapping("/create")
     public String create(Model model, RedirectAttributes redirectAttributes) {
-
-        List<Project> projectList = projectService.findAll();
-        List<Person> personList = personService.findAll();
-        List<ScholarshipType> scholarshipTypeList = scholarshipTypeService.findAll();
-
-        new ModelAttributes(model)
-                .add("projectList", projectList)
-                .add("personList", personList)
-                .add("scholarshipTypeList", scholarshipTypeList)
-                .apply();
-
-
+        
+        addEntitiesToModel(model);
         return super.create(model, redirectAttributes);
     }
 
@@ -60,16 +50,20 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
 
+        addEntitiesToModel(model);
+        return super.edit(id, model, redirectAttributes);
+    }
+
+    private void addEntitiesToModel(Model model) {
         List<Project> projectList = projectService.findAll();
-        List<Person> personList = personService.findAll();
+        List<Person> scholarshipHolders = personService.findAllScholarshipHolders();
         List<ScholarshipType> scholarshipTypeList = scholarshipTypeService.findAll();
 
         new ModelAttributes(model)
                 .add("projectList", projectList)
-                .add("personList", personList)
+                .add("personList", scholarshipHolders)
                 .add("scholarshipTypeList", scholarshipTypeList)
                 .apply();
-        return super.edit(id, model, redirectAttributes);
     }
 
     @InitBinder

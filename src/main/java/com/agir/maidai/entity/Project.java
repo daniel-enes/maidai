@@ -17,15 +17,15 @@ public class Project extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank
+    //@NotBlank
     @Column(name = "nome")
     private String name;
 
-    @NotNull
+    //@NotNull
     @Column(name = "inicio")
     private LocalDate start;
 
-    @NotNull
+    //@NotNull
     @Column(name = "fim")
     private LocalDate end;
 

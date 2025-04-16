@@ -37,13 +37,15 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
         String trimmedName = project.getName().trim();
         project.setName(trimmedName);
 
-        Optional<Company> projectWithSameName = projectRepository.findByName(trimmedName);
+        if(project.getName().isEmpty()) {
+            throw new IllegalArgumentException("Defina o nome do projeto, não o deixe em branco.");
+        }
 
-        String sameNameError = "Esse nome já está sendo usado por outro projeto.";
+        Optional<Project> projectWithSameName = projectRepository.findByName(trimmedName);
 
         if(projectWithSameName.isPresent()) {
             if(project.getId() == null || !projectWithSameName.get().getId().equals(project.getId())) {
-                throw new IllegalArgumentException(sameNameError);
+                throw new IllegalArgumentException("Esse nome já está sendo usado por outro projeto.");
             }
         }
 

@@ -10,6 +10,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PersonServiceImpl extends AbstractCrudService<Person, Integer> implements PersonService{
 
@@ -37,23 +40,17 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         if("orientador".equals(personType.getType())) {
             createAdvisorRecord(person);
         }
-        /*if("bolsista".equals(personType.getType())) {
 
-        }*/
     }
 
-    /*@Override
+    @Override
     @Transactional
     public void update(Person person) {
 
+        validateSave(person);
         super.update(person);
 
-        PersonType personType = person.getPersonType();
-
-        if("orientador".equals(personType.getType())) {
-            createAdvisorRecord(person);
-        }
-    }*/
+    }
 
     private void validateSave(Person person) {
 
@@ -87,4 +84,8 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         person.setAdvisor(advisor);
     }
 
+    @Override
+    public List<Person> findAllScholarshipHolders() {
+        return personRepository.findAllScholarshipHolders();
+    }
 }

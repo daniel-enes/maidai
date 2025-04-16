@@ -25,7 +25,6 @@
 
             <div>
                 <label for="name">Nome: </label>
-                <!--<input type="text" name="name" id="name" th:field="*{name}" maxlength="255">-->
                 <input type="text" name="name" id="name" th:field="*{name}" maxlength="255" >
             </div>
 
@@ -46,7 +45,7 @@
             <div class="margin-y-20">
                 <label for="company">Empresa: </label> <br>
                 <p th:if="${companyList.isEmpty()}"><b>Nenhuma empresa encontrada</b>. <a th:href="@{/companies}">Certifique-se
-                    de ter cadastado alguma empresas</a>.</p>
+                    de ter cadastrado alguma empresas</a>.</p>
                 <select id="company" name="company" th:field="*{company}" th:if="${!companyList.isEmpty()}" >
 
                     <option value="">--- Selecione uma empresa ---</option>

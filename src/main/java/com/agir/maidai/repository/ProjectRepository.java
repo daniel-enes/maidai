@@ -10,5 +10,5 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     boolean existsByName(String name);
 
-    Optional<Company> findByName(String name);
+    Optional<Project> findByName(String name);
 }

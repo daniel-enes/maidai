@@ -71,7 +71,7 @@
                     de ter cadastado algum tipo de bolsa</a>.</p>
                 <select id="scholarshipType" name="scholarshipType" th:field="*{scholarshipType}" th:if="${!scholarshipTypeList.isEmpty()}" >
 
-                    <option value="">--- Selecione um bolsista ---</option>
+                    <option value="">--- Selecione um tipo de bolsa ---</option>
                     <option th:each="scholarshipType : ${scholarshipTypeList}"
                             th:value="${scholarshipType.id}"
                             th:text="${scholarshipType.type}">

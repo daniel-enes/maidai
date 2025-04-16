@@ -41,7 +41,9 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
             throw new IllegalArgumentException("Defina o projeto para o qual a bolsa pertence.");
         }
 
-        if(scholarship.getPerson() == null) {
+        if(scholarship.getPerson() == null ||
+        scholarship.getPerson().getPersonType() == null ||
+        !"bolsista".equalsIgnoreCase(scholarship.getPerson().getPersonType().getType())) {
             throw new IllegalArgumentException("Defina um bolsita.");
         }
 

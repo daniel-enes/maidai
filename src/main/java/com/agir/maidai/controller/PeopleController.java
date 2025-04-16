@@ -41,14 +41,13 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
     public String show(@PathVariable Integer id, Model model) {
 
         Person person = personService.find(id);
-        Advisor advisor = advisorService.find(id);
 
         if(person.getId() != null) {
 
             PersonType personType = person.getPersonType();
 
             if("orientador".equals(personType.getType())) {
-
+                Advisor advisor = advisorService.find(id);
                 List<PPG> ppgList = ppgService.findAll();
 
                 new ModelAttributes(model)
@@ -56,10 +55,6 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
                     .add("advisor", advisor)
                     .apply();
             }
-            /*if("bolsista".equals(personType.getType())) {
-                return null;
-            }*/
-            return super.show(id, model);
         }
         return super.show(id, model);
     }
