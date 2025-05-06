@@ -4,10 +4,7 @@ import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.Project;
 import com.agir.maidai.entity.Scholarship;
 import com.agir.maidai.entity.ScholarshipType;
-import com.agir.maidai.service.PersonService;
-import com.agir.maidai.service.ProjectService;
-import com.agir.maidai.service.ScholarshipService;
-import com.agir.maidai.service.ScholarshipTypeService;
+import com.agir.maidai.service.*;
 import com.agir.maidai.util.ModelAttributes;
 import com.agir.maidai.util.RedirectAttributesWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +21,13 @@ import java.util.List;
 @RequestMapping("/scholarships")
 public class ScholarshipsController extends AbstractCrudController<Scholarship, Integer> implements CrudController<Scholarship, Integer>{
 
-    private final ScholarshipService scholarshipService;
+    private final ScholarshipServiceImpl scholarshipService;
     private final ProjectService projectService;
     private final PersonService personService;
     private final ScholarshipTypeService scholarshipTypeService;
 
     @Autowired
-    public ScholarshipsController(ScholarshipService scholarshipService, ProjectService projectService, PersonService personService, ScholarshipTypeService scholarshipTypeService) {
+    public ScholarshipsController(ScholarshipServiceImpl scholarshipService, ProjectService projectService, PersonService personService, ScholarshipTypeService scholarshipTypeService) {
         super(scholarshipService, "scholarship", "scholarships");
         this.scholarshipService = scholarshipService;
         this.projectService = projectService;
@@ -41,9 +38,20 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
     @Override
     @GetMapping("/create")
     public String create(Model model, RedirectAttributes redirectAttributes) {
-        
+
         addEntitiesToModel(model);
         return super.create(model, redirectAttributes);
+    }
+
+    @Override
+    @PostMapping
+    public String store(Scholarship scholarship,
+                        BindingResult bindingResult,
+                        Model model,
+                        RedirectAttributes redirectAttributes) {
+
+        scholarshipService.validateSave(scholarship, bindingResult);
+        return super.store(scholarship, bindingResult, model, redirectAttributes);
     }
 
     @Override
@@ -64,6 +72,18 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
                 .add("personList", scholarshipHolders)
                 .add("scholarshipTypeList", scholarshipTypeList)
                 .apply();
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    public String update(Integer id,
+                         Scholarship scholarship,
+                         BindingResult bindingResult,
+                         Model model,
+                         RedirectAttributes redirectAttributes) {
+
+        scholarshipService.validateSave(scholarship, bindingResult);
+        return super.update(id, scholarship, bindingResult, model, redirectAttributes);
     }
 
     @InitBinder

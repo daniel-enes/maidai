@@ -31,7 +31,7 @@ public class Scholarship extends AuditableEntity {
     private Project project;
 
     @OneToOne
-    @JoinColumn(name = "pessoas_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "pessoas_id", referencedColumnName = "id", nullable = false, unique = true)
     private Person person;
 
     public Scholarship() {

@@ -6,6 +6,7 @@ import com.agir.maidai.util.ModelAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -57,6 +58,16 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     }
 
     @Override
+    @PostMapping
+    public String store(Project project,
+                        BindingResult bindingResult,
+                        Model model,
+                        RedirectAttributes redirectAttributes) {
+        projectServiceImpl.validateSave(project, bindingResult);
+        return super.store(project, bindingResult, model,redirectAttributes);
+    }
+
+    @Override
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         List<Company> companyList = companyService.findAll();
@@ -66,6 +77,17 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
                 .add("advisorList", advisorList)
                 .apply();
         return super.edit(id, model, redirectAttributes);
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    public String update(Integer id, Project project,
+                        BindingResult bindingResult,
+                        Model model,
+                        RedirectAttributes redirectAttributes) {
+
+        projectServiceImpl.validateSave(project, bindingResult);
+        return super.update(id, project, bindingResult, model,redirectAttributes);
     }
 
     // Used to convert LocalDate to String and vice-versa

@@ -13,11 +13,17 @@
 
   <!-- ERROR MESSAGE -->
 
-  <div id="error" class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
+  <div id="error" class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}" role="alert">
     <p class="font-bold">Erro!</p>
     <p>Alguns erros foram encontrados:</p>
     <ul>
-      <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
+      <!--<li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>-->
+      <li th:each="error: ${errors}">
+        <a th:href="'#' + ${#strings.defaultString(error.field, 'global')}"
+           th:text="${error.defaultMessage}"
+           aria-label="Ir par ao campo com o erro."
+        ></a>
+      </li>
     </ul>
   </div>
 

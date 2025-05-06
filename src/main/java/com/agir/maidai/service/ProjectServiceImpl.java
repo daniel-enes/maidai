@@ -6,6 +6,7 @@ import com.agir.maidai.entity.Project;
 import com.agir.maidai.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
@@ -23,66 +24,75 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
     }
 
     public void create(Project project) {
-        validateSave(project);
+        //validateSave(project);
         super.create(project);
     }
 
     public void update(Project project) {
-        validateSave(project);
+        //validateSave(project);
         super.update(project);
     }
 
-    public void validateSave(Project project) {
+    public void validateSave(Project project, BindingResult bindingResult) {
 
         String trimmedName = project.getName().trim();
         project.setName(trimmedName);
 
         if(project.getName().isEmpty()) {
-            throw new IllegalArgumentException("Defina o nome do projeto, não o deixe em branco.");
+            bindingResult.rejectValue("name", "required", "Defina o nome do projeto, não o deixe em branco.");
+            //throw new IllegalArgumentException("Defina o nome do projeto, não o deixe em branco.");
         }
 
         Optional<Project> projectWithSameName = projectRepository.findByName(trimmedName);
 
         if(projectWithSameName.isPresent()) {
             if(project.getId() == null || !projectWithSameName.get().getId().equals(project.getId())) {
-                throw new IllegalArgumentException("Esse nome já está sendo usado por outro projeto.");
+                bindingResult.rejectValue("name", "duplicate", "Defina a data para quando a projeto inicia.");
+                //throw new IllegalArgumentException("Esse nome já está sendo usado por outro projeto.");
             }
         }
-
-        /*
-        if(projectRepository.existsByName(trimmedName)) {
-            if(project.getId() == null) {
-                throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
-            }
-        }
-        */
 
         if(project.getStart() == null) {
-            throw new IllegalArgumentException("É necessário definir a data que o projeto inicia.");
+            bindingResult.rejectValue("start", "required", "Defina a data para quando a projeto inicia.");
+            //throw new IllegalArgumentException("É necessário definir a data que o projeto inicia.");
         }
 
         if (project.getEnd() == null) {
-            throw new IllegalArgumentException("É necessário definir a data que o projeto termina.");
+            bindingResult.rejectValue("end", "required", "É necessário definir a data que o projeto termina.");
+            //throw new IllegalArgumentException("É necessário definir a data que o projeto termina.");
         }
 
-        if (project.getEnd().isBefore(project.getStart())) {
-            throw new IllegalArgumentException("A data que termina não deve ser anterior a data que inicia.");
+        if (project.getEnd() != null &&
+                project.getStart() !=null &&
+                project.getEnd().isBefore(project.getStart())) {
+            bindingResult.rejectValue("end", "invalid", "A data de término não pode ser anterior à data de início.");
+            //throw new IllegalArgumentException("A data que termina não deve ser anterior a data que inicia.");
         }
 
-        if (project.getEnd().equals(project.getStart())) {
-            throw new IllegalArgumentException("A data que termina não deve ser igual a data que inicia.");
+        if (project.getEnd() != null &&
+                project.getStart() !=null &&
+                project.getEnd().equals(project.getStart())) {
+            bindingResult.rejectValue("end", "invalid", "A data de término não pode ser igual à data de início.");
+            //throw new IllegalArgumentException("A data que termina não deve ser igual a data que inicia.");
         }
 
         Company company = project.getCompany();
         if(company == null) {
-            throw new IllegalArgumentException("É necessário definir uma empresa para o projeto.");
+            bindingResult.rejectValue("company", "required", "Selecione uma empresa para o projeto.");
+            //throw new IllegalArgumentException("É necessário definir uma empresa para o projeto.");
         }
 
         Integer advisorId = project.getAdvisorId();
         Advisor advisor = advisorService.find(advisorId);
 
+        if(advisorId == null) {
+            bindingResult.rejectValue("advisorId", "required", "Defina um orientador para o projeto.");
+            //throw new IllegalArgumentException("É necessário definir um orientador para o projeto.");
+        }
+
         if(advisor == null) {
-            throw new IllegalArgumentException("É necessário definir um orientador para o projeto.");
+            bindingResult.rejectValue("advisorId", "invalid", "Orientador selecionado não encontrado.");
+            //throw new IllegalArgumentException("É necessário definir um orientador para o projeto.");
         } else {
             project.setAdvisor(advisor);
         }
@@ -94,7 +104,8 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
                 Advisor coAdvisor = advisorService.find(project.getCoAdvisorId());
                 project.setCoAdvisor(coAdvisor);
             } else {
-                throw new IllegalArgumentException("Defina um 'Coorientador' diferente do 'Orientador'.");
+                bindingResult.rejectValue("coAdvisorId", "invalid", "O coorientador deve ser diferente do orientador.");
+                //throw new IllegalArgumentException("Defina um 'Coorientador' diferente do 'Orientador'.");
             }
         }
     }

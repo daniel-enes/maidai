@@ -31,6 +31,7 @@ public class Project extends AuditableEntity {
 
     @ManyToOne
     @JoinColumn(name = "empresas_id", referencedColumnName = "id", nullable = false)
+    //@JoinColumn(name = "empresas_id", referencedColumnName = "id")
     private Company company;
 
     @OneToMany(targetEntity = Scholarship.class, mappedBy = "project")
@@ -53,6 +54,7 @@ public class Project extends AuditableEntity {
     }
 
     @ManyToOne
+    //@JoinColumn(name = "orientador", referencedColumnName = "pessoas_id")
     @JoinColumn(name = "orientador", referencedColumnName = "pessoas_id", nullable = false)
     private Advisor advisor;
 
@@ -64,7 +66,7 @@ public class Project extends AuditableEntity {
     public Project() {
     }
 
-    public Project(Integer id, String name, @NotNull LocalDate start, @NotNull LocalDate end) {
+    public Project(Integer id, String name, LocalDate start, LocalDate end) {
         this.id = id;
         this.name = name;
         this.start = start;

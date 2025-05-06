@@ -72,7 +72,9 @@
             </div>
 
             <div class="margin-y-20" th:if="${!advisorList.isEmpty()}">
-                <label for="coAdvisorId">Coorientador: </label> <br>
+                <label for="coAdvisorId">Coorientador:
+                    <p class="input-description">Campo opcional.</p>
+                </label>
                 <select id="coAdvisorId" name="coAdvisorId" th:field="*{coAdvisorId}">
                     <option value="">--- Selecione um coorientador ---</option>
                     <option th:each="advisor : ${advisorList}"
