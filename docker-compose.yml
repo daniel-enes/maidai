@@ -1,0 +1,36 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/maidai?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - maidai-network
+
+  db:
+    image: mysql:8.0
+    container_name: maidai-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=maidai
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - maidai-network
+
+volumes:
+  mysql_data:
+
+networks:
+  maidai-network:
+    driver: bridge
