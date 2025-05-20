@@ -11,6 +11,7 @@ services:
       - db
     networks:
       - maidai-network
+    restart: unless-stopped
 
   db:
     image: mysql:8.0
@@ -27,6 +28,7 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - maidai-network
+    restart: unless-stopped
 
 volumes:
   mysql_data:
