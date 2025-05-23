@@ -68,7 +68,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
         return super.edit(id, model, redirectAttributes);
     }
 
-    // Used to convert LocalDate to String and vice-versa
+    // Used to convert LocalDate to String and vice versa
     @InitBinder
     public void initBinder(WebDataBinder binder) {}
 

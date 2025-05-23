@@ -4,14 +4,13 @@ import com.agir.maidai.entity.Advisor;
 import com.agir.maidai.entity.PPG;
 import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.PersonType;
-import com.agir.maidai.service.AdvisorService;
-import com.agir.maidai.service.PPGService;
-import com.agir.maidai.service.PersonService;
-import com.agir.maidai.service.PersonTypeService;
+import com.agir.maidai.service.*;
 import com.agir.maidai.util.ModelAttributes;
+import com.agir.maidai.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,13 +20,13 @@ import java.util.List;
 @RequestMapping("/people")
 public class PeopleController extends AbstractCrudController<Person, Integer>  implements CrudController<Person, Integer>{
 
-    private PersonService personService;
+    private PersonServiceImpl personService;
     private PersonTypeService personTypeService;
     private PPGService ppgService;
     private AdvisorService advisorService;
 
     @Autowired
-    public PeopleController(PersonService personService, PersonTypeService personTypeService, PPGService ppgService, AdvisorService advisorService) {
+    public PeopleController(PersonServiceImpl personService, PersonTypeService personTypeService, PPGService ppgService, AdvisorService advisorService) {
         super(personService, "person", "people");
         this.personService = personService;
         this.personTypeService = personTypeService;

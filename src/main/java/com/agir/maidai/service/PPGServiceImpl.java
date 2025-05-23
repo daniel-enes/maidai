@@ -3,6 +3,9 @@ package com.agir.maidai.service;
 import com.agir.maidai.entity.PPG;
 import com.agir.maidai.repository.PPGRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+
+import java.util.Optional;
 
 @Service
 public class PPGServiceImpl extends AbstractCrudService<PPG, Integer> implements PPGService{
@@ -13,22 +16,38 @@ public class PPGServiceImpl extends AbstractCrudService<PPG, Integer> implements
         super(ppgRepository);
         this.ppgRepository = ppgRepository;
     }
+//
+//    public void create(PPG ppg) {
+//        String trimmedName = ppg.getName().trim();
+//        ppg.setName(trimmedName);
+//        if(ppgRepository.existsByName(trimmedName)) {
+//            throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
+//        }
+//        super.create(ppg);
+//    }
 
-    public void create(PPG ppg) {
+//    public void update(PPG ppg) {
+//        String trimmedName = ppg.getName().trim();
+//        ppg.setName(trimmedName);
+//        if(ppgRepository.existsByName(trimmedName)) {
+//            throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
+//        }
+//        super.update(ppg);
+//    }
+
+    @Override
+    public Errors validateSave(PPG ppg, Errors errors) {
         String trimmedName = ppg.getName().trim();
         ppg.setName(trimmedName);
-        if(ppgRepository.existsByName(trimmedName)) {
-            throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
-        }
-        super.create(ppg);
-    }
 
-    public void update(PPG ppg) {
-        String trimmedName = ppg.getName().trim();
-        ppg.setName(trimmedName);
-        if(ppgRepository.existsByName(trimmedName)) {
-            throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
+        // Check for duplicate name
+        Optional<PPG> ppgWithSameName = ppgRepository.findByName(ppg.getName());
+
+        if(ppgWithSameName.isPresent() &&
+                (ppg.getId() == null || !ppgWithSameName.get().getId().equals(ppg.getId()))) {
+            errors.rejectValue("name", "name.duplicate", "Esse nome já está sendo usado por outra empresa.");
         }
-        super.update(ppg);
+
+        return errors;
     }
 }

@@ -25,26 +25,26 @@
 
             <div>
                 <label for="name">Nome: </label>
-                <input type="text" name="name" id="name" th:field="*{name}" maxlength="255" required>
+                <input type="text" name="name" id="name" th:field="*{name}" maxlength="255">
             </div>
             <div>
                 <label for="phone">Telefone:
-                    <p class="input-description">Campo opcional.</p>
+                    <p class="input-description">Campo opcional. Deve conter apenas números.</p>
                 </label>
-                <input type="number" name="phone" id="phone" th:field="*{phone}" maxlength="20">
+                <input type="text" name="phone" id="phone" th:field="*{phone}" maxlength="20">
 
             </div>
             <div>
                 <label for="email">E-mail:
-                    <p class="input-description">Campo opcional.</p>
+                    <p class="input-description">Campo opcional. Forneça um e-mail válido</p>
                 </label>
-                <input type="email" name="email" id="email" th:field="*{email}" maxlength="255">
+                <input type="text" name="email" id="email" th:field="*{email}" maxlength="255">
 
             </div>
 
             <div class="margin-y-20">
-                <label for="personTypes">Tipo: <span th:text="${person.id != null ? person.personType.type : null}"></span></label>
-                <select th:hidden="${person.id != null}" id="personTypes" name="personTypes" th:field="*{personType}" required >
+                <label for="personType">Tipo: <span th:text="${person.id != null ? person.personType.type : null}"></span></label>
+                <select th:hidden="${person.id != null}" id="personType" name="personType" th:field="*{personType}" >
                     <option value="">--- Selecione o tipo de pessoa ---</option>
                     <option th:each="personType : ${personTypeList}"
                             th:value="${personType.id}"

@@ -3,6 +3,7 @@ package com.agir.maidai.service;
 import com.agir.maidai.entity.AuditableEntity;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -39,5 +40,10 @@ public abstract class AbstractCrudService<T extends AuditableEntity, ID> impleme
     @Override
     public void update(T entity) {
         repository.save(entity);
+    }
+
+    @Override
+    public Errors validateSave(T entity, Errors errors) {
+        return errors;
     }
 }

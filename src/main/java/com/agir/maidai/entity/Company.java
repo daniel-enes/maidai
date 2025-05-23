@@ -15,7 +15,7 @@ public class Company extends AuditableEntity implements NameUniqueEntity {
     @Column(name = "id", unique = true)
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "Nome não pode ficar em branco ")
     @Column(name = "nome", unique = true)
     private String name;
 

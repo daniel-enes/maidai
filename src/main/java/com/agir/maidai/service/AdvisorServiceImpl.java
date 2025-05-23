@@ -11,6 +11,7 @@ import com.agir.maidai.repository.PersonTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -76,5 +77,10 @@ public class AdvisorServiceImpl implements AdvisorService {
 
         advisorRepository.save(existingAdvisor);
 
+    }
+
+    @Override
+    public Errors validateSave(Advisor entity, Errors errors) {
+        return null;
     }
 }

@@ -15,7 +15,7 @@ public class PPG extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "Nome não pode ficar em branco ")
     @Column(name = "nome", unique = true)
     private String name;
 

@@ -17,18 +17,19 @@ public class Project extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    //@NotBlank
+    @NotBlank(message="O nome do projeto não pode ficar em branco.")
     @Column(name = "nome")
     private String name;
 
-    //@NotNull
+    @NotNull(message="A data de início precisa ser definida.")
     @Column(name = "inicio")
     private LocalDate start;
 
-    //@NotNull
+    @NotNull(message="A data do fim do projeto precisa ser definida.")
     @Column(name = "fim")
     private LocalDate end;
 
+    @NotNull(message="A empresa precisa ser definida.")
     @ManyToOne
     @JoinColumn(name = "empresas_id", referencedColumnName = "id", nullable = false)
     private Company company;

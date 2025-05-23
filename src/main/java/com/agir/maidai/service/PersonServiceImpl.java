@@ -6,6 +6,7 @@ import com.agir.maidai.entity.PersonType;
 import com.agir.maidai.repository.AdvisorRepository;
 import com.agir.maidai.repository.PersonRepository;
 import com.agir.maidai.repository.PersonTypeRepository;
+import com.agir.maidai.validation.ValidationResult;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     @Transactional
     public void create(Person person) {
 
-        validateSave(person);
+        //validateSave(person);
         super.create(person);
 
         PersonType personType = person.getPersonType();
@@ -42,37 +43,15 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         }
 
     }
-
-    @Override
-    @Transactional
-    public void update(Person person) {
-
-        validateSave(person);
-        super.update(person);
-
-    }
-
-    private void validateSave(Person person) {
-
-        String trimmedName = person.getName().trim();
-        person.setName(trimmedName);
-
-        if(person.getName().isEmpty()) {
-            throw new IllegalArgumentException("Nome não pode estar em branco.");
-        }
-
-        if(person.getPhone() != null) {
-            String trimmedNumber = person.getPhone().trim();
-            person.setPhone(trimmedNumber);
-            if (!person.getPhone().matches("\\d+")) {
-                throw new IllegalArgumentException("O telefone deve conter apenas números.");
-            }
-        }
-
-        if (person.getPersonType() == null) {
-            throw new IllegalArgumentException("É necessário definir o tipo de pessoa");
-        }
-    }
+//
+//    @Override
+//    @Transactional
+//    public void update(Person person) {
+//
+//        //validateSave(person);
+//        super.update(person);
+//
+//    }
 
     private void createAdvisorRecord(Person person) {
 

@@ -13,12 +13,19 @@
 
   <!-- ERROR MESSAGE -->
 
-  <div id="error" class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
+  <!--<div id="error" class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
     <p class="font-bold">Erro!</p>
     <p>Alguns erros foram encontrados:</p>
     <ul>
       <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
     </ul>
+  </div>-->
+  <div id="" tabindex="0" autofocus class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
+    <p class="font-bold">Erro!</p>
+    <p>Alguns erros foram encontrados:</p>
+    <ul>
+      <li th:each="error: ${errors}"><a th:text="${error.defaultMessage}" th:href="'#' + ${error.getField()}"></a></li>
+     </ul>
   </div>
 
   <!-- SUCCESS MESSAGE -->

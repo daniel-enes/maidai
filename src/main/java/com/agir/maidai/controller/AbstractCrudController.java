@@ -6,6 +6,7 @@ import com.agir.maidai.util.RedirectAttributesWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -62,6 +63,9 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
                         BindingResult bindingResult,
                         Model model,
                         RedirectAttributes redirectAttributes) {
+
+        service.validateSave(entity, bindingResult);
+
         if(bindingResult.hasErrors()) {
 
             new RedirectAttributesWrapper(redirectAttributes)
@@ -76,14 +80,16 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
             redirectAttributes.addFlashAttribute("success", getCreateSuccessMessage());
             return "redirect:/" + baseViewPath;
         } catch (Exception e) {
-            List<ObjectError> errors = new ArrayList<>();
-            errors.add(new ObjectError("globalError", e.getMessage()));
-
-            new RedirectAttributesWrapper(redirectAttributes)
-                    .add("errors", errors)
-                    .add(entityName, entity)
-                    .apply();
+            System.out.println("Aconteceu um erro: " + e.getMessage());
             return "redirect:/" + baseViewPath + "/create";
+//            List<ObjectError> errors = new ArrayList<>();
+//            errors.add(new ObjectError("globalError", e.getMessage()));
+//
+//            new RedirectAttributesWrapper(redirectAttributes)
+//                    .add("errors", errors)
+//                    .add(entityName, entity)
+//                    .apply();
+//            return "redirect:/" + baseViewPath + "/create";
         }
     }
 
@@ -105,6 +111,9 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
                          BindingResult bindingResult,
                          Model model,
                          RedirectAttributes redirectAttributes) {
+
+        service.validateSave(entity, bindingResult);
+
         if (bindingResult.hasErrors()) {
 
             new RedirectAttributesWrapper(redirectAttributes)
@@ -119,15 +128,16 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
             redirectAttributes.addFlashAttribute("success", getUpdateSuccessMessage());
             return "redirect:/" + baseViewPath;
         } catch (Exception e) {
-
-            List<ObjectError> errors = new ArrayList<>();
-            errors.add(new ObjectError("globalError", e.getMessage()));
-
-            new RedirectAttributesWrapper(redirectAttributes)
-                    .add("errors", errors)
-                    .add(entityName, entity)
-                    .apply();
+            System.out.println("Aconteceu um erro: " + e.getMessage());
             return "redirect:/" + baseViewPath + "/"+id+"/edit";
+//            List<ObjectError> errors = new ArrayList<>();
+//            errors.add(new ObjectError("globalError", e.getMessage()));
+//
+//            new RedirectAttributesWrapper(redirectAttributes)
+//                    .add("errors", errors)
+//                    .add(entityName, entity)
+//                    .apply();
+//            return "redirect:/" + baseViewPath + "/"+id+"/edit";
         }
     }
 

@@ -3,6 +3,8 @@ package com.agir.maidai.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Date;
 
@@ -15,20 +17,22 @@ public class Person extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    //@NotBlank
+    @NotBlank(message = "Nome não pode estar em branco.")
     @Column(name = "nome")
     private String name;
 
+    @Pattern(regexp = "^(|\\d+)$", message = "Telefone deve conter apenas números.")
     @Column(name = "telefone", nullable = true )
     private String phone;
 
-    @Email
+    @Email(message = "Email deve ser válido.")
     @Column(name = "email", nullable = true)
     private String email;
 
     @OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Advisor advisor;
 
+    @NotNull(message = "Tipo de pessoas precisa ser definido.")
     @ManyToOne
     @JoinColumn(name = "tipos_pessoa_id", referencedColumnName = "id")
     private PersonType personType;

@@ -1,10 +1,12 @@
 package com.agir.maidai.service;
 
+import com.agir.maidai.entity.Advisor;
 import com.agir.maidai.entity.ScholarshipType;
 import com.agir.maidai.repository.ScholarshipTypeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class ScholarshipTypeServiceImpl implements ScholarshipTypeService{
 
     @Override
     public void create(ScholarshipType entity) {
-        validateSave(entity);
+        //validateSave(entity);
         scholarshipTypeRepository.save(entity);
     }
 
@@ -41,15 +43,21 @@ public class ScholarshipTypeServiceImpl implements ScholarshipTypeService{
 
     @Override
     public void update(ScholarshipType entity) {
-        validateSave(entity);
+        //validateSave(entity);
         scholarshipTypeRepository.save(entity);
     }
 
-    public void validateSave(ScholarshipType entity) {
-        String trimmedType = entity.getType().trim();
-        entity.setType(trimmedType);
-        if(scholarshipTypeRepository.existsByType(entity.getType())) {
-            throw new IllegalArgumentException("Esse tipo de bolsa já existe. Escolha outro nome.");
-        }
+    @Override
+    public Errors validateSave(ScholarshipType entity, Errors errors) {
+        return errors;
     }
+
+//    public void validateSave(ScholarshipType entity) {
+//        String trimmedType = entity.getType().trim();
+//        entity.setType(trimmedType);
+//        if(scholarshipTypeRepository.existsByType(entity.getType())) {
+//            throw new IllegalArgumentException("Esse tipo de bolsa já existe. Escolha outro nome.");
+//        }
+//    }
+
 }
