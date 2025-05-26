@@ -1,13 +1,13 @@
 package com.agir.maidai.service;
 
-import com.agir.maidai.entity.AuditableEntity;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.validation.Errors;
 
 import java.util.List;
 
-//public abstract class AbstractCrudService<T extends AuditableEntity, ID> implements CrudService<T, ID> {
 public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
     protected final JpaRepository<T, ID> repository;
@@ -20,6 +20,11 @@ public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
     @Override
     public List<T> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<T> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override

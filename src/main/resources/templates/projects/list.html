@@ -58,10 +58,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(projectList)}">
+            <tr th:if="${#lists.isEmpty(entityList)}">
                 <td colspan="2">Nenhum projeto encontrado</td>
             </tr>
-            <tr th:each="project : ${projectList}">
+            <tr th:each="project : ${entityList}">
                 <td><a th:text="${project.name}" th:href="@{/projects/{id}(id=${project.id})}">Nome</a></td>
 
                 <td class="text-center">
@@ -86,6 +86,9 @@
             </tr>
             </tbody>
         </table>
+        <!-- Pagination controls -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+    </div>
 </main>
 </body>
 </html>

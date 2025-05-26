@@ -5,11 +5,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public interface CrudController<T, ID> {
 
-    String index(Model model);
+    String index(Model model,
+                 @RequestParam int page,
+                 @RequestParam int size);
 
     String show(@PathVariable ID id,
                 Model model);

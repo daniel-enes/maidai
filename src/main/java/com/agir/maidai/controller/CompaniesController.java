@@ -18,11 +18,11 @@ public class CompaniesController extends AbstractCrudController<Company, Integer
         super(companyService, "company", "companies");
     }
 
-    @Override
-    @GetMapping("/{id}")
-    public String show(Integer id, Model model) {
-        return "redirect:/"+ super.baseViewPath;
-    }
+//    @Override
+//    @GetMapping("/{id}")
+//    public String show(Integer id, Model model) {
+//        return "redirect:/"+ super.baseViewPath;
+//    }
 
     @Override
     protected Company createNewEntity() {

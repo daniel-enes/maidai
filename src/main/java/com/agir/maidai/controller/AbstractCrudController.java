@@ -3,16 +3,15 @@ package com.agir.maidai.controller;
 import com.agir.maidai.service.CrudService;
 import com.agir.maidai.util.ModelAttributes;
 import com.agir.maidai.util.RedirectAttributesWrapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractCrudController<T, ID> implements CrudController<T, ID>{
 
@@ -28,9 +27,19 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
 
     @Override
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model,
+                        @RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<T> entityPage = service.findAll(pageable);
+
         new ModelAttributes(model)
-                .add(entityName + "List", service.findAll())
+                //.add(entityName + "List", service.findAll())
+                //.add(entityName + "List", entityPage)
+                .add("baseViewPath", baseViewPath)
+                .add("entityList", entityPage)
                 .apply();
         return baseViewPath + "/list";
     }
@@ -82,14 +91,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         } catch (Exception e) {
             System.out.println("Aconteceu um erro: " + e.getMessage());
             return "redirect:/" + baseViewPath + "/create";
-//            List<ObjectError> errors = new ArrayList<>();
-//            errors.add(new ObjectError("globalError", e.getMessage()));
-//
-//            new RedirectAttributesWrapper(redirectAttributes)
-//                    .add("errors", errors)
-//                    .add(entityName, entity)
-//                    .apply();
-//            return "redirect:/" + baseViewPath + "/create";
         }
     }
 
@@ -130,14 +131,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         } catch (Exception e) {
             System.out.println("Aconteceu um erro: " + e.getMessage());
             return "redirect:/" + baseViewPath + "/"+id+"/edit";
-//            List<ObjectError> errors = new ArrayList<>();
-//            errors.add(new ObjectError("globalError", e.getMessage()));
-//
-//            new RedirectAttributesWrapper(redirectAttributes)
-//                    .add("errors", errors)
-//                    .add(entityName, entity)
-//                    .apply();
-//            return "redirect:/" + baseViewPath + "/"+id+"/edit";
         }
     }
 
@@ -152,7 +145,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
 
     // Template methods to be implemented by concrete controllers
     protected abstract T createNewEntity();
-    //protected abstract void addFormAttributes(List list);
     protected abstract String getCreateSuccessMessage();
     protected abstract String getUpdateSuccessMessage();
     protected abstract String getDeleteSuccessMessage();
