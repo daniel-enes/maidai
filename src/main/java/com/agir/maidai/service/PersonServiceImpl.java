@@ -33,7 +33,6 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     @Transactional
     public void create(Person person) {
 
-        //validateSave(person);
         super.create(person);
 
         PersonType personType = person.getPersonType();
@@ -43,15 +42,6 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         }
 
     }
-//
-//    @Override
-//    @Transactional
-//    public void update(Person person) {
-//
-//        //validateSave(person);
-//        super.update(person);
-//
-//    }
 
     private void createAdvisorRecord(Person person) {
 

@@ -25,7 +25,7 @@ public class Project extends AuditableEntity {
     @Column(name = "inicio")
     private LocalDate start;
 
-    @NotNull(message="A data do fim do projeto precisa ser definida.")
+    @NotNull(message="A data do fim precisa ser definida.")
     @Column(name = "fim")
     private LocalDate end;
 

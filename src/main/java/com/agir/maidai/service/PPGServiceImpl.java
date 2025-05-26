@@ -16,24 +16,6 @@ public class PPGServiceImpl extends AbstractCrudService<PPG, Integer> implements
         super(ppgRepository);
         this.ppgRepository = ppgRepository;
     }
-//
-//    public void create(PPG ppg) {
-//        String trimmedName = ppg.getName().trim();
-//        ppg.setName(trimmedName);
-//        if(ppgRepository.existsByName(trimmedName)) {
-//            throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
-//        }
-//        super.create(ppg);
-//    }
-
-//    public void update(PPG ppg) {
-//        String trimmedName = ppg.getName().trim();
-//        ppg.setName(trimmedName);
-//        if(ppgRepository.existsByName(trimmedName)) {
-//            throw new IllegalArgumentException("Esse nome já existe. Tente usar outro.");
-//        }
-//        super.update(ppg);
-//    }
 
     @Override
     public Errors validateSave(PPG ppg, Errors errors) {

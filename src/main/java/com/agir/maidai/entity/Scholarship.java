@@ -14,22 +14,25 @@ public class Scholarship extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    //@NotNull
+    @NotNull(message="A data de início precisa ser definida.")
     @Column(name = "inicio")
     private LocalDate start;
 
-    //@NotNull
+    @NotNull(message="A data do fim precisa ser definida.")
     @Column(name = "fim")
     private LocalDate end;
 
+    @NotNull(message="O tipo de bolsa precisa ser definido.")
     @OneToOne
     @JoinColumn(name = "tipos_bolsa_id", referencedColumnName = "id", nullable = false)
     private ScholarshipType scholarshipType;
 
+    @NotNull(message="O Projeto que a bolsa pertence precisa ser definido.")
     @ManyToOne
     @JoinColumn(name = "projetos_id", referencedColumnName = "id", nullable = false)
     private Project project;
 
+    @NotNull(message="Um bolsista precisa ser definido para a bolsa.")
     @OneToOne
     @JoinColumn(name = "pessoas_id", referencedColumnName = "id", nullable = false)
     private Person person;

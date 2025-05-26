@@ -16,33 +16,10 @@ public class CompanyServiceImpl extends AbstractCrudService<Company, Integer> im
         super(companyRepository);
         this.companyRepository = companyRepository;
     }
-//
-//    public void create(Company company) {
-//        //validateSave(company);
-//        super.create(company);
-//    }
-//
-//    public void update(Company company) {
-//        //validateSave(company);
-//        super.update(company);
-//    }
 
     @Override
     public Errors validateSave(Company company, Errors errors) {
 
-//        String trimmedName = company.getName().trim();
-//        company.setName(trimmedName);
-//
-//        Optional<Company> companyWithSameName = companyRepository.findByName(trimmedName);
-//
-//        String sameNameError = "Esse nome já está sendo usado por outra empresa.";
-//
-//        if(companyWithSameName.isPresent()) {
-//            if(company.getId() == null || !companyWithSameName.get().getId().equals(company.getId())) {
-//                throw new IllegalArgumentException(sameNameError);
-//            }
-//        }
-//    }
         // Trim name and validate
         String trimmedName = company.getName().trim();
         company.setName(trimmedName);

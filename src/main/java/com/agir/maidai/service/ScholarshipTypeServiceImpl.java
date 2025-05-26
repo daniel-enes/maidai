@@ -1,63 +1,39 @@
 package com.agir.maidai.service;
 
-import com.agir.maidai.entity.Advisor;
 import com.agir.maidai.entity.ScholarshipType;
 import com.agir.maidai.repository.ScholarshipTypeRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
-public class ScholarshipTypeServiceImpl implements ScholarshipTypeService{
+public class ScholarshipTypeServiceImpl extends AbstractCrudService<ScholarshipType, Integer> implements ScholarshipTypeService{
 
     final private ScholarshipTypeRepository scholarshipTypeRepository;
 
     @Autowired
     protected ScholarshipTypeServiceImpl(ScholarshipTypeRepository scholarshipTypeRepository) {
+        super(scholarshipTypeRepository);
         this.scholarshipTypeRepository = scholarshipTypeRepository;
     }
 
     @Override
-    public List<ScholarshipType> findAll() {
-        return scholarshipTypeRepository.findAll();
-    }
+    public Errors validateSave(ScholarshipType scholarshipType, Errors errors) {
 
-    @Override
-    public ScholarshipType find(Integer integer) {
-        return scholarshipTypeRepository.findById(integer).orElseThrow(() -> new EntityNotFoundException("ID não encontrado para Scholarship: " + integer));
-    }
+        String trimmedName = scholarshipType.getType().trim();
+        scholarshipType.setType(trimmedName);
 
-    @Override
-    public void create(ScholarshipType entity) {
-        //validateSave(entity);
-        scholarshipTypeRepository.save(entity);
-    }
+        Optional<ScholarshipType> scholarshipTypeWithSameName = scholarshipTypeRepository.findByType(trimmedName);
 
-    @Override
-    public void delete(Integer integer) {
-        scholarshipTypeRepository.deleteById(integer);
-    }
+        if(scholarshipTypeWithSameName.isPresent()) {
+            if(scholarshipType.getId() == null || !scholarshipTypeWithSameName.get().getId().equals(scholarshipType.getId())) {
+                errors.rejectValue("type", "type.duplicated","Esse tipo de bolsa já existe.");
+            }
+        }
 
-    @Override
-    public void update(ScholarshipType entity) {
-        //validateSave(entity);
-        scholarshipTypeRepository.save(entity);
-    }
-
-    @Override
-    public Errors validateSave(ScholarshipType entity, Errors errors) {
         return errors;
     }
-
-//    public void validateSave(ScholarshipType entity) {
-//        String trimmedType = entity.getType().trim();
-//        entity.setType(trimmedType);
-//        if(scholarshipTypeRepository.existsByType(entity.getType())) {
-//            throw new IllegalArgumentException("Esse tipo de bolsa já existe. Escolha outro nome.");
-//        }
-//    }
 
 }

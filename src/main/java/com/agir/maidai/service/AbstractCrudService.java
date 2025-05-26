@@ -7,7 +7,8 @@ import org.springframework.validation.Errors;
 
 import java.util.List;
 
-public abstract class AbstractCrudService<T extends AuditableEntity, ID> implements CrudService<T, ID> {
+//public abstract class AbstractCrudService<T extends AuditableEntity, ID> implements CrudService<T, ID> {
+public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
     protected final JpaRepository<T, ID> repository;
 
