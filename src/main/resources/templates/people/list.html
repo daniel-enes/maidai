@@ -62,7 +62,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(entityList)}">
+            <tr th:if="${entityList.totalElements == 0}">
                 <td colspan="2">Nenhuma pessoa encontrada</td>
             </tr>
             <tr th:each="person : ${entityList}">

@@ -9,7 +9,7 @@
 </head>
 <body>
 <!-- Pagination controls -->
-<div class="" id="pagination" th:fragment="pagination">
+<div class="" id="pagination" th:fragment="pagination" th:if="${entityList.totalPages > 1}">
     <!-- Previous Page Link -->
     <span th:if="${entityList.hasPrevious()}">
         <a th:href="@{'/' + ${baseViewPath} + '?page=' + ${entityList.number-1} + '&size=' + ${entityList.size}}">Anterior</a>
