@@ -9,5 +9,6 @@ import java.util.List;
 public interface PersonService extends CrudService<Person, Integer> {
 
     List<Person> findAllScholarshipHolders();
-    //Page<Person> findAllOrderedByName(Pageable pageable);
+    Page<Person> findByPersonTypeId(Integer typeId, Pageable pageable);
+
 }

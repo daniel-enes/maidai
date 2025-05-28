@@ -1,5 +1,6 @@
 package com.agir.maidai.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -15,10 +16,13 @@ public interface CrudController<T, ID> {
 //                 @RequestParam int page,
 //                 @RequestParam int size);
 
+//    String index(Model model,
+//                 @RequestParam(defaultValue = "0") int page,
+//                 @RequestParam(defaultValue = "10") int size,
+//                 @RequestParam(defaultValue = "") String sort);
+
     String index(Model model,
-                 @RequestParam(defaultValue = "0") int page,
-                 @RequestParam(defaultValue = "10") int size,
-                 @RequestParam(defaultValue = "") String sort);
+                 HttpServletRequest request);
 
     String show(@PathVariable ID id,
                 Model model);

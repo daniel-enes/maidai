@@ -33,12 +33,6 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         this.personTypeRepository = personTypeRepository;
     }
 
-//    @Override
-//    public Page<Person> findAllOrderedByName(Pageable pageable) {
-//        return personRepository.findAllByOrderByNameAsc(pageable);
-//    }
-
-
     @Override
     public Page<Person> findAll(Pageable pageable) {
 
@@ -49,8 +43,13 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
                     Sort.by("name").ascending()
             );
         }
-        //return personRepository.findAll(pageable);
+
         return super.findAll(pageable);
+    }
+
+    @Override
+    public Page<Person> findByPersonTypeId(Integer typeId, Pageable pageable) {
+        return personRepository.findByPersonTypeId(typeId, pageable);
     }
 
     @Override

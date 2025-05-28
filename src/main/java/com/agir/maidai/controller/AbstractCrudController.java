@@ -3,6 +3,7 @@ package com.agir.maidai.controller;
 import com.agir.maidai.service.CrudService;
 import com.agir.maidai.util.ModelAttributes;
 import com.agir.maidai.util.RedirectAttributesWrapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import static org.springframework.web.bind.ServletRequestUtils.getIntParameter;
+
 
 public abstract class AbstractCrudController<T, ID> implements CrudController<T, ID>{
 
@@ -20,7 +23,9 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
     protected final String entityName;
     protected final String baseViewPath;
 
-    public AbstractCrudController(CrudService<T, ID> service, String entityName, String baseViewPath) {
+    public AbstractCrudController(CrudService<T, ID> service,
+                                  String entityName,
+                                  String baseViewPath) {
         this.service = service;
         this.entityName = entityName;
         this.baseViewPath = baseViewPath;
@@ -29,11 +34,14 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
     @GetMapping
     @Override
     public String index(Model model,
-                        @RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "10") int size,
-                        @RequestParam(defaultValue = "") String sort) {
+                        HttpServletRequest request) {
 
-        Pageable pageable;
+        int page = getIntParameter(request, "page", 0);
+        int size = getIntParameter(request, "size", 10);
+        String sort = request.getParameter("sort");
+        if (sort == null) sort = ""; // Default sort
+
+       Pageable pageable;
 
         if(sort.isEmpty()) {
             pageable = PageRequest.of(page, size);
@@ -55,18 +63,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
                 .apply();
 
         return baseViewPath + "/list";
-
-//        Pageable pageable = PageRequest.of(page, size);
-//
-//        Page<T> entityPage = service.findAll(pageable);
-//
-//        new ModelAttributes(model)
-//                //.add(entityName + "List", service.findAll())
-//                //.add(entityName + "List", entityPage)
-//                .add("baseViewPath", baseViewPath)
-//                .add("entityList", entityPage)
-//                .apply();
-//        return baseViewPath + "/list";
     }
 
     @Override

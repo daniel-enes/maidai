@@ -6,7 +6,7 @@ import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.PersonType;
 import com.agir.maidai.service.*;
 import com.agir.maidai.util.ModelAttributes;
-import com.agir.maidai.validation.ValidationResult;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,11 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+
+import static org.springframework.web.bind.ServletRequestUtils.getIntParameter;
 
 @Controller
 @RequestMapping("/people")
@@ -36,6 +37,56 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
         this.personTypeService = personTypeService;
         this.ppgService = ppgService;
         this.advisorService = advisorService;
+    }
+
+    @GetMapping
+    @Override
+    public String index(Model model,
+                        HttpServletRequest request) {
+
+        int page = getIntParameter(request, "page", 0);
+        int size = getIntParameter(request, "size", 10);
+        String sort = request.getParameter("sort");
+        if (sort == null) sort = "name,asc"; // Default sort
+        Integer typeId = null;
+        if(request.getParameter("typeId") != null &&
+                !request.getParameter("typeId").isEmpty()) {
+            typeId = Integer.valueOf(request.getParameter("typeId"));
+        }
+
+        String[] sortParams = sort.split(",");
+        String sortField = sortParams[0];
+        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, direction, sortField);
+
+//        if(sort.isEmpty()) {
+//            pageable = PageRequest.of(page, size);
+//        } else {
+//            String[] sortParams = sort.split(",");
+//            String sortField = sortParams[0];
+//            Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+//                    ? Sort.Direction.DESC
+//                    : Sort.Direction.ASC;
+//            pageable = PageRequest.of(page, size, direction, sortField);
+//        }
+
+        Page<Person> personPage = typeId != null
+                ? personService.findByPersonTypeId(typeId, pageable)
+                : personService.findAll(pageable);
+
+        List<PersonType> personTypeList = personTypeService.findAll();
+
+        new ModelAttributes(model)
+                .add("personTypeList", personTypeList)
+                .add("typeId", typeId)
+                .add("baseViewPath", baseViewPath)
+                .add("entityList", personPage)
+                .add("sort", sort)
+                .apply();
+        return baseViewPath + "/list";
+        //return super.index(model, page, size, sort);
     }
 
     @Override

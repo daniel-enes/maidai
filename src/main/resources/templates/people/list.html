@@ -49,6 +49,28 @@
         </div>
         <div th:replace="~{components/alert :: alert}"></div>
 
+        <!-- Filter Form -->
+        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+            <label for="typeId">Filtar por: </label>
+            <select name="typeId" id="typeId">
+            <option value="">Sem filtro</option>
+                <option th:each="type : ${personTypeList}"
+                        th:value="${type.id}"
+                        th:text="${type.type}"
+                        th:selected="${type.id == typeId}">
+                </option>
+            </select>
+
+            <!-- Hidden fields to maintain pagination -->
+            <input type="hidden" name="size" th:value="${entityList.size}">
+            <input type="hidden" name="sort" th:value="${sort}">
+
+            <button type="submit" class="button success font-light">Buscar</button>
+        </form>
+
+        <!-- Pagination controls -->
+        <div th:replace="~{components/people-pagination :: pagination}"></div>
+
         <table>
             <thead>
             <tr>
@@ -57,7 +79,9 @@
                         '?page=' + ${entityList.number} +
                         '&size=' + ${entityList.size} +
                         '&sort=name,' +
-                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' }}">
+                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' } +
+                        ${typeId != null ? '&typeId='+typeId : ''}
+                        }">
                         Nome
                         <span>
                             <i th:class="${(sort == '' || sort == 'name,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
@@ -111,10 +135,8 @@
             </tr>
             </tbody>
         </table>
-
         <!-- Pagination controls -->
-        <div th:replace="~{components/pagination :: pagination}"></div>
-
+        <div th:replace="~{components/people-pagination :: pagination}"></div>
     </div>
 </main>
 </body>
