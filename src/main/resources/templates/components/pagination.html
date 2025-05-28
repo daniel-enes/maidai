@@ -12,20 +12,32 @@
 <div class="" id="pagination" th:fragment="pagination" th:if="${entityList.totalPages > 1}">
     <!-- Previous Page Link -->
     <span th:if="${entityList.hasPrevious()}">
-        <a th:href="@{'/' + ${baseViewPath} + '?page=' + ${entityList.number-1} + '&size=' + ${entityList.size}}">Anterior</a>
+        <a th:href="@{'/' + ${baseViewPath} +
+        '?page=' + ${entityList.number-1} +
+        '&size=' + ${entityList.size} +
+        ${sort != '' ? '&sort='+sort : ''}
+        }">Anterior</a>
     </span>
 
     <!-- Page Numbers -->
     <span th:each="i : ${#numbers.sequence(0, entityList.totalPages-1)}">
         <a th:if="${i != entityList.number}"
-           th:href="@{'/' + ${baseViewPath} + '?page=' + ${i} + '&size=' + ${entityList.size} }"
+           th:href="@{'/' + ${baseViewPath} +
+           '?page=' + ${i} +
+           '&size=' + ${entityList.size} +
+           ${sort != '' ? '&sort='+sort : ''}
+            }"
            th:text="${i+1}"></a>
         <span th:unless="${i != entityList.number}" th:text="${i+1}"></span>
     </span>
 
     <!-- Next Page Link -->
     <span th:if="${entityList.hasNext()}">
-        <a th:href="@{'/' + ${baseViewPath} + '?page=' + ${entityList.number+1} + '&size=' + ${entityList.size}}">Próximo</a>
+        <a th:href="@{'/' + ${baseViewPath} +
+        '?page=' + ${entityList.number+1} +
+        '&size=' + ${entityList.size} +
+        ${sort != '' ? '&sort='+sort : ''}
+        }">Próximo</a>
     </span>
 </div>
 </body>

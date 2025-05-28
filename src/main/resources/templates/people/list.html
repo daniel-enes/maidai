@@ -52,7 +52,18 @@
         <table>
             <thead>
             <tr>
-                <th>Nome</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=name,' +
+                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' }}">
+                        Nome
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'name,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <th>Telefone</th>
                 <th>Email</th>
                 <th>Tipo</th>

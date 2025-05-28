@@ -9,6 +9,10 @@ import com.agir.maidai.repository.PersonTypeRepository;
 import com.agir.maidai.validation.ValidationResult;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +31,26 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         this.personRepository = personRepository;
         this.advisorRepository = advisorRepository;
         this.personTypeRepository = personTypeRepository;
+    }
+
+//    @Override
+//    public Page<Person> findAllOrderedByName(Pageable pageable) {
+//        return personRepository.findAllByOrderByNameAsc(pageable);
+//    }
+
+
+    @Override
+    public Page<Person> findAll(Pageable pageable) {
+
+        if(pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by("name").ascending()
+            );
+        }
+        //return personRepository.findAll(pageable);
+        return super.findAll(pageable);
     }
 
     @Override

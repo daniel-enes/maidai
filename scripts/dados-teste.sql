@@ -88,7 +88,27 @@ INSERT INTO `maidai`.`ppg` (`nome`, `created_at`, `updated_at`) VALUES ('Program
 INSERT INTO `maidai`.`ppg` (`nome`, `created_at`, `updated_at`) VALUES ('Programa de Pós-Graduação em Ciências do Esporte', NOW(6), NOW(6));
 INSERT INTO `maidai`.`ppg` (`nome`, `created_at`, `updated_at`) VALUES ('Programa de Pós-Graduação em Engenharia Aeroespacial', NOW(6), NULL);
 
-INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`)
-SELECT `id`, NULL 
-FROM `maidai`.`pessoas` 
-WHERE `tipos_pessoa_id` = 1;
+-- First 20 orientadores (using pessoas_id 1-20 where tipos_pessoa_id = 1)
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (1, 5);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (3, 12);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (5, 8);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (7, 3);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (9, 17);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (11, 9);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (13, 2);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (15, 14);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (17, 6);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (19, 11);
+
+-- Next 10 orientadores (using pessoas_id 21-40 where tipos_pessoa_id = 1)
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (21, 7);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (23, 15);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (25, 4);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (27, 19);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (29, 10);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (31, 1);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (33, 16);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (35, 20);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (37, 13);
+INSERT INTO `maidai`.`orientadores` (`pessoas_id`, `ppg_id`) VALUES (39, 18);
+

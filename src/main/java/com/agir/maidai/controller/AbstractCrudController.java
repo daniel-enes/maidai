@@ -6,6 +6,7 @@ import com.agir.maidai.util.RedirectAttributesWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,23 +26,47 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         this.baseViewPath = baseViewPath;
     }
 
-    @Override
     @GetMapping
+    @Override
     public String index(Model model,
                         @RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "10") int size) {
+                        @RequestParam(defaultValue = "10") int size,
+                        @RequestParam(defaultValue = "") String sort) {
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable;
+
+        if(sort.isEmpty()) {
+            pageable = PageRequest.of(page, size);
+        } else {
+            String[] sortParams = sort.split(",");
+            String sortField = sortParams[0];
+            Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+                    ? Sort.Direction.DESC
+                    : Sort.Direction.ASC;
+            pageable = PageRequest.of(page, size, direction, sortField);
+        }
 
         Page<T> entityPage = service.findAll(pageable);
 
         new ModelAttributes(model)
-                //.add(entityName + "List", service.findAll())
-                //.add(entityName + "List", entityPage)
                 .add("baseViewPath", baseViewPath)
                 .add("entityList", entityPage)
+                .add("sort", sort)
                 .apply();
+
         return baseViewPath + "/list";
+
+//        Pageable pageable = PageRequest.of(page, size);
+//
+//        Page<T> entityPage = service.findAll(pageable);
+//
+//        new ModelAttributes(model)
+//                //.add(entityName + "List", service.findAll())
+//                //.add(entityName + "List", entityPage)
+//                .add("baseViewPath", baseViewPath)
+//                .add("entityList", entityPage)
+//                .apply();
+//        return baseViewPath + "/list";
     }
 
     @Override
