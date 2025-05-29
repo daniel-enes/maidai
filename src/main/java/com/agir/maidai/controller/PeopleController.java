@@ -59,18 +59,8 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
         Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
                 ? Sort.Direction.DESC
                 : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, direction, sortField);
 
-//        if(sort.isEmpty()) {
-//            pageable = PageRequest.of(page, size);
-//        } else {
-//            String[] sortParams = sort.split(",");
-//            String sortField = sortParams[0];
-//            Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
-//                    ? Sort.Direction.DESC
-//                    : Sort.Direction.ASC;
-//            pageable = PageRequest.of(page, size, direction, sortField);
-//        }
+        Pageable pageable = PageRequest.of(page, size, direction, sortField);
 
         Page<Person> personPage = typeId != null
                 ? personService.findByPersonTypeId(typeId, pageable)
@@ -86,7 +76,6 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
                 .add("sort", sort)
                 .apply();
         return baseViewPath + "/list";
-        //return super.index(model, page, size, sort);
     }
 
     @Override
@@ -100,12 +89,12 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
             PersonType personType = person.getPersonType();
 
             if("orientador".equals(personType.getType())) {
-                Advisor advisor = advisorService.find(id);
+                //Advisor advisor = advisorService.find(id);
                 List<PPG> ppgList = ppgService.findAll();
 
                 new ModelAttributes(model)
                     .add("ppgList", ppgList)
-                    .add("advisor", advisor)
+                    //.add("advisor", advisor)
                     .apply();
             }
         }

@@ -19,8 +19,11 @@ public class PPG extends AuditableEntity {
     @Column(name = "nome", unique = true)
     private String name;
 
-    @OneToMany(targetEntity = Advisor.class, mappedBy ="ppg")
-    private List<Advisor> advisorList = new ArrayList<>();
+    @ManyToMany(mappedBy = "ppgList")
+    private List<Person> personList = new ArrayList<>();
+
+//    @OneToMany(targetEntity = Advisor.class, mappedBy ="ppg")
+//    private List<Advisor> advisorList = new ArrayList<>();
 
     public PPG() {
     }
@@ -46,13 +49,21 @@ public class PPG extends AuditableEntity {
         this.name = name;
     }
 
-    public List<Advisor> getAdvisorList() {
-        return advisorList;
+    public List<Person> getPersonList() {
+        return personList;
     }
 
-    public void setAdvisorList(List<Advisor> advisorList) {
-        this.advisorList = advisorList;
+    public void setPersonList(List<Person> personList) {
+        this.personList = personList;
     }
+
+    //    public List<Advisor> getAdvisorList() {
+//        return advisorList;
+//    }
+//
+//    public void setAdvisorList(List<Advisor> advisorList) {
+//        this.advisorList = advisorList;
+//    }
 
     @Override
     public String toString() {

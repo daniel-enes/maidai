@@ -106,12 +106,12 @@
                 <td th:text="${person.email}">Email</td>
                 <td th:text="${person.personType.type}">Tipo</td>
                 <td>
-                    <th:block th:if="${person.advisor}">
-                        <span th:switch="${person.advisor.ppg == null}">
-                            <a th:case="true" th:href="@{/people/{id}(id=${person.id})}">Cadastrar PPG</a>
-                            <span th:case="false">sem pendência</span>
-                        </span>
+                    <th:block th:if="${person.personType.id == 1 and #lists.isEmpty((person.ppgList))}">
+                        <a>Cadastar em PPG</a>
                     </th:block>
+                    <span th:if="${person.personType.id == 1 and not #lists.isEmpty((person.ppgList))}">
+                        sem pendências.
+                    </span>
                 </td>
                 <td class="text-center">
                     <a th:href="@{/people/{id}/edit(id=${person.id})}"

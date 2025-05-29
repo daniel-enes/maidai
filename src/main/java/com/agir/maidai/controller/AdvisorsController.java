@@ -31,7 +31,11 @@ public class AdvisorsController extends AbstractCrudController<Advisor, Integer>
 
     @Override
     @PutMapping("/{id}")
-    public String update(@PathVariable Integer id, Advisor entity, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+    public String update(@PathVariable Integer id,
+                         Advisor entity,
+                         BindingResult bindingResult,
+                         Model model,
+                         RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             System.out.println("Chegou no if");

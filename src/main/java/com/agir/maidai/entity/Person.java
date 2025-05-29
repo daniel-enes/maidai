@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pessoas")
@@ -29,8 +31,16 @@ public class Person extends AuditableEntity {
     @Column(name = "email", nullable = true)
     private String email;
 
-    @OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Advisor advisor;
+//    @OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    private Advisor advisor;
+
+    @ManyToMany
+    @JoinTable(
+        name = "pessoas_ppg",
+        joinColumns = @JoinColumn(name = "pessoas_id"),
+        inverseJoinColumns =    @JoinColumn(name = "ppg_id")
+    )
+    private List<PPG> ppgList = new ArrayList<>();
 
     @NotNull(message = "Tipo de pessoas precisa ser definido.")
     @ManyToOne
@@ -90,13 +100,40 @@ public class Person extends AuditableEntity {
         this.personType = personType;
     }
 
-    public Advisor getAdvisor() {
-        return advisor;
+    public List<PPG> getPpgList() {
+        return ppgList;
     }
 
-    public void setAdvisor(Advisor advisor) {
-        this.advisor = advisor;
+    public void setPpgList(List<PPG> ppgList) {
+        this.ppgList = ppgList;
     }
+
+    public Scholarship getScholarship() {
+        return scholarship;
+    }
+
+    public void setScholarship(Scholarship scholarship) {
+        this.scholarship = scholarship;
+    }
+
+    // Helper methods for managing the relationship
+    public void addPpg(PPG ppg) {
+        this.ppgList.add(ppg);
+        ppg.getPersonList().add(this);
+    }
+
+    public void removePpg(PPG ppg) {
+        this.ppgList.remove(ppg);
+        ppg.getPersonList().remove(this);
+    }
+
+    //    public Advisor getAdvisor() {
+//        return advisor;
+//    }
+//
+//    public void setAdvisor(Advisor advisor) {
+//        this.advisor = advisor;
+//    }
 
     @Override
     public String toString() {
