@@ -101,13 +101,17 @@
                 <td colspan="2">Nenhuma pessoa encontrada</td>
             </tr>
             <tr th:each="person : ${entityList}">
-                <td><a th:text="${person.name}" th:href="@{/people/{id}(id=${person.id})}">Nome</a></td>
+                <td>
+                    <a th:text="${person.name}" th:href="@{/people/{id}(id=${person.id})}">Nome</a>
+                </td>
                 <td th:text="${person.phone}">Telefone</td>
                 <td th:text="${person.email}">Email</td>
                 <td th:text="${person.personType.type}">Tipo</td>
                 <td>
                     <th:block th:if="${person.personType.id == 1 and #lists.isEmpty((person.ppgList))}">
-                        <a>Cadastar em PPG</a>
+                        <a th:href="@{/people/{id}(id=${person.id})}">
+                            Cadastar em PPG
+                        </a>
                     </th:block>
                     <span th:if="${person.personType.id == 1 and not #lists.isEmpty((person.ppgList))}">
                         sem pendências.

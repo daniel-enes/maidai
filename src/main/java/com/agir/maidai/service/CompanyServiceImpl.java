@@ -18,7 +18,7 @@ public class CompanyServiceImpl extends AbstractCrudService<Company, Integer> im
     }
 
     @Override
-    public Errors validateSave(Company company, Errors errors) {
+    public void validateSave(Company company, Errors errors) {
 
         // Trim name and validate
         String trimmedName = company.getName().trim();
@@ -31,8 +31,6 @@ public class CompanyServiceImpl extends AbstractCrudService<Company, Integer> im
                 (company.getId() == null || !companyWithSameName.get().getId().equals(company.getId()))) {
             errors.rejectValue("name", "name.duplicate", "Esse nome já está sendo usado por outra empresa.");
         }
-
-        return errors;
     }
 
 }

@@ -18,15 +18,14 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
         this.scholarshipRepository = scholarshipRepository;
     }
 
-    public Errors validateSave(Scholarship scholarship, Errors errors) {
+    public void validateSave(Scholarship scholarship, Errors errors) {
 
         if(scholarship.getStart() != null && scholarship.getEnd() != null) {
-            if(scholarship.getStart().isEqual((scholarship.getEnd()))) {
+            if (scholarship.getStart().isEqual((scholarship.getEnd()))) {
                 errors.rejectValue("end", "dates.equal", "A data final não pode ser igual a data inicial.");
-            } else if(scholarship.getEnd().isBefore(scholarship.getStart())) {
+            } else if (scholarship.getEnd().isBefore(scholarship.getStart())) {
                 errors.rejectValue("end", ".dates.invalid", "A data final não pode ser anterior à data inicial.");
             }
         }
-        return errors;
     }
 }

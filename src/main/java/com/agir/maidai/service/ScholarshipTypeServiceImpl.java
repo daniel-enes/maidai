@@ -20,7 +20,7 @@ public class ScholarshipTypeServiceImpl extends AbstractCrudService<ScholarshipT
     }
 
     @Override
-    public Errors validateSave(ScholarshipType scholarshipType, Errors errors) {
+    public void validateSave(ScholarshipType scholarshipType, Errors errors) {
 
         String trimmedName = scholarshipType.getType().trim();
         scholarshipType.setType(trimmedName);
@@ -32,8 +32,6 @@ public class ScholarshipTypeServiceImpl extends AbstractCrudService<ScholarshipT
                 errors.rejectValue("type", "type.duplicated","Esse tipo de bolsa já existe.");
             }
         }
-
-        return errors;
     }
 
 }

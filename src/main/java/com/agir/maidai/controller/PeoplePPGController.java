@@ -1,7 +1,5 @@
 package com.agir.maidai.controller;
 
-import com.agir.maidai.entity.PPG;
-import com.agir.maidai.entity.Person;
 import com.agir.maidai.service.PPGService;
 import com.agir.maidai.service.PersonService;
 import org.springframework.http.HttpStatus;
@@ -14,26 +12,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PeoplePPGController {
 
     private final PersonService personService;
-    private final PPGService ppgService;
 
-    public PeoplePPGController(PersonService personService, PPGService ppgService) {
+    public PeoplePPGController(PersonService personService) {
         this.personService = personService;
-        this.ppgService = ppgService;
     }
 
-    @PatchMapping
+    @PostMapping
     public String addToPPG(@PathVariable Integer id,
-                         @RequestParam("ppgId") Integer ppgId,
-                         RedirectAttributes redirectAttributes) {
+                           @RequestParam("ppgId") Integer ppgId,
+                           RedirectAttributes redirectAttributes) {
         try {
-            Person person = personService.find(id);
-            PPG ppg = ppgService.find(ppgId);
-
-            person.getPpgList().add(ppg);
-            ppg.getPersonList().add(person);
-
-            personService.update(person);
-
+            personService.addPersonToPpg(id, ppgId);
             redirectAttributes.addFlashAttribute("success", getUpdateSuccessMessage());
             return "redirect:/people/" + id;
         } catch (Exception e) {
@@ -47,14 +36,7 @@ public class PeoplePPGController {
                                 @PathVariable("ppgId") Integer ppgId,
                                 RedirectAttributes redirectAttributes) {
         try {
-            Person person = personService.find(id);
-            PPG ppg = ppgService.find(ppgId);
-
-            person.getPpgList().remove(ppg);
-            ppg.getPersonList().remove(person);
-
-            personService.update(person);
-
+            personService.removePersonFromPpg(id, ppgId);
             redirectAttributes.addFlashAttribute("success", getDeleteSuccessMessage());
             return "redirect:/people/" + id;
         } catch (Exception e) {
@@ -63,9 +45,8 @@ public class PeoplePPGController {
     }
 
     private String getUpdateSuccessMessage() {
-        return "A orientador foi cadastrado no PPG.";
+        return "O orientador foi cadastrado no PPG.";
     }
-
     protected String getDeleteSuccessMessage() {
         return "O orientador foi removido do PPG.";
     }

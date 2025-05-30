@@ -49,7 +49,7 @@ public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
     }
 
     @Override
-    public Errors validateSave(T entity, Errors errors) {
-        return errors;
+    public void validateSave(T entity, Errors errors) {
+
     }
 }

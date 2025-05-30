@@ -20,7 +20,6 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     private final CompanyServiceImpl companyService;
     private final AdvisorService advisorService;
 
-
     @Autowired
     public ProjectsController(ProjectServiceImpl projectServiceImpl,
                               CompanyServiceImpl companyService,

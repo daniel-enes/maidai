@@ -118,8 +118,10 @@ public class Person extends AuditableEntity {
 
     // Helper methods for managing the relationship
     public void addPpg(PPG ppg) {
-        this.ppgList.add(ppg);
-        ppg.getPersonList().add(this);
+        if(!this.ppgList.contains(ppg)) {
+            this.ppgList.add(ppg);
+            ppg.getPersonList().add(this);
+        }
     }
 
     public void removePpg(PPG ppg) {

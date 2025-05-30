@@ -28,15 +28,13 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
     private PersonServiceImpl personService;
     private PersonTypeService personTypeService;
     private PPGService ppgService;
-    private AdvisorService advisorService;
 
     @Autowired
-    public PeopleController(PersonServiceImpl personService, PersonTypeService personTypeService, PPGService ppgService, AdvisorService advisorService) {
+    public PeopleController(PersonServiceImpl personService, PersonTypeService personTypeService, PPGService ppgService) {
         super(personService, "person", "people");
         this.personService = personService;
         this.personTypeService = personTypeService;
         this.ppgService = ppgService;
-        this.advisorService = advisorService;
     }
 
     @GetMapping
@@ -63,7 +61,7 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
         Pageable pageable = PageRequest.of(page, size, direction, sortField);
 
         Page<Person> personPage = typeId != null
-                ? personService.findByPersonTypeId(typeId, pageable)
+                ? personService.findByPersonType(typeId, pageable)
                 : personService.findAll(pageable);
 
         List<PersonType> personTypeList = personTypeService.findAll();
@@ -89,12 +87,10 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
             PersonType personType = person.getPersonType();
 
             if("orientador".equals(personType.getType())) {
-                //Advisor advisor = advisorService.find(id);
                 List<PPG> ppgList = ppgService.findAll();
 
                 new ModelAttributes(model)
                     .add("ppgList", ppgList)
-                    //.add("advisor", advisor)
                     .apply();
             }
         }

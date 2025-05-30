@@ -18,7 +18,7 @@ public class PPGServiceImpl extends AbstractCrudService<PPG, Integer> implements
     }
 
     @Override
-    public Errors validateSave(PPG ppg, Errors errors) {
+    public void validateSave(PPG ppg, Errors errors) {
         String trimmedName = ppg.getName().trim();
         ppg.setName(trimmedName);
 
@@ -29,7 +29,5 @@ public class PPGServiceImpl extends AbstractCrudService<PPG, Integer> implements
                 (ppg.getId() == null || !ppgWithSameName.get().getId().equals(ppg.getId()))) {
             errors.rejectValue("name", "name.duplicate", "Esse nome já está sendo usado por outra empresa.");
         }
-
-        return errors;
     }
 }

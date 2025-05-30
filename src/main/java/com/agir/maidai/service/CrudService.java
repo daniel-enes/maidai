@@ -16,5 +16,5 @@ public interface CrudService<T, ID> {
     void delete(ID id);
     void update(T entity);
 
-    Errors validateSave(T entity, Errors errors);
+    void validateSave(T entity, Errors errors);
 }

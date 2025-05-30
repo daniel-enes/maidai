@@ -24,7 +24,7 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
     }
 
     @Override
-    public Errors validateSave(Project project, Errors errors) {
+    public void validateSave(Project project, Errors errors) {
 
         String trimmedName = project.getName().trim();
         project.setName(trimmedName);
@@ -63,7 +63,5 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
                 }
             }
         }
-
-        return errors;
     }
 }

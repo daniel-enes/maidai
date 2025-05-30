@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     }
 
     @Override
-    public Page<Person> findByPersonTypeId(Integer typeId, Pageable pageable) {
+    public Page<Person> findByPersonType(Integer typeId, Pageable pageable) {
         return personRepository.findByPersonTypeId(typeId, pageable);
     }
 
@@ -52,8 +53,10 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         Person person = find(personId);
         PPG ppg = ppgRepository.findById(ppgId)
                 .orElseThrow(() -> new EntityNotFoundException("PPG não encontrado"));
-        person.addPpg(ppg);
-        repository.save(person);
+        if(!person.getPpgList().contains(ppg)) {
+            person.addPpg(ppg);
+            personRepository.save(person);
+        }
     }
 
     @Transactional
@@ -65,32 +68,10 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         repository.save(person);
     }
 
-//    @Override
-//    @Transactional
-//    public void create(Person person) {
-//
-//        super.create(person);
-//
-//        PersonType personType = person.getPersonType();
-//
-//        if("orientador".equals(personType.getType())) {
-//            createAdvisorRecord(person);
-//        }
-//
-//    }
-
-//    private void createAdvisorRecord(Person person) {
-//
-//        Advisor advisor = new Advisor();
-//        advisor.setPerson(person);
-//        advisorRepository.save(advisor);
-//
-//        // Set the bidirectional relationship
-//        person.setAdvisor(advisor);
-//    }
-
     @Override
     public List<Person> findAllScholarshipHolders() {
         return personRepository.findAllScholarshipHolders();
     }
+
+
 }
