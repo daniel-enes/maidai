@@ -48,6 +48,8 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         return personRepository.findByPersonTypeId(typeId, pageable);
     }
 
+
+
     @Transactional
     public void addPersonToPpg(Integer personId, Integer ppgId) {
         Person person = find(personId);
@@ -66,6 +68,11 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
                 .orElseThrow(() -> new EntityNotFoundException("PPG não encontrado"));
         person.removePpg(ppg);
         repository.save(person);
+    }
+
+    @Override
+    public List<Person> findAllAdvisors() {
+        return personRepository.findAllAdvisors();
     }
 
     @Override

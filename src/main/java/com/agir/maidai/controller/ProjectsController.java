@@ -18,23 +18,23 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
 
     private final ProjectServiceImpl projectServiceImpl;
     private final CompanyServiceImpl companyService;
-    private final AdvisorService advisorService;
+    private final PersonService personService;
 
     @Autowired
     public ProjectsController(ProjectServiceImpl projectServiceImpl,
                               CompanyServiceImpl companyService,
-                              AdvisorService advisorService) {
+                              PersonService personService) {
         super(projectServiceImpl, "project", "projects");
         this.projectServiceImpl = projectServiceImpl;
         this.companyService = companyService;
-        this.advisorService = advisorService;
+        this.personService = personService;
     }
 
     @Override
     @GetMapping("/{id}")
     public String show(@PathVariable Integer id, Model model) {
 
-        List<Advisor> advisorList = advisorService.findAll();
+        List<Person> advisorList = personService.findAllAdvisors();
         new ModelAttributes(model)
                 .add("advisorList", advisorList)
                 .apply();
@@ -46,7 +46,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     public String create(Model model, RedirectAttributes redirectAttributes) {
 
         List<Company> companyList  = companyService.findAll();
-        List<Advisor> advisorList = advisorService.findAll();
+        List<Person> advisorList = personService.findAll();
 
         new ModelAttributes(model)
                 .add("companyList", companyList)
@@ -59,7 +59,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         List<Company> companyList = companyService.findAll();
-        List<Advisor> advisorList = advisorService.findAll();
+        List<Person> advisorList = personService.findAll();
         new ModelAttributes(model)
                 .add("companyList", companyList)
                 .add("advisorList", advisorList)

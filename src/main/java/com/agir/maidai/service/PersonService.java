@@ -12,4 +12,6 @@ public interface PersonService extends CrudService<Person, Integer> {
     Page<Person> findByPersonType(Integer typeId, Pageable pageable);
     void addPersonToPpg(Integer personId, Integer ppgId);
     void removePersonFromPpg(Integer personId, Integer ppgId);
+
+    List<Person> findAllAdvisors();
 }

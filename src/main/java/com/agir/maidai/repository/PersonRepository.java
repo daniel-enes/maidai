@@ -16,4 +16,9 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     @Query("SELECT p FROM Person p WHERE (:typeId IS NULL OR p.personType.id = :typeId)")
     Page<Person> findByPersonTypeId(Integer typeId, Pageable pageable);
+
+    List<Person> findByPersonTypeId(Integer typeId);
+
+    @Query("SELECT p FROM Person p JOIN p.personType pt WHERE pt.type = 'orientador' ORDER BY p.name ASC")
+    List<Person> findAllAdvisors();
 }

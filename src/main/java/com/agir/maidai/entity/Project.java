@@ -21,13 +21,33 @@ public class Project extends AuditableEntity {
     @Column(name = "nome")
     private String name;
 
-    @NotNull(message="A data de início precisa ser definida.")
+    //@NotNull(message="A data de início precisa ser definida.")
     @Column(name = "inicio")
     private LocalDate start;
 
-    @NotNull(message="A data do fim precisa ser definida.")
+    //@NotNull(message="A data do fim precisa ser definida.")
     @Column(name = "fim")
     private LocalDate end;
+
+    @Column(name = "ano_edital")
+    private Integer yearNotice;
+
+    // 1:N relationship for advisor
+    @NotNull(message = "O orientador precisa ser definido.")
+    @ManyToOne
+    @JoinColumn(name = "pessoas_id",
+            referencedColumnName = "id",
+            nullable = false)
+    private Person advisor;
+
+    // N:M relationship for co-advisors
+    @ManyToMany
+    @JoinTable(
+            name = "coorientadores",
+            joinColumns = @JoinColumn(name = "projetos_id"),
+            inverseJoinColumns = @JoinColumn(name = "pessoas_id")
+    )
+    private List<Person> coAdvisors = new ArrayList<>();
 
     @NotNull(message="A empresa precisa ser definida.")
     @ManyToOne
@@ -36,31 +56,6 @@ public class Project extends AuditableEntity {
 
     @OneToMany(targetEntity = Scholarship.class, mappedBy = "project")
     private List<Scholarship> scholarshipList = new ArrayList<>();
-
-    @Transient
-    private Integer advisorId;
-
-    @Transient
-    private Integer coAdvisorId;
-
-    @PostLoad
-    private void populateTransientFields() {
-        if (advisor != null) {
-            this.advisorId = advisor.getId();
-        }
-        if (coAdvisor != null) {
-            this.coAdvisorId = coAdvisor.getId();
-        }
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "orientador", referencedColumnName = "pessoas_id", nullable = false)
-    private Advisor advisor;
-
-
-    @ManyToOne
-    @JoinColumn(name = "coorientador", referencedColumnName = "pessoas_id", nullable = true)
-    private Advisor coAdvisor;
 
     public Project() {
     }
@@ -120,36 +115,41 @@ public class Project extends AuditableEntity {
         this.scholarshipList = scholarshipList;
     }
 
-    public Advisor getAdvisor() {
+    public Integer getYearNotice() {
+        return yearNotice;
+    }
+
+    public void setYearNotice(Integer yearNotice) {
+        this.yearNotice = yearNotice;
+    }
+
+    public Person getAdvisor() {
         return advisor;
     }
 
-    public void setAdvisor(Advisor advisor) {
+    public void setAdvisor(Person advisor) {
         this.advisor = advisor;
     }
 
-    public Advisor getCoAdvisor() {
-        return coAdvisor;
+    public List<Person> getCoAdvisors() {
+        return coAdvisors;
     }
 
-    public void setCoAdvisor(Advisor coAdvisor) {
-        this.coAdvisor = coAdvisor;
+    public void setCoAdvisors(List<Person> coAdvisors) {
+        this.coAdvisors = coAdvisors;
     }
 
-    public Integer getAdvisorId() {
-        return advisorId;
+    // Helper methods for co-advisors
+    public void addCoAdvisor(Person coAdvisor) {
+        if (!this.coAdvisors.contains(coAdvisor)) {
+            this.coAdvisors.add(coAdvisor);
+            coAdvisor.getCoAdvisedProjects().add(this);
+        }
     }
 
-    public void setAdvisorId(Integer advisorId) {
-        this.advisorId = advisorId;
-    }
-
-    public Integer getCoAdvisorId() {
-        return coAdvisorId;
-    }
-
-    public void setCoAdvisorId(Integer coAdvisorId) {
-        this.coAdvisorId = coAdvisorId;
+    public void removeCoAdvisor(Person coAdvisor) {
+        this.coAdvisors.remove(coAdvisor);
+        coAdvisor.getCoAdvisedProjects().remove(this);
     }
 
     @Override

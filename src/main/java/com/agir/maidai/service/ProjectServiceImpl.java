@@ -1,9 +1,9 @@
 package com.agir.maidai.service;
 
-import com.agir.maidai.entity.Advisor;
-import com.agir.maidai.entity.Company;
+import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.Project;
 import com.agir.maidai.repository.ProjectRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -14,13 +14,32 @@ import java.util.Optional;
 public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> implements ProjectService{
 
     private final ProjectRepository projectRepository;
-    private final AdvisorServiceImpl advisorService;
+    private final PersonService personService;
 
     @Autowired
-    protected ProjectServiceImpl(ProjectRepository projectRepository, AdvisorServiceImpl advisorService) {
+    protected ProjectServiceImpl(ProjectRepository projectRepository, PersonService personService) {
         super(projectRepository);
         this.projectRepository = projectRepository;
-        this.advisorService = advisorService;
+        this.personService = personService;
+    }
+
+    @Transactional
+    public void addCoAdvisorToProject(Integer projectId, Integer personId) {
+        Project project = find(projectId);
+        Person coAdvisor = personService.find(personId);
+
+        if (!project.getCoAdvisors().contains(coAdvisor)) {
+            project.addCoAdvisor(coAdvisor);
+            repository.save(project);
+        }
+    }
+
+    @Transactional
+    public void removeCoAdvisorFromProject(Integer projectId, Integer personId) {
+        Project project = find(projectId);
+        Person coAdvisor = personService.find(personId);
+        project.removeCoAdvisor(coAdvisor);
+        repository.save(project);
     }
 
     @Override
@@ -45,23 +64,14 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
             }
         }
 
-        if(project.getAdvisorId() == null) {
-            errors.rejectValue("advisorId","advisorId.notnull","É necessário definir um orientador para o projeto.");
-        } else {
-            Integer advisorId = project.getAdvisorId();
-            Advisor advisor = advisorService.find(advisorId);
-            project.setAdvisor(advisor);
-
-            Integer coAdvisorId = project.getCoAdvisorId();
-
-            if(coAdvisorId != null) {
-                if(coAdvisorId != advisorId) {
-                    Advisor coAdvisor = advisorService.find(project.getCoAdvisorId());
-                    project.setCoAdvisor(coAdvisor);
-                } else {
-                    errors.rejectValue("coAdvisorId","coAdvisorId.equals","Defina um 'Coorientador' diferente do 'Orientador'.");
-                }
-            }
-        }
+//            if(coAdvisorId != null) {
+//                if(coAdvisorId != advisorId) {
+//                    Advisor coAdvisor = advisorService.find(project.getCoAdvisorId());
+//                    project.setCoAdvisor(coAdvisor);
+//                } else {
+//                    errors.rejectValue("coAdvisorId","coAdvisorId.equals","Defina um 'Coorientador' diferente do 'Orientador'.");
+//                }
+//            }
+//        }
     }
 }

@@ -425,16 +425,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema maidai
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema maidai
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `maidai` DEFAULT CHARACTER SET utf8 ;
 USE `maidai` ;
 
 -- -----------------------------------------------------
 -- Table `maidai`.`editais`
 -- -----------------------------------------------------
+/*
 CREATE TABLE IF NOT EXISTS `maidai`.`editais` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `ano` YEAR NOT NULL,
@@ -442,6 +439,7 @@ CREATE TABLE IF NOT EXISTS `maidai`.`editais` (
   `updated_at` DATETIME NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
+*/
 
 -- -----------------------------------------------------
 -- Table `maidai`.`empresas`
@@ -582,6 +580,15 @@ ADD CONSTRAINT `fk_projetos_pessoas1`
   REFERENCES `maidai`.`pessoas` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+  -- Modify the columns to allow NULL
+  ALTER TABLE `maidai`.`projetos`
+  MODIFY COLUMN `inicio` DATE NULL,
+  MODIFY COLUMN `fim` DATE NULL;
+
+  -- Add the new column
+  ALTER TABLE `maidai`.`projetos`
+  ADD COLUMN `ano_edital` YEAR NULL AFTER `fim`;
 
 -- -----------------------------------------------------
 -- Table `maidai`.`coorientadores`

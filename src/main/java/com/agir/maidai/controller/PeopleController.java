@@ -1,6 +1,5 @@
 package com.agir.maidai.controller;
 
-import com.agir.maidai.entity.Advisor;
 import com.agir.maidai.entity.PPG;
 import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.PersonType;

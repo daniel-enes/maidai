@@ -9,11 +9,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/people/{id}/ppgs")
-public class PeoplePPGController {
+public class PeoplePPGRelationshipsController {
 
     private final PersonService personService;
 
-    public PeoplePPGController(PersonService personService) {
+    public PeoplePPGRelationshipsController(PersonService personService) {
         this.personService = personService;
     }
 

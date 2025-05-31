@@ -31,9 +31,6 @@ public class Person extends AuditableEntity {
     @Column(name = "email", nullable = true)
     private String email;
 
-//    @OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//    private Advisor advisor;
-
     @ManyToMany
     @JoinTable(
         name = "pessoas_ppg",
@@ -49,6 +46,14 @@ public class Person extends AuditableEntity {
 
     @OneToOne(targetEntity = Scholarship.class, mappedBy = "person", cascade = {CascadeType.REMOVE})
     private Scholarship scholarship;
+
+    // 1:N inverse side (projects where this person is advisor)
+    @OneToMany(mappedBy = "advisor")
+    private List<Project> advisedProjects = new ArrayList<>();
+
+    // N:M inverse side (projects where this person is co-advisor)
+    @ManyToMany(mappedBy = "coAdvisors")
+    private List<Project> coAdvisedProjects = new ArrayList<>();
 
     public Person() {
     }
@@ -129,13 +134,13 @@ public class Person extends AuditableEntity {
         ppg.getPersonList().remove(this);
     }
 
-    //    public Advisor getAdvisor() {
-//        return advisor;
-//    }
-//
-//    public void setAdvisor(Advisor advisor) {
-//        this.advisor = advisor;
-//    }
+    public List<Project> getAdvisedProjects() {
+        return advisedProjects;
+    }
+
+    public List<Project> getCoAdvisedProjects() {
+        return coAdvisedProjects;
+    }
 
     @Override
     public String toString() {

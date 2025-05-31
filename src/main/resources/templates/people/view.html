@@ -7,37 +7,6 @@
     <title>Pessoa</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
-    <script>
-        function removePersonFromPPG(url, event) {
-
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
-
-            if(confirm('Tem certeza que deseja remover este orientador do PPG?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.reload();
-                    } else {
-                        alert("Erro ao remover o orientador do PPG");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert("Erro ao remover o orientador do PPG");
-                    });
-            }
-            return false;
-        }
-    </script>
-
 </head>
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content">
@@ -60,7 +29,7 @@
                         <span th:text="${ppg.name}"></span>
                         <a th:href="@{/people/{id}/ppgs/{ppgId}(id=${person.id}, ppgId=${ppg.id})}"
                            th:data-url="@{/people/{id}/ppgs/{ppgId}(id=${person.id}, ppgId=${ppg.id})}"
-                           onclick="return removePersonFromPPG(this.getAttribute('data-url'), event)"
+                           onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                            role="button"
                            aria-label="Remover orientador o PGG"
                         >
@@ -73,7 +42,7 @@
                 </dd>
             </th:block>
         </dl>
-        <div>
+        <div class="margin-y-40">
             <fieldset>
                 <legend>Adicionar orientador a um PPG</legend>
                 <p th:if="${#lists.isEmpty(ppgList)}">Nenhum programa de Pós-graduação encontrado. Para visualizar os programas
