@@ -3,12 +3,15 @@ package com.agir.maidai.service;
 import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.Project;
 import com.agir.maidai.repository.ProjectRepository;
+import com.agir.maidai.validation.ProjectsPeopleRelationshipsException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> implements ProjectService{
@@ -29,8 +32,12 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
         Person coAdvisor = personService.find(personId);
 
         if (!project.getCoAdvisors().contains(coAdvisor)) {
-            project.addCoAdvisor(coAdvisor);
-            repository.save(project);
+            if (!project.getAdvisor().getId().equals(coAdvisor.getId())) {
+                project.addCoAdvisor(coAdvisor);
+                repository.save(project);
+            } else {
+                throw new ProjectsPeopleRelationshipsException("O orientador não pode ser também o coorientador do projeto");
+            }
         }
     }
 
@@ -64,14 +71,17 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
             }
         }
 
-//            if(coAdvisorId != null) {
-//                if(coAdvisorId != advisorId) {
-//                    Advisor coAdvisor = advisorService.find(project.getCoAdvisorId());
-//                    project.setCoAdvisor(coAdvisor);
-//                } else {
-//                    errors.rejectValue("coAdvisorId","coAdvisorId.equals","Defina um 'Coorientador' diferente do 'Orientador'.");
-//                }
-//            }
-//        }
+        if(project.getAdvisor() != null && !project.getCoAdvisors().isEmpty()) {
+            // Check if advisor is in co-advisors list
+            if(project.getCoAdvisors().contains(project.getAdvisor())) {
+                errors.rejectValue("coAdvisors", "coAdvisor.duplicate","O orientador não pode ser também coorientador do mesmo projeto.");
+            }
+            // Check for duplicate co-advisors
+            Set<Person> uniqueCoAdvisors = new HashSet<>(project.getCoAdvisors());
+            if(uniqueCoAdvisors.size() < project.getCoAdvisors().size()) {
+                errors.rejectValue("coAdvisors", "coAdvisor.duplicates",
+                        "Há coorientadores duplicados na lista.");
+            }
+        }
     }
 }

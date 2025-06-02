@@ -177,3 +177,25 @@ INSERT INTO `maidai`.`projetos` (`nome`, `inicio`, `fim`, `created_at`, `updated
 ('Solução de Blockchain para Votação', '2025-05-01', '2025-11-15', NOW(6), NOW(6), 8, 15, 19),
 ('Plataforma de Doações para ONGs', '2025-06-10', '2025-12-30', NOW(6), NULL, 9, 17, 21),
 ('Sistema de Gestão de Bibliotecas', '2025-07-05', '2026-01-20', NOW(6), NOW(6), 10, 19, 23);
+
+-- Insert scholarship types
+INSERT INTO `maidai`.`tipos_bolsa` (`tipo`) VALUES ('MAI');
+INSERT INTO `maidai`.`tipos_bolsa` (`tipo`) VALUES ('DAI');
+
+-- Insert scholarships (assuming tipos_bolsa.id 1=MAI, 2=DAI)
+-- First 10 scholarships alternating between MAI and DAI types
+INSERT INTO `maidai`.`bolsas` (`inicio`, `fim`, `created_at`, `updated_at`, `projetos_id`, `tipos_bolsa_id`, `pessoas_id`)
+SELECT
+    DATE_ADD(CURDATE(), INTERVAL -FLOOR(RAND() * 365) DAY) AS inicio,
+    DATE_ADD(CURDATE(), INTERVAL FLOOR(RAND() * 365) DAY) AS fim,
+    NOW(6) AS created_at,
+    NULL AS updated_at,
+    (SELECT id FROM `maidai`.`projetos` ORDER BY RAND() LIMIT 1) AS projetos_id,
+    CASE WHEN @row := @row + 1 THEN (@row % 2) + 1 END AS tipos_bolsa_id,
+    p.id AS pessoas_id
+FROM
+    `maidai`.`pessoas` p,
+    (SELECT @row := 0) r
+WHERE
+    p.tipos_pessoa_id = 2
+LIMIT 10;

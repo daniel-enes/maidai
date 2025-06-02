@@ -12,15 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public interface CrudController<T, ID> {
 
-//    String index(Model model,
-//                 @RequestParam int page,
-//                 @RequestParam int size);
-
-//    String index(Model model,
-//                 @RequestParam(defaultValue = "0") int page,
-//                 @RequestParam(defaultValue = "10") int size,
-//                 @RequestParam(defaultValue = "") String sort);
-
     String index(Model model,
                  HttpServletRequest request);
 

@@ -46,7 +46,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     public String create(Model model, RedirectAttributes redirectAttributes) {
 
         List<Company> companyList  = companyService.findAll();
-        List<Person> advisorList = personService.findAll();
+        List<Person> advisorList = personService.findAllAdvisors();
 
         new ModelAttributes(model)
                 .add("companyList", companyList)
@@ -59,7 +59,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         List<Company> companyList = companyService.findAll();
-        List<Person> advisorList = personService.findAll();
+        List<Person> advisorList = personService.findAllAdvisors();
         new ModelAttributes(model)
                 .add("companyList", companyList)
                 .add("advisorList", advisorList)

@@ -48,8 +48,6 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
         return personRepository.findByPersonTypeId(typeId, pageable);
     }
 
-
-
     @Transactional
     public void addPersonToPpg(Integer personId, Integer ppgId) {
         Person person = find(personId);

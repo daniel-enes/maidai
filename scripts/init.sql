@@ -199,8 +199,13 @@ SELECT `coorientador`, `id`
 FROM `maidai`.`projetos`
 WHERE `coorientador` IS NOT NULL;
 
----- Remove the old foreign key constraints first
+---- If you need to keep the old structure temporarily during transition, you can rename columns instead of dropping them:
+ALTER TABLE `maidai`.`projetos`
+CHANGE COLUMN `orientador` `deprecated_orientador` INT UNSIGNED NULL,
+CHANGE COLUMN `coorientador` `deprecated_coorientador` INT UNSIGNED NULL;
+
 /*
+---- Remove the old foreign key constraints first
 ALTER TABLE `maidai`.`projetos`
 DROP FOREIGN KEY `fk_projetos_orientadores1`,
 DROP FOREIGN KEY `fk_projetos_orientadores2`;
@@ -210,13 +215,6 @@ ALTER TABLE `maidai`.`projetos`
 DROP COLUMN `orientador`,
 DROP COLUMN `coorientador`;
 */
-
----- If you need to keep the old structure temporarily during transition, you can rename columns instead of dropping them:
-ALTER TABLE `maidai`.`projetos`
-CHANGE COLUMN `orientador` `deprecated_orientador` INT UNSIGNED NULL,
-CHANGE COLUMN `coorientador` `deprecated_coorientador` INT UNSIGNED NULL;
-
-
 
 -- -----------------------------------------------------
 -- Table `maidai`.`tipos_bolsa`
