@@ -7,35 +7,6 @@
     <title>Empresas</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script>
-        function deleteCompany(url, event) {
-
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
-
-            if(confirm('Tem certeza que deseja apagar esta empresa?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.href = '/companies';
-                    } else {
-                        alert("Erro ao apagar a empresa");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert('Erro ao apagar a empresa');
-                    });
-            }
-            return false;
-        }
-    </script>
 </head>
 
 <body>
@@ -52,7 +23,20 @@
         <table>
             <thead>
             <tr>
-                <th>Nome</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=name,' +
+                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' } +
+                        ${typeId != null ? '&typeId='+typeId : ''}
+                        }">
+                        Nome
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'name,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
@@ -75,7 +59,7 @@
                     <td class="text-center">
                         <a th:href="@{/companies/{id}(id=${company.id})}"
                            th:data-url="@{/companies/{id}(id=${company.id})}"
-                           onclick="return deleteCompany(this.getAttribute('data-url'), event)"
+                           onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                            role="button"
                            aria-label="Apagar empresa"
                         >

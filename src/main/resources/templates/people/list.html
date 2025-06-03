@@ -20,6 +20,25 @@
         </div>
         <div th:replace="~{components/alert :: alert}"></div>
 
+        <!-- Search Form -->
+        <!-- Simple Name Search Form -->
+        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+            <div id="search" class="relative">
+                <i class="fas fa-search"></i>
+                <input type="search"
+                       class=""
+                       name="name"
+                       th:value="${searchName}"
+                       placeholder="Pesquisar por nome">
+            </div>
+
+            <!-- Hidden fields to maintain other filters -->
+<!--            <input type="hidden" name="typeId" th:value="${typeId}">-->
+            <input type="hidden" name="page" th:value="${param.page}">
+            <input type="hidden" name="size" th:value="${param.size}">
+            <input type="hidden" name="sort" th:value="${param.sort}">
+        </form>
+
         <!-- Filter Form -->
         <form th:action="@{'/' + ${baseViewPath}}" method="get">
             <label for="typeId">Filtar por: </label>
@@ -32,15 +51,20 @@
                 </option>
             </select>
 
+            <input type="hidden" name="page" th:value="${param.page}">
+            <input type="hidden" name="size" th:value="${param.size}">
+            <input type="hidden" name="sort" th:value="${param.sort}">
+
             <!-- Hidden fields to maintain pagination -->
-            <input type="hidden" name="size" th:value="${entityList.size}">
-            <input type="hidden" name="sort" th:value="${sort}">
+<!--            <input type="hidden" name="size" th:value="${entityList.size}">-->
+<!--            <input type="hidden" name="sort" th:value="${sort}">-->
 
             <button type="submit" class="button success font-light">Buscar</button>
         </form>
 
         <!-- Pagination controls -->
-        <div th:replace="~{components/people-pagination :: pagination}"></div>
+        <div th:replace="~{people/people-pagination :: pagination}"></div>
+        <!--<div th:replace="~{components/pagination :: pagination}"></div>-->
 
         <table>
             <thead>
@@ -111,7 +135,8 @@
             </tbody>
         </table>
         <!-- Pagination controls -->
-        <div th:replace="~{components/people-pagination :: pagination}"></div>
+        <div th:replace="~{people/people-pagination :: pagination}"></div>
+        <!--<div th:replace="~{components/pagination :: pagination}"></div>-->
     </div>
 </main>
 </body>

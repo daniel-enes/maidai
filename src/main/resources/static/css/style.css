@@ -233,6 +233,17 @@ input:focus {
     background: #fff;
 }
 
+input[type=search] {
+    padding-left: 30px;
+    max-width: 500px;
+}
+
+#search i {
+    position: absolute;
+    top: 20px;
+    left: 5px;
+}
+
 /*******
 
 LOGIN FORM

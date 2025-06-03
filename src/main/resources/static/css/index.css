@@ -127,6 +127,23 @@ li {
 }
 /*******
 
+POSITION
+
+********/
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.absolute-center {
+    top: 50%;
+    bottom: 50%;
+}
+
+/*******
 
 FLEX
 

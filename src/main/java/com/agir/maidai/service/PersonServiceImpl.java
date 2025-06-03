@@ -30,22 +30,18 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     }
 
     @Override
-    public Page<Person> findAll(Pageable pageable) {
-
-        if(pageable.getSort().isUnsorted()) {
-            pageable = PageRequest.of(
-                    pageable.getPageNumber(),
-                    pageable.getPageSize(),
-                    Sort.by("name").ascending()
-            );
-        }
-
-        return super.findAll(pageable);
+    public Page<Person> findByNameContainingIgnoreCase(String name, Pageable pageable) {
+        return personRepository.findByNameContainingIgnoreCase(name, pageable);
     }
 
     @Override
     public Page<Person> findByPersonType(Integer typeId, Pageable pageable) {
-        return personRepository.findByPersonTypeId(typeId, pageable);
+        return personRepository.findByPersonType(typeId, pageable);
+    }
+
+    @Override
+    public List<Person> findByPersonType(Integer typeId) {
+        return personRepository.findByPersonType(typeId);
     }
 
     @Transactional

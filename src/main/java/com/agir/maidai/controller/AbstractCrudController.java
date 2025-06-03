@@ -41,7 +41,7 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         String sort = request.getParameter("sort");
         if (sort == null) sort = ""; // Default sort
 
-       Pageable pageable;
+        Pageable pageable;
 
         if(sort.isEmpty()) {
             pageable = PageRequest.of(page, size);
@@ -56,11 +56,11 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
 
         Page<T> entityPage = service.findAll(pageable);
 
-        new ModelAttributes(model)
+        ModelAttributes modelAttributes = new ModelAttributes(model)
                 .add("baseViewPath", baseViewPath)
-                .add("entityList", entityPage)
                 .add("sort", sort)
-                .apply();
+                .add("entityList", entityPage);
+        modelAttributes.apply();
 
         return baseViewPath + "/list";
     }

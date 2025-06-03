@@ -16,16 +16,16 @@ import java.util.List;
 @RequestMapping("/projects")
 public class ProjectsController extends AbstractCrudController<Project, Integer> implements CrudController<Project, Integer> {
 
-    private final ProjectServiceImpl projectServiceImpl;
+    private final ProjectService projectService;
     private final CompanyServiceImpl companyService;
     private final PersonService personService;
 
     @Autowired
-    public ProjectsController(ProjectServiceImpl projectServiceImpl,
+    public ProjectsController(ProjectService projectService,
                               CompanyServiceImpl companyService,
                               PersonService personService) {
-        super(projectServiceImpl, "project", "projects");
-        this.projectServiceImpl = projectServiceImpl;
+        super(projectService, "project", "projects");
+        this.projectService = projectService;
         this.companyService = companyService;
         this.personService = personService;
     }

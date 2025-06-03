@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,57 +25,118 @@ import static org.springframework.web.bind.ServletRequestUtils.getIntParameter;
 @RequestMapping("/people")
 public class PeopleController extends AbstractCrudController<Person, Integer>  implements CrudController<Person, Integer>{
 
-    private PersonServiceImpl personService;
+    private PersonService personService;
     private PersonTypeService personTypeService;
     private PPGService ppgService;
 
     @Autowired
-    public PeopleController(PersonServiceImpl personService, PersonTypeService personTypeService, PPGService ppgService) {
+    public PeopleController(PersonService personService, PersonTypeService personTypeService, PPGService ppgService) {
         super(personService, "person", "people");
         this.personService = personService;
         this.personTypeService = personTypeService;
         this.ppgService = ppgService;
     }
 
-    @GetMapping
-    @Override
-    public String index(Model model,
-                        HttpServletRequest request) {
+//    @GetMapping
+//    @Override
+//    public String index(Model model,
+//                        HttpServletRequest request) {
+//
+//        int page = getIntParameter(request, "page", 0);
+//        int size = getIntParameter(request, "size", 10);
+//        String sort = request.getParameter("sort");
+//        if (sort == null) sort = "name,asc"; // Default sort
+//        Integer typeId = null;
+//        if(request.getParameter("typeId") != null &&
+//                !request.getParameter("typeId").isEmpty()) {
+//            typeId = Integer.valueOf(request.getParameter("typeId"));
+//        }
+//
+//        String[] sortParams = sort.split(",");
+//        String sortField = sortParams[0];
+//        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+//                ? Sort.Direction.DESC
+//                : Sort.Direction.ASC;
+//
+//        Pageable pageable = PageRequest.of(page, size, direction, sortField);
+//
+//        Page<Person> personPage = typeId != null
+//                ? personService.findByPersonType(typeId, pageable)
+//                : personService.findAll(pageable);
+//
+//        List<PersonType> personTypeList = personTypeService.findAll();
+//
+//        new ModelAttributes(model)
+//                .add("personTypeList", personTypeList)
+//                .add("typeId", typeId)
+//                .add("baseViewPath", baseViewPath)
+//                .add("entityList", personPage)
+//                .add("sort", sort)
+//                .apply();
+//        return baseViewPath + "/list";
+//    }
+@GetMapping
+@Override
+public String index(Model model,
+                    HttpServletRequest request) {
 
-        int page = getIntParameter(request, "page", 0);
-        int size = getIntParameter(request, "size", 10);
-        String sort = request.getParameter("sort");
-        if (sort == null) sort = "name,asc"; // Default sort
-        Integer typeId = null;
-        if(request.getParameter("typeId") != null &&
-                !request.getParameter("typeId").isEmpty()) {
-            typeId = Integer.valueOf(request.getParameter("typeId"));
-        }
+    int page = getIntParameter(request, "page", 0);
+    int size = getIntParameter(request, "size", 10);
+    String sort = request.getParameter("sort");
+    if (sort == null) sort = ""; // Default sort
 
+    Integer typeId = null;
+    if(request.getParameter("typeId") != null &&
+            !request.getParameter("typeId").isEmpty()) {
+        typeId = Integer.valueOf(request.getParameter("typeId"));
+    }
+
+    String name = "";
+    if(request.getParameter("name") != null) {
+        name = request.getParameter("name").trim();
+    }
+
+    Pageable pageable;
+
+    if(sort.isEmpty()) {
+        pageable = PageRequest.of(page, size);
+    }
+    else {
         String[] sortParams = sort.split(",");
         String sortField = sortParams[0];
         Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
                 ? Sort.Direction.DESC
                 : Sort.Direction.ASC;
-
-        Pageable pageable = PageRequest.of(page, size, direction, sortField);
-
-        Page<Person> personPage = typeId != null
-                ? personService.findByPersonType(typeId, pageable)
-                : personService.findAll(pageable);
-
-        List<PersonType> personTypeList = personTypeService.findAll();
-
-        new ModelAttributes(model)
-                .add("personTypeList", personTypeList)
-                .add("typeId", typeId)
-                .add("baseViewPath", baseViewPath)
-                .add("entityList", personPage)
-                .add("sort", sort)
-                .apply();
-        return baseViewPath + "/list";
+        pageable = PageRequest.of(page, size, direction, sortField);
     }
 
+    Page<Person> personPage;
+
+    if(typeId != null) {
+        personPage = personService.findByPersonType(typeId, pageable);
+    } else if(StringUtils.hasText(name)) {
+        personPage = personService.findByNameContainingIgnoreCase(name, pageable);
+    } else {
+        // No filters - get all
+        personPage = personService.findAll(pageable);
+    }
+
+//    Page<Person> personPage = typeId != null
+//            ? personService.findByPersonType(typeId, pageable)
+//            : personService.findAll(pageable);
+
+    List<PersonType> personTypeList = personTypeService.findAll();
+
+    new ModelAttributes(model)
+            .add("personTypeList", personTypeList)
+            .add("typeId", typeId)
+            .add("searchName", name)
+            .add("baseViewPath", baseViewPath)
+            .add("entityList", personPage)
+            .add("sort", sort)
+            .apply();
+    return baseViewPath + "/list";
+}
     @Override
     @GetMapping("/{id}")
     public String show(@PathVariable Integer id, Model model) {
