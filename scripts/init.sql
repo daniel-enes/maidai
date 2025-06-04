@@ -11,19 +11,6 @@ CREATE SCHEMA IF NOT EXISTS `maidai` DEFAULT CHARACTER SET utf8 ;
 USE `maidai` ;
 
 -- -----------------------------------------------------
--- Table `maidai`.`editais`
--- -----------------------------------------------------
-/*
-CREATE TABLE IF NOT EXISTS `maidai`.`editais` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ano` YEAR NOT NULL,
-  `created_at` DATETIME NOT NULL,
-  `updated_at` DATETIME NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-*/
-
--- -----------------------------------------------------
 -- Table `maidai`.`empresas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `maidai`.`empresas` (
@@ -35,7 +22,6 @@ CREATE TABLE IF NOT EXISTS `maidai`.`empresas` (
   UNIQUE INDEX `nome_UNIQUE` (`nome` ASC) VISIBLE)
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `maidai`.`tipos_pessoa`
 -- -----------------------------------------------------
@@ -45,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `maidai`.`tipos_pessoa` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `tipo_UNIQUE` (`tipo` ASC) VISIBLE)
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `maidai`.`pessoas`

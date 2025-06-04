@@ -32,8 +32,6 @@
                        placeholder="Pesquisar por nome">
             </div>
 
-            <!-- Hidden fields to maintain other filters -->
-<!--            <input type="hidden" name="typeId" th:value="${typeId}">-->
             <input type="hidden" name="page" th:value="${param.page}">
             <input type="hidden" name="size" th:value="${param.size}">
             <input type="hidden" name="sort" th:value="${param.sort}">
@@ -41,25 +39,23 @@
 
         <!-- Filter Form -->
         <form th:action="@{'/' + ${baseViewPath}}" method="get">
-            <label for="typeId">Filtar por: </label>
-            <select name="typeId" id="typeId">
-            <option value="">Sem filtro</option>
-                <option th:each="type : ${personTypeList}"
-                        th:value="${type.id}"
-                        th:text="${type.type}"
-                        th:selected="${type.id == typeId}">
-                </option>
-            </select>
+            <label for="typeIdFilter">Filtrar por tipo: </label>
+            <div>
+                <select name="typeId" id="typeIdFilter">
+                    <option value="">Sem filtro</option>
+                    <option th:each="type : ${personTypeList}"
+                            th:value="${type.id}"
+                            th:text="${type.type}"
+                            th:selected="${type.id == typeId}">
+                    </option>
+                </select>
 
-            <input type="hidden" name="page" th:value="${param.page}">
-            <input type="hidden" name="size" th:value="${param.size}">
-            <input type="hidden" name="sort" th:value="${param.sort}">
+                <input type="hidden" name="page" th:value="${param.page}">
+                <input type="hidden" name="size" th:value="${param.size}">
+                <input type="hidden" name="sort" th:value="${param.sort}">
 
-            <!-- Hidden fields to maintain pagination -->
-<!--            <input type="hidden" name="size" th:value="${entityList.size}">-->
-<!--            <input type="hidden" name="sort" th:value="${sort}">-->
-
-            <button type="submit" class="button success font-light">Buscar</button>
+                <button type="submit" class="button success font-light">Buscar</button>
+            </div>
         </form>
 
         <!-- Pagination controls -->

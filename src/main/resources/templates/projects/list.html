@@ -20,8 +20,47 @@
         </div>
         <div th:replace="~{components/alert :: alert}"></div>
 
+        <!-- Search Form -->
+        <!-- Simple Name Search Form -->
+        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+            <div id="search" class="relative">
+                <i class="fas fa-search"></i>
+                <input type="search"
+                       class=""
+                       name="name"
+                       th:value="${searchName}"
+                       placeholder="Pesquisar por nome">
+            </div>
+
+            <input type="hidden" name="page" th:value="${param.page}">
+            <input type="hidden" name="size" th:value="${param.size}">
+            <input type="hidden" name="sort" th:value="${param.sort}">
+        </form>
+
+        <!-- Filter Form -->
+        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+            <label for="yearNoticeFilter">Filtrar por edital: </label>
+            <div>
+                <select name="yearNotice" id="yearNoticeFilter">
+                    <option value="">Sem filtro</option>
+                    <option value="null" th:selected="${yearNotice == 'null'}">Projeto sem o ano do edital</option>
+                    <option th:each="year : ${yearNoticeList}"
+                            th:value="${year}"
+                            th:selected="${year == yearNotice}"
+                            Edital do ano <span th:text="${year}"></span>
+                    </option>
+                </select>
+
+                <input type="hidden" name="page" th:value="${param.page}">
+                <input type="hidden" name="size" th:value="${param.size}">
+                <input type="hidden" name="sort" th:value="${param.sort}">
+
+                <button type="submit" class="button success font-light">Buscar</button>
+            </div>
+        </form>
+
         <!-- Pagination controls -->
-        <div th:replace="~{components/pagination :: pagination}"></div>
+        <div th:replace="~{projects/projects-pagination :: pagination}"></div>
         <table>
             <thead>
             <tr>
@@ -31,7 +70,7 @@
                         '&size=' + ${entityList.size} +
                         '&sort=name,' +
                         ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' } +
-                        ${typeId != null ? '&typeId='+typeId : ''}
+                        ${yearNotice != null ? '&yearNotice='+yearNotice : ''}
                         }">
                         Nome
                         <span>
@@ -39,6 +78,7 @@
                         </span>
                     </a>
                 </th>
+                <th>Ano do edital</th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
@@ -49,7 +89,9 @@
             </tr>
             <tr th:each="project : ${entityList}">
                 <td><a th:text="${project.name}" th:href="@{/projects/{id}(id=${project.id})}">Nome</a></td>
-
+                <td>
+                    <span th:if="${project.yearNotice != null}" th:text="${project.yearNotice}"></span>
+                </td>
                 <td class="text-center">
                     <a th:href="@{/projects/{id}/edit(id=${project.id})}"
                        role="button"
@@ -73,7 +115,7 @@
             </tbody>
         </table>
         <!-- Pagination controls -->
-        <div th:replace="~{components/pagination :: pagination}"></div>
+        <div th:replace="~{projects/projects-pagination :: pagination}"></div>
     </div>
 </main>
 </body>

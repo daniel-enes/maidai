@@ -3,6 +3,7 @@ package com.agir.maidai.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,8 +30,9 @@ public class Project extends AuditableEntity {
     @Column(name = "fim")
     private LocalDate end;
 
-    @Column(name = "ano_edital")
-    private Integer yearNotice;
+    @Pattern(regexp = "^(19|20)\\d{2}$", message = "O ano deve estar no formato YYYY (entre 1900-2099)")
+    @Column(name = "ano_edital", nullable = true)
+    private String yearNotice;
 
     // 1:N relationship for advisor
     @NotNull(message = "O orientador precisa ser definido.")
@@ -115,11 +117,11 @@ public class Project extends AuditableEntity {
         this.scholarshipList = scholarshipList;
     }
 
-    public Integer getYearNotice() {
+    public String getYearNotice() {
         return yearNotice;
     }
 
-    public void setYearNotice(Integer yearNotice) {
+    public void setYearNotice(String yearNotice) {
         this.yearNotice = yearNotice;
     }
 

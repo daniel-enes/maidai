@@ -42,6 +42,22 @@
                        pattern="\d{4}-\d{2}-\d{2}">
             </div>
 
+            <div>
+                <label for="yearNotice">
+                    Ano do edital:
+                    <p class="input-description">Campo opcional. Formato: YYYY (ex: 2023).</p>
+                </label> <br>
+                <input type="number"
+                       name="yearNotice"
+                       id="yearNotice"
+                       th:field="*{yearNotice}"
+                       min="1900"
+                       max="2099"
+                       step="1"
+                       placeholder="YYYY"
+                >
+            </div>
+
             <div class="margin-y-20">
                 <label for="company">Empresa: </label> <br>
                 <p th:if="${companyList.isEmpty()}"><b>Nenhuma empresa encontrada</b>. <a th:href="@{/companies}">Certifique-se

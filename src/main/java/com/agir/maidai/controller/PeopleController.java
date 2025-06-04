@@ -37,44 +37,6 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
         this.ppgService = ppgService;
     }
 
-//    @GetMapping
-//    @Override
-//    public String index(Model model,
-//                        HttpServletRequest request) {
-//
-//        int page = getIntParameter(request, "page", 0);
-//        int size = getIntParameter(request, "size", 10);
-//        String sort = request.getParameter("sort");
-//        if (sort == null) sort = "name,asc"; // Default sort
-//        Integer typeId = null;
-//        if(request.getParameter("typeId") != null &&
-//                !request.getParameter("typeId").isEmpty()) {
-//            typeId = Integer.valueOf(request.getParameter("typeId"));
-//        }
-//
-//        String[] sortParams = sort.split(",");
-//        String sortField = sortParams[0];
-//        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
-//                ? Sort.Direction.DESC
-//                : Sort.Direction.ASC;
-//
-//        Pageable pageable = PageRequest.of(page, size, direction, sortField);
-//
-//        Page<Person> personPage = typeId != null
-//                ? personService.findByPersonType(typeId, pageable)
-//                : personService.findAll(pageable);
-//
-//        List<PersonType> personTypeList = personTypeService.findAll();
-//
-//        new ModelAttributes(model)
-//                .add("personTypeList", personTypeList)
-//                .add("typeId", typeId)
-//                .add("baseViewPath", baseViewPath)
-//                .add("entityList", personPage)
-//                .add("sort", sort)
-//                .apply();
-//        return baseViewPath + "/list";
-//    }
 @GetMapping
 @Override
 public String index(Model model,
@@ -120,10 +82,6 @@ public String index(Model model,
         // No filters - get all
         personPage = personService.findAll(pageable);
     }
-
-//    Page<Person> personPage = typeId != null
-//            ? personService.findByPersonType(typeId, pageable)
-//            : personService.findAll(pageable);
 
     List<PersonType> personTypeList = personTypeService.findAll();
 

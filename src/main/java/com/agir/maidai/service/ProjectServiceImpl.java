@@ -6,10 +6,13 @@ import com.agir.maidai.repository.ProjectRepository;
 import com.agir.maidai.validation.ProjectsPeopleRelationshipsException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -47,6 +50,26 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
         Person coAdvisor = personService.find(personId);
         project.removeCoAdvisor(coAdvisor);
         repository.save(project);
+    }
+
+    @Override
+    public Page<Project> findByNameContainingIgnoreCase(String name, Pageable pageable) {
+        return projectRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
+
+    @Override
+    public Page<Project> findByYearNotice(String yearNotice, Pageable pageable) {
+        return projectRepository.findByYearNotice(yearNotice, pageable);
+    }
+
+    @Override
+    public List<String> findDistinctByYearNotice() {
+        return projectRepository.findDistinctByYearNotice();
+    }
+
+    @Override
+    public Page<Project> findByYearNoticeIsNull(Pageable pageable) {
+        return projectRepository.findByYearNoticeIsNull(pageable);
     }
 
     @Override
