@@ -78,22 +78,22 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `maidai`.`orientadores`
 -- -----------------------------------------------------
--- CREATE TABLE IF NOT EXISTS `maidai`.`orientadores` (
---   `pessoas_id` INT UNSIGNED NOT NULL,
---   `ppg_id` INT UNSIGNED NULL,
---   PRIMARY KEY (`pessoas_id`),
---   INDEX `fk_orientadores_ppg1_idx` (`ppg_id` ASC) VISIBLE,
---   CONSTRAINT `fk_orientadores_pessoas1`
---     FOREIGN KEY (`pessoas_id`)
---     REFERENCES `maidai`.`pessoas` (`id`)
---     ON DELETE NO ACTION
---     ON UPDATE NO ACTION,
---   CONSTRAINT `fk_orientadores_ppg1`
---     FOREIGN KEY (`ppg_id`)
---     REFERENCES `maidai`.`ppg` (`id`)
---     ON DELETE NO ACTION
---     ON UPDATE NO ACTION)
--- ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `maidai`.`orientadores` (
+  `pessoas_id` INT UNSIGNED NOT NULL,
+  `ppg_id` INT UNSIGNED NULL,
+  PRIMARY KEY (`pessoas_id`),
+  INDEX `fk_orientadores_ppg1_idx` (`ppg_id` ASC) VISIBLE,
+  CONSTRAINT `fk_orientadores_pessoas1`
+    FOREIGN KEY (`pessoas_id`)
+    REFERENCES `maidai`.`pessoas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orientadores_ppg1`
+    FOREIGN KEY (`ppg_id`)
+    REFERENCES `maidai`.`ppg` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------

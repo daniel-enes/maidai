@@ -200,11 +200,12 @@ FROM `maidai`.`projetos`
 WHERE `coorientador` IS NOT NULL;
 
 ---- If you need to keep the old structure temporarily during transition, you can rename columns instead of dropping them:
+/*
 ALTER TABLE `maidai`.`projetos`
 CHANGE COLUMN `orientador` `deprecated_orientador` INT UNSIGNED NULL,
 CHANGE COLUMN `coorientador` `deprecated_coorientador` INT UNSIGNED NULL;
+*/
 
-/*
 ---- Remove the old foreign key constraints first
 ALTER TABLE `maidai`.`projetos`
 DROP FOREIGN KEY `fk_projetos_orientadores1`,
@@ -214,7 +215,6 @@ DROP FOREIGN KEY `fk_projetos_orientadores2`;
 ALTER TABLE `maidai`.`projetos`
 DROP COLUMN `orientador`,
 DROP COLUMN `coorientador`;
-*/
 
 -- -----------------------------------------------------
 -- Table `maidai`.`tipos_bolsa`
@@ -344,22 +344,13 @@ FROM `maidai`.`orientadores`
 WHERE `ppg_id` IS NOT NULL
 ON DUPLICATE KEY UPDATE `ppg_id` = VALUES(`ppg_id`);
 
--- For records where ppg_id is null, you might want to:
--- 1. Set a default ppg_id, or
--- 2. Skip them (as done above)
-
--- Re-enable safe updates
-SET SQL_SAFE_UPDATES = 1;
-
-/*
--- First drop foreign key constraints from projetos that reference orientadores
-ALTER TABLE `maidai`.`projetos`
-DROP FOREIGN KEY `fk_projetos_orientadores1`,
-DROP FOREIGN KEY `fk_projetos_orientadores2`;
 
 -- Then drop the old table
 DROP TABLE IF EXISTS `maidai`.`orientadores`;
-*/
+
+
+-- Re-enable safe updates
+SET SQL_SAFE_UPDATES = 1;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
