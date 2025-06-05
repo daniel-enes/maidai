@@ -44,8 +44,8 @@ public class Person extends AuditableEntity {
     @JoinColumn(name = "tipos_pessoa_id", referencedColumnName = "id")
     private PersonType personType;
 
-    @OneToOne(targetEntity = Scholarship.class, mappedBy = "person", cascade = {CascadeType.REMOVE})
-    private Scholarship scholarship;
+    @OneToMany(targetEntity = Scholarship.class, mappedBy = "person", cascade = {CascadeType.REMOVE})
+    private List<Scholarship> scholarships;
 
     // 1:N inverse side (projects where this person is advisor)
     @OneToMany(mappedBy = "advisor")
@@ -113,12 +113,12 @@ public class Person extends AuditableEntity {
         this.ppgList = ppgList;
     }
 
-    public Scholarship getScholarship() {
-        return scholarship;
+    public List<Scholarship> getScholarships() {
+        return scholarships;
     }
 
-    public void setScholarship(Scholarship scholarship) {
-        this.scholarship = scholarship;
+    public void setScholarships(List<Scholarship> scholarships) {
+        this.scholarships = scholarships;
     }
 
     // Helper methods for managing the relationship

@@ -4,6 +4,8 @@ import com.agir.maidai.entity.Project;
 import com.agir.maidai.entity.Scholarship;
 import com.agir.maidai.repository.ScholarshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
@@ -16,6 +18,11 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
     protected ScholarshipServiceImpl(ScholarshipRepository scholarshipRepository) {
         super(scholarshipRepository);
         this.scholarshipRepository = scholarshipRepository;
+    }
+
+    @Override
+    public Page<Scholarship> findAllByOrderByPersonNameAsc(Pageable pageable) {
+        return scholarshipRepository.findAllByOrderByPersonNameAsc(pageable);
     }
 
     public void validateSave(Scholarship scholarship, Errors errors) {

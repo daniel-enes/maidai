@@ -22,6 +22,9 @@ public class Scholarship extends AuditableEntity {
     @Column(name = "fim")
     private LocalDate end;
 
+    @Column(name = "status")
+    private String status;
+
     @NotNull(message="O tipo de bolsa precisa ser definido.")
     @OneToOne
     @JoinColumn(name = "tipos_bolsa_id", referencedColumnName = "id", nullable = false)
@@ -33,17 +36,18 @@ public class Scholarship extends AuditableEntity {
     private Project project;
 
     @NotNull(message="Um bolsista precisa ser definido para a bolsa.")
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "pessoas_id", referencedColumnName = "id", nullable = false)
     private Person person;
 
     public Scholarship() {
     }
 
-    public Scholarship(Integer id, @NotNull LocalDate start, @NotNull LocalDate end) {
+    public Scholarship(Integer id, @NotNull LocalDate start, @NotNull LocalDate end, String status) {
         this.id = id;
         this.start = start;
         this.end = end;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -68,6 +72,14 @@ public class Scholarship extends AuditableEntity {
 
     public void setEnd(LocalDate end) {
         this.end = end;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ScholarshipType getScholarshipType() {
@@ -100,6 +112,7 @@ public class Scholarship extends AuditableEntity {
                 "id=" + id +
                 ", start=" + start +
                 ", end=" + end +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

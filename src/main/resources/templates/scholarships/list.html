@@ -11,24 +11,131 @@
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content">
     <h1>Bolsas</h1>
-    <div class="max-width-800px">
+    <div class="">
         <div>
             <p>
                 <svg class="vertical-align-middle" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#03a696" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg>
                 <a th:href="@{/scholarships/create}">Cadastrar uma nova Bolsa</a>
             </p>
         </div>
+
+        <!-- ALERT component -->
         <div th:replace="~{components/alert :: alert}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION componenet -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
 
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Bolsista</th>
-                    <th>Projeto</th>
-                    <th>Tipo de Bolsa</th>
-                    <th>Início</th>
-                    <th>Fim</th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=personName,' +
+                        ${(sort == '' || sort == 'personName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Bolsista
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'personName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=projectName,' +
+                        ${(sort == '' || sort == 'projectName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Projeto
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'projectName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=projectAdvisorName,' +
+                        ${(sort == '' || sort == 'projectAdvisorName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Orientador
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'projectAdvisorName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=projectCompanyName,' +
+                        ${(sort == '' || sort == 'projectCompanyName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Empresa
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'projectCompanyName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=scholarshipTypeType,' +
+                        ${(sort == '' || sort == 'scholarshipTypeType,asc') ? 'desc' : 'asc' }
+                        }">
+                            Tipo de Bolsa
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'scholarshipTypeType,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=start,' +
+                        ${(sort == '' || sort == 'start,asc') ? 'desc' : 'asc' }
+                        }">
+                            Início
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'start,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=end,' +
+                        ${(sort == '' || sort == 'end,asc') ? 'desc' : 'asc' }
+                        }">
+                            Fim
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'end,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=status,' +
+                        ${(sort == '' || sort == 'status,asc') ? 'desc' : 'asc' }
+                        }">
+                            Status
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'status,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
                     <th>Editar</th>
                     <th>Apagar</th>
                 </tr>
@@ -41,9 +148,12 @@
                 <td><a th:text="${scholarship.id}" th:href="@{/scholarships/{id}(id=${scholarship.id})}"></a></td>
                 <td th:text="${scholarship.person.name}"></td>
                 <td th:text="${scholarship.project.name}"></td>
+                <td th:text="${scholarship.project.advisor.name}"></td>
+                <td th:text="${scholarship.project.company.name}"></td>
                 <td th:text="${scholarship.scholarshipType.type}"></td>
-                <td th:text="${scholarship.start}">Início</td>
-                <td th:text="${scholarship.end}">Fim</td>
+                <td th:text="${scholarship.start}"></td>
+                <td th:text="${scholarship.end}"></td>
+                <td th:text="${scholarship.status}"></td>
                 <td class="text-center">
                     <a th:href="@{/scholarships/{id}/edit(id=${scholarship.id})}"
                        role="button"
@@ -66,8 +176,13 @@
             </tr>
             </tbody>
         </table>
-        <!-- Pagination controls -->
+
+        <!-- PAGINATION componenet -->
         <div th:replace="~{components/pagination :: pagination}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
     </div>
 </main>
 </body>

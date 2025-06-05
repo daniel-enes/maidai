@@ -38,7 +38,7 @@
         </form>
 
         <!-- Filter Form -->
-        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+        <form th:action="@{'/' + ${baseViewPath} + '?sort=name,asc'}" method="get">
             <label for="typeIdFilter">Filtrar por tipo: </label>
             <div>
                 <select name="typeId" id="typeIdFilter">
@@ -52,13 +52,15 @@
 
                 <input type="hidden" name="page" th:value="${param.page}">
                 <input type="hidden" name="size" th:value="${param.size}">
-                <input type="hidden" name="sort" th:value="${param.sort}">
 
                 <button type="submit" class="button success font-light">Buscar</button>
             </div>
         </form>
 
-        <!-- Pagination controls -->
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION component -->
         <div th:replace="~{people/people-pagination :: pagination}"></div>
         <!--<div th:replace="~{components/pagination :: pagination}"></div>-->
 
@@ -81,7 +83,19 @@
                 </th>
                 <th>Telefone</th>
                 <th>Email</th>
-                <th>Tipo</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=personTypeType,' +
+                        ${(sort == '' || sort == 'personTypeType,asc') ? 'desc' : 'asc' }
+                        }">
+                        Tipo
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'personTypeType,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <th>Status</th>
                 <th>Editar</th>
                 <th>Apagar</th>
@@ -130,9 +144,14 @@
             </tr>
             </tbody>
         </table>
-        <!-- Pagination controls -->
+
+        <!-- PAGINATION component -->
         <div th:replace="~{people/people-pagination :: pagination}"></div>
         <!--<div th:replace="~{components/pagination :: pagination}"></div>-->
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
     </div>
 </main>
 </body>

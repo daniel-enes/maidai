@@ -59,8 +59,12 @@
             </div>
         </form>
 
-        <!-- Pagination controls -->
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION component -->
         <div th:replace="~{projects/projects-pagination :: pagination}"></div>
+
         <table>
             <thead>
             <tr>
@@ -78,7 +82,20 @@
                         </span>
                     </a>
                 </th>
-                <th>Ano do edital</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=yearNotice,' +
+                        ${(sort == '' || sort == 'yearNotice,asc') ? 'desc' : 'asc' } +
+                        ${yearNotice != null ? '&yearNotice='+yearNotice : ''}
+                        }">
+                        Ano do edital
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'yearNotice,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
@@ -114,8 +131,13 @@
             </tr>
             </tbody>
         </table>
-        <!-- Pagination controls -->
+
+        <!-- PAGINATION component -->
         <div th:replace="~{projects/projects-pagination :: pagination}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
     </div>
 </main>
 </body>

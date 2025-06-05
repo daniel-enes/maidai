@@ -213,6 +213,13 @@ th, td {
     padding: 12px 15px;
 }
 
+th {
+    white-space: nowrap;
+}
+
+th a {
+    color: #ffffff;
+}
 /*******
 
 FORM
