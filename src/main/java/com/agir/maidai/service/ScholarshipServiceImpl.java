@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
+import java.util.Map;
+
 @Service
 public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Integer> implements ScholarshipService {
 
@@ -25,6 +27,29 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
         return scholarshipRepository.findAllByOrderByPersonNameAsc(pageable);
     }
 
+    @Override
+    public Page<Scholarship> findAll(Pageable pageable, Map<String, String> filters) {
+        if(filters.containsKey("status")) {
+           String status = filters.get("status");
+           return this.findByStatus(pageable, status);
+        } else if (filters.containsKey("scholarshipHolder")) {
+            String scholarshipHolder = filters.get("scholarshipHolder");
+            return this.findByScholarshipHolder(pageable, scholarshipHolder);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Page<Scholarship> findByStatus(Pageable pageable, String status) {
+        return scholarshipRepository.findByStatus(pageable , status);
+    }
+
+    @Override
+    public Page<Scholarship> findByScholarshipHolder(Pageable pageable, String name) {
+        return scholarshipRepository.findByScholarshipHolder(pageable, name);
+    }
+
     public void validateSave(Scholarship scholarship, Errors errors) {
 
         if(scholarship.getStart() != null && scholarship.getEnd() != null) {
@@ -35,4 +60,6 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
             }
         }
     }
+
+
 }

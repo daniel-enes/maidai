@@ -14,6 +14,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.springframework.web.bind.ServletRequestUtils.getIntParameter;
 
 
@@ -41,20 +44,21 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         String sort = request.getParameter("sort");
         if (sort == null) sort = ""; // Default sort
 
-        Pageable pageable;
+        Pageable pageable = sort.isEmpty()
+                ? PageRequest.of(page, size)
+                : parseSort(sort, page, size);
 
-        if(sort.isEmpty()) {
-            pageable = PageRequest.of(page, size);
+        Map<String, String> filters = parseFilterGroups(request.getParameter("filter"));
+
+        Page<T> entityPage;
+
+        if(!filters.isEmpty()) {
+            entityPage = service.findAll(pageable, filters);
         } else {
-            String[] sortParams = sort.split(",");
-            String sortField = sortParams[0];
-            Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
-                    ? Sort.Direction.DESC
-                    : Sort.Direction.ASC;
-            pageable = PageRequest.of(page, size, direction, sortField);
+            entityPage = service.findAll(pageable);
         }
 
-        Page<T> entityPage = service.findAll(pageable);
+        // Page<T> entityPage = service.findAll(pageable);
 
         ModelAttributes modelAttributes = new ModelAttributes(model)
                 .add("baseViewPath", baseViewPath)
@@ -162,6 +166,40 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         service.delete(id);
         redirectAttributes.addFlashAttribute("success", getDeleteSuccessMessage());
         return "redirect:/" + baseViewPath;
+    }
+
+    /*
+    * Util functions to controller
+    */
+
+    private Pageable parseSort(String sort, int page, int size) {
+        String[] sortParams = sort.split(",");
+        String sortField = sortParams[0];
+        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        return PageRequest.of(page, size, direction, sortField);
+    }
+
+    // Parse filter=status:vigente,name:John into a Map
+    private Map<String, String> parseFilterGroups(String filterParam) {
+        Map<String, String> filters = new HashMap<>();
+        if (filterParam == null || filterParam.isEmpty()) {
+            return filters;
+        }
+
+        // Split multiple filters: "status:vigente,name:John" → ["status:vigente", "name:John"]
+        String[] filterPairs = filterParam.split(",");
+
+        for (String pair : filterPairs) {
+            // Split each pair: "status:vigente" → ["status", "vigente"]
+            String[] keyValue = pair.split(":");
+            if (keyValue.length == 2) {
+                filters.put(keyValue[0].trim(), keyValue[1].trim());
+            }
+        }
+
+        return filters;
     }
 
     // Template methods to be implemented by concrete controllers

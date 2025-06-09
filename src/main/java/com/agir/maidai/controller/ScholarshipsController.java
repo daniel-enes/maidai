@@ -43,46 +43,6 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
         this.scholarshipTypeService = scholarshipTypeService;
     }
 
-//    @GetMapping
-//    @Override
-//    public String index(Model model,
-//                        HttpServletRequest request) {
-//
-//        int page = getIntParameter(request, "page", 0);
-//        int size = getIntParameter(request, "size", 10);
-//        String sort = request.getParameter("sort");
-//        if (sort == null) sort = ""; // Default sort
-//
-//        Pageable pageable;
-//
-//        if(sort.isEmpty()) {
-//            pageable = PageRequest.of(page, size);
-//        }
-//        else {
-//            String[] sortParams = sort.split(",");
-//            String sortField = sortParams[0];
-//            Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
-//                    ? Sort.Direction.DESC
-//                    : Sort.Direction.ASC;
-//            pageable = PageRequest.of(page, size, direction, sortField);
-//        }
-//
-//        Page<Scholarship> scholarships;
-//        scholarships = scholarshipService.findAll(pageable);
-////        if(sort.equals("person,asc") || sort.equals("person,desc")) {
-////            scholarships = scholarshipService.findAllByOrderByPersonNameAsc(pageable);
-////        } else {
-////            scholarships = scholarshipService.findAll(pageable);
-////        }
-//
-//        new ModelAttributes(model)
-//                .add("baseViewPath", baseViewPath)
-//                .add("entityList", scholarships)
-//                .add("sort", sort)
-//                .apply();
-//        return baseViewPath + "/list";
-//    }
-
     @Override
     @GetMapping("/create")
     public String create(Model model, RedirectAttributes redirectAttributes) {

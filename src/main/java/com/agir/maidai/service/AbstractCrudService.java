@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.validation.Errors;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
@@ -27,6 +28,11 @@ public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
     @Override
     public Page<T> findAll(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+
+    @Override
+    public Page<T> findAll(Pageable pageable, Map<String, String> filters) {
+        return null;
     }
 
     @Override
