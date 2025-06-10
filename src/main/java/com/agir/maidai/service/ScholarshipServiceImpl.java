@@ -28,13 +28,16 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
     }
 
     @Override
-    public Page<Scholarship> findAll(Pageable pageable, Map<String, String> filters) {
-        if(filters.containsKey("status")) {
-           String status = filters.get("status");
+    public Page<Scholarship> findAll(Pageable pageable, Map<String, String> parameters) {
+
+        // Verify if it's filtered by status
+        if(parameters.containsKey("status")) {
+           String status = parameters.get("status");
            return this.findByStatus(pageable, status);
-        } else if (filters.containsKey("scholarshipHolder")) {
-            String scholarshipHolder = filters.get("scholarshipHolder");
-            return this.findByScholarshipHolder(pageable, scholarshipHolder);
+        } else if (parameters.containsKey("scholarshipHolder")) {
+            System.out.println("Chegou no ELSEIF do findAll Scholarship");
+            String name = parameters.get("scholarshipHolder");
+            return this.findByScholarshipHolder(pageable, name);
         } else {
             return null;
         }

@@ -12,14 +12,6 @@
 <div id="alert" th:fragment="alert">
 
   <!-- ERROR MESSAGE -->
-
-  <!--<div id="error" class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
-    <p class="font-bold">Erro!</p>
-    <p>Alguns erros foram encontrados:</p>
-    <ul>
-      <li th:each="error: ${errors}" th:text="${error.defaultMessage}"></li>
-    </ul>
-  </div>-->
   <div id="alert-danger" tabindex="0" autofocus class="alert alert-danger" th:if="${not #lists.isEmpty(errors)}">
     <p class="font-bold">Erro!</p>
     <p>Alguns erros foram encontrados:</p>
@@ -29,7 +21,6 @@
   </div>
 
   <!-- SUCCESS MESSAGE -->
-
   <div id="alert-success" tabindex="0" autofocus th:if="${success}" class="alert alert-success">
     <p class="font-bold">Sucesso!</p>
     <p th:text="${success}"></p>

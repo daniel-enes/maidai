@@ -1,6 +1,7 @@
 package com.agir.maidai.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,8 +9,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.validation.Errors;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.springframework.web.bind.ServletRequestUtils.getIntParameter;
+import static org.springframework.web.bind.ServletRequestUtils.getStringParameter;
 
 public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
@@ -27,6 +32,7 @@ public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
     @Override
     public Page<T> findAll(Pageable pageable) {
+        System.out.println("Chegou no FINDALL AbstractCrudService");
         return repository.findAll(pageable);
     }
 
@@ -58,6 +64,6 @@ public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
     @Override
     public void validateSave(T entity, Errors errors) {
-
     }
+
 }

@@ -1,6 +1,7 @@
 package com.agir.maidai.controller;
 
 import com.agir.maidai.service.CrudService;
+import com.agir.maidai.util.FilteredParams;
 import com.agir.maidai.util.ModelAttributes;
 import com.agir.maidai.util.RedirectAttributesWrapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,26 +40,27 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
     public String index(Model model,
                         HttpServletRequest request) {
 
-        int page = getIntParameter(request, "page", 0);
-        int size = getIntParameter(request, "size", 10);
-        String sort = request.getParameter("sort");
-        if (sort == null) sort = ""; // Default sort
+        FilteredParams filteredParams = new FilteredParams();
 
-        Pageable pageable = sort.isEmpty()
-                ? PageRequest.of(page, size)
-                : parseSort(sort, page, size);
+        Pageable pageable = filteredParams.getPageable(request);
 
-        Map<String, String> filters = parseFilterGroups(request.getParameter("filter"));
+        String sort = filteredParams.getSort();
+
+        Map<String, String> filters = filteredParams.getFilters(request);
+
+        Map<String, String> restOfParameters = filteredParams.getParparameters(request);
 
         Page<T> entityPage;
 
         if(!filters.isEmpty()) {
             entityPage = service.findAll(pageable, filters);
-        } else {
+        } else if(!restOfParameters.isEmpty()) {
+            System.out.println("Chegou no ELSEIF");
+            entityPage = service.findAll(pageable, restOfParameters);
+        }else {
+            System.out.println("Chegou no ELSE");
             entityPage = service.findAll(pageable);
         }
-
-        // Page<T> entityPage = service.findAll(pageable);
 
         ModelAttributes modelAttributes = new ModelAttributes(model)
                 .add("baseViewPath", baseViewPath)

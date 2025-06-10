@@ -44,7 +44,7 @@
                 </form>
             </div>
 
-            <!-- Filtro pelo nome do bolsista -->
+            <!-- Filtrar pelo nome do bolsista -->
             <div>
                 <!-- Simple Name Search Form -->
                 <form th:action="@{'/' + ${baseViewPath}}" method="get">
@@ -52,14 +52,13 @@
                         <i class="fas fa-search"></i>
                         <input type="search"
                                class=""
-                               name="name"
-                               th:value="${searchName}"
-                               placeholder="Pesquisar por nome">
+                               name="scholarshipHolder"
+                               placeholder="Buscar bolsista">
                     </div>
 
-                    <input type="hidden" name="page" th:value="${param.page}">
-                    <input type="hidden" name="size" th:value="${param.size}">
-                    <input type="hidden" name="sort" th:value="${param.sort}">
+                    <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">
+                    <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">
+                    <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">
                 </form>
             </div>
         </div>
