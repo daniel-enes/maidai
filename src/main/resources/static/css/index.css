@@ -173,6 +173,10 @@ FLEX
     justify-content: space-between;
 }
 
+.flex-justify-space-around {
+    justify-content: space-around;
+}
+
 .flex-align-center {
     align-items: center;
 }
@@ -189,6 +193,10 @@ FLEX
     flex-grow: 6;
 }
 
+.flex-grow-5 {
+    flex-grow: 5;
+}
+
 .flex-grow-4 {
     flex-grow: 4;
 }
@@ -196,6 +204,7 @@ FLEX
 .flex-grow-2 {
     flex-grow: 2;
 }
+
 /*******
 
 

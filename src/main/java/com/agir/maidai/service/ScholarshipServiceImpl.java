@@ -32,12 +32,28 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
 
         // Verify if it's filtered by status
         if(parameters.containsKey("status")) {
-           String status = parameters.get("status");
-           return this.findByStatus(pageable, status);
-        } else if (parameters.containsKey("scholarshipHolder")) {
-            System.out.println("Chegou no ELSEIF do findAll Scholarship");
-            String name = parameters.get("scholarshipHolder");
-            return this.findByScholarshipHolder(pageable, name);
+            String status = parameters.get("status");
+            return this.findByStatus(pageable, status);
+
+        } else if (parameters.containsKey("query") && parameters.containsKey("search")) {
+
+            String query = parameters.get("query");
+            String search = parameters.get("search");
+
+            if(search.equals("scholarshipHolder")) {
+                return this.findByScholarshipHolder(pageable, query);
+            } else if(search.equals("advisor")) {
+                return this.findByAdvisor(pageable, query);
+            }
+            else if(search.equals("project")) {
+                return this.findByProject(pageable, query);
+            }
+            else if(search.equals("company")) {
+                return this.findByCompany(pageable, query);
+            }
+            else {
+                return null;
+            }
         } else {
             return null;
         }
@@ -51,6 +67,21 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
     @Override
     public Page<Scholarship> findByScholarshipHolder(Pageable pageable, String name) {
         return scholarshipRepository.findByScholarshipHolder(pageable, name);
+    }
+
+    @Override
+    public Page<Scholarship> findByAdvisor(Pageable pageable, String name) {
+        return scholarshipRepository.findByAdvisor(pageable, name);
+    }
+
+    @Override
+    public Page<Scholarship> findByProject(Pageable pageable, String name) {
+        return scholarshipRepository.findByProject(pageable, name);
+    }
+
+    @Override
+    public Page<Scholarship> findByCompany(Pageable pageable, String name) {
+        return scholarshipRepository.findByCompany(pageable, name);
     }
 
     public void validateSave(Scholarship scholarship, Errors errors) {

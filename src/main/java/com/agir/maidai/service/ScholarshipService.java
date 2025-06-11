@@ -11,4 +11,10 @@ public interface ScholarshipService extends CrudService<Scholarship, Integer>{
     Page<Scholarship> findByStatus(Pageable pageable, String status);
 
     Page<Scholarship> findByScholarshipHolder(Pageable pageable, String name);
+
+    Page<Scholarship> findByAdvisor(Pageable pageable, String name);
+
+    Page<Scholarship> findByProject(Pageable pageable, String name);
+
+    Page<Scholarship> findByCompany(Pageable pageable, String name);
 }

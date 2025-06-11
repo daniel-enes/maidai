@@ -7,6 +7,36 @@
     <title>Bolsas</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const tabLinks = document.querySelectorAll('.nav-link');
+          const tabContents = document.querySelectorAll('.tab-pane');
+
+          tabLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+              e.preventDefault();
+
+              // Remove active class from all tabs and hide all content
+              tabLinks.forEach(tab => tab.classList.remove('active'));
+              tabContents.forEach(content => content.classList.remove('active'));
+
+              // Add active class to clicked tab
+              this.classList.add('active');
+
+              // Show corresponding content
+              const targetId = this.getAttribute('href');
+              document.querySelector(targetId).classList.add('active');
+            });
+          });
+
+          // Activate first tab by default
+          if (tabLinks.length > 0) {
+            tabLinks[0].click();
+          }
+        });
+    </script>
+
 </head>
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content" tabindex="0" autofocus>
@@ -22,44 +52,69 @@
         <!-- ALERT component -->
         <div th:replace="~{components/alert :: alert}"></div>
 
-        <div>
-            <h2>Filtros</h2>
-            <!-- Filtro para o status da bolsa -->
-            <div>
-                <form th:action="@{'/' + ${baseViewPath} + '?sort=name,asc'}" method="get">
-                    <label for="filter">Filtrar pelo status: </label>
-                    <div>
-                        <select name="filter" id="filter">
-                            <option value="">--- Selecione um status ---</option>
-                            <option value="status:vigente">Vigente</option>
-                            <option value="status:cancelada">Cancelada</option>
-                            <option value="status:vigência expirada">Vigência expirada</option>
-                        </select>
+        <h2>Filtros</h2>
 
-                        <input type="hidden" name="page" th:value="${param.page}">
-                        <input type="hidden" name="size" th:value="${param.size}">
+        <div id="filters" class="">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="#filter-name">Nome</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#filter-status">Status</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div id="filter-name" class="tab-pane">
+                    <fieldset>
+                        <!-- Simple Name Search Form -->
+                        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+                            <div id="search" class="relative">
+                                <i class="fas fa-search"></i>
+                                <input type="search"
+                                       class="search"
+                                       name="query"
+                                       placeholder="Buscar pelo nome"
+                                       th:value="${param.search != null ? param.query : ''}"
+                                >
+                            </div>
+                            <div>
+                                <select name="search">
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'scholarshipHolder')}" th:value="scholarshipHolder">Bolsista</option>
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'advisor')}" th:value="advisor">Orientador</option>
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'project')}" th:value="project">Projeto</option>
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'company')}" th:value="company">Empresa</option>
+                                </select>
 
-                        <button type="submit" class="button success font-light">Buscar</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Filtrar pelo nome do bolsista -->
-            <div>
-                <!-- Simple Name Search Form -->
-                <form th:action="@{'/' + ${baseViewPath}}" method="get">
-                    <div id="search" class="relative">
-                        <i class="fas fa-search"></i>
-                        <input type="search"
-                               class=""
-                               name="scholarshipHolder"
-                               placeholder="Buscar bolsista">
-                    </div>
-
-                    <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">
-                    <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">
-                    <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">
-                </form>
+                                <button type="submit" class="button success font-light">Buscar</button>
+                            </div>
+                            <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">
+                            <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">
+                            <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">
+                        </form>
+                    </fieldset>
+                </div>
+                <div id="filter-status" class="tab-pane">
+                    <fieldset>
+                        <legend>Filtrar pelo status:</legend>
+                        <form th:action="@{'/' + ${baseViewPath} + '?sort=name,asc'}" method="get">
+                            <div>
+                                <select name="filter" id="filter">
+                                    <option value="">--- Selecione um status ---</option>
+                                    <option value="status:vigente">Vigente</option>
+                                    <option value="status:cancelada">Cancelada</option>
+                                    <option value="status:vigência expirada">Vigência expirada</option>
+                                </select>
+                            </div>
+                            <div>
+                                <button type="submit" class="button success font-light">Buscar</button>
+                            </div>
+                            <input type="hidden" name="page" th:value="${param.page}">
+                            <input type="hidden" name="size" th:value="${param.size}">
+                        </form>
+                    </fieldset>
+                </div>
             </div>
         </div>
 

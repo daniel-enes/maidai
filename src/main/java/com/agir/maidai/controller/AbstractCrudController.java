@@ -18,9 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.web.bind.ServletRequestUtils.getIntParameter;
-
-
 public abstract class AbstractCrudController<T, ID> implements CrudController<T, ID>{
 
     protected final CrudService<T, ID> service;
@@ -55,10 +52,8 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         if(!filters.isEmpty()) {
             entityPage = service.findAll(pageable, filters);
         } else if(!restOfParameters.isEmpty()) {
-            System.out.println("Chegou no ELSEIF");
             entityPage = service.findAll(pageable, restOfParameters);
         }else {
-            System.out.println("Chegou no ELSE");
             entityPage = service.findAll(pageable);
         }
 

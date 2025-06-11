@@ -11,7 +11,7 @@ public interface CrudService<T, ID> {
 
     List<T> findAll();
     Page<T> findAll(Pageable pageable);
-    Page<T> findAll(Pageable pageable, Map<String, String> filters);
+    Page<T> findAll(Pageable pageable, Map<String, String> parameters);
 
     T find(ID id);
 

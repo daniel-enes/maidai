@@ -32,12 +32,11 @@ public abstract class AbstractCrudService<T, ID> implements CrudService<T, ID> {
 
     @Override
     public Page<T> findAll(Pageable pageable) {
-        System.out.println("Chegou no FINDALL AbstractCrudService");
         return repository.findAll(pageable);
     }
 
     @Override
-    public Page<T> findAll(Pageable pageable, Map<String, String> filters) {
+    public Page<T> findAll(Pageable pageable, Map<String, String> parameters) {
         return null;
     }
 

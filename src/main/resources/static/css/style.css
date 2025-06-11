@@ -220,6 +220,61 @@ th {
 th a {
     color: #ffffff;
 }
+
+/*******
+
+TABS
+
+********/
+.nav-tabs {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid var(--dark);
+}
+
+.nav-item {
+    margin-bottom: -1px;
+}
+
+.nav-item>.active {
+    border-top: 1px solid var(--dark);
+    border-left: 1px solid var(--dark);
+    border-right: 1px solid var(--dark);
+    background: #FFFFFF;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    color: var(--success);;
+    text-decoration: none;
+
+}
+
+.tab-content {
+    padding: 10px;
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    background: #FFFFFF;
+}
+
+.tab-content>.active {
+    display: block !important;
+}
+
+.tab-content>.tab-pane {
+    display: none;
+}
+
+.tab-pane:target {
+    display: block;
+}
+
 /*******
 
 FORM
