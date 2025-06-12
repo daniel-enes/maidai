@@ -6,16 +6,13 @@ import com.agir.maidai.util.ModelAttributes;
 import com.agir.maidai.util.RedirectAttributesWrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractCrudController<T, ID> implements CrudController<T, ID>{
@@ -37,15 +34,13 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
     public String index(Model model,
                         HttpServletRequest request) {
 
+        // Obtain separately the parameters from URL
         FilteredParams filteredParams = new FilteredParams();
-
         Pageable pageable = filteredParams.getPageable(request);
-
         String sort = filteredParams.getSort();
-
         Map<String, String> filters = filteredParams.getFilters(request);
-
         Map<String, String> restOfParameters = filteredParams.getParparameters(request);
+        String queryParameters = filteredParams.getQueryParameters(request);
 
         Page<T> entityPage;
 
@@ -60,7 +55,10 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         ModelAttributes modelAttributes = new ModelAttributes(model)
                 .add("baseViewPath", baseViewPath)
                 .add("sort", sort)
-                .add("entityList", entityPage);
+                .add("filters", filters)
+                .add("restOfParameters", restOfParameters)
+                .add("entityList", entityPage)
+                .add("queryParameters", queryParameters);
         modelAttributes.apply();
 
         return baseViewPath + "/list";
@@ -146,7 +144,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
             return "redirect:/" + baseViewPath + "/"+id+"/edit";
         }
         try {
-
             service.update(entity);
             redirectAttributes.addFlashAttribute("success", getUpdateSuccessMessage());
             return "redirect:/" + baseViewPath;
@@ -163,40 +160,6 @@ public abstract class AbstractCrudController<T, ID> implements CrudController<T,
         service.delete(id);
         redirectAttributes.addFlashAttribute("success", getDeleteSuccessMessage());
         return "redirect:/" + baseViewPath;
-    }
-
-    /*
-    * Util functions to controller
-    */
-
-    private Pageable parseSort(String sort, int page, int size) {
-        String[] sortParams = sort.split(",");
-        String sortField = sortParams[0];
-        Sort.Direction direction = sortParams.length > 1 && sortParams[1].equalsIgnoreCase("desc")
-                ? Sort.Direction.DESC
-                : Sort.Direction.ASC;
-        return PageRequest.of(page, size, direction, sortField);
-    }
-
-    // Parse filter=status:vigente,name:John into a Map
-    private Map<String, String> parseFilterGroups(String filterParam) {
-        Map<String, String> filters = new HashMap<>();
-        if (filterParam == null || filterParam.isEmpty()) {
-            return filters;
-        }
-
-        // Split multiple filters: "status:vigente,name:John" → ["status:vigente", "name:John"]
-        String[] filterPairs = filterParam.split(",");
-
-        for (String pair : filterPairs) {
-            // Split each pair: "status:vigente" → ["status", "vigente"]
-            String[] keyValue = pair.split(":");
-            if (keyValue.length == 2) {
-                filters.put(keyValue[0].trim(), keyValue[1].trim());
-            }
-        }
-
-        return filters;
     }
 
     // Template methods to be implemented by concrete controllers

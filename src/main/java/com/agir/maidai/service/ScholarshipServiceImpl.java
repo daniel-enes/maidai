@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Map;
 
@@ -34,28 +35,25 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
         if(parameters.containsKey("status")) {
             String status = parameters.get("status");
             return this.findByStatus(pageable, status);
-
         } else if (parameters.containsKey("query") && parameters.containsKey("search")) {
-
             String query = parameters.get("query");
             String search = parameters.get("search");
 
-            if(search.equals("scholarshipHolder")) {
-                return this.findByScholarshipHolder(pageable, query);
-            } else if(search.equals("advisor")) {
-                return this.findByAdvisor(pageable, query);
-            }
-            else if(search.equals("project")) {
-                return this.findByProject(pageable, query);
-            }
-            else if(search.equals("company")) {
-                return this.findByCompany(pageable, query);
-            }
-            else {
-                return null;
+            switch (search) {
+                case "scholarshipHolder":
+                    return this.findByScholarshipHolder(pageable, query);
+                case "advisor":
+                    return this.findByAdvisor(pageable, query);
+                case "project":
+                    return this.findByProject(pageable, query);
+                case "company":
+                    return this.findByCompany(pageable, query);
+                default:
+                    return scholarshipRepository.findAll(pageable);
             }
         } else {
-            return null;
+            System.out.println("CHEGOU NO ELSE");
+            return scholarshipRepository.findAll(pageable);
         }
     }
 
@@ -85,7 +83,6 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
     }
 
     public void validateSave(Scholarship scholarship, Errors errors) {
-
         if(scholarship.getStart() != null && scholarship.getEnd() != null) {
             if (scholarship.getStart().isEqual((scholarship.getEnd()))) {
                 errors.rejectValue("end", "dates.equal", "A data final não pode ser igual a data inicial.");
@@ -94,6 +91,4 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
             }
         }
     }
-
-
 }

@@ -13,11 +13,14 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     Page<Person> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    @Query("SELECT p FROM Person p WHERE (:typeId IS NULL OR p.personType.id = :typeId)")
-    Page<Person> findByPersonType(Integer typeId, Pageable pageable);
+//    @Query("SELECT p FROM Person p WHERE (:typeId IS NULL OR p.personType.id = :typeId)")
+//    Page<Person> findByPersonType(Integer typeId, Pageable pageable);
+//
+//    @Query("SELECT p FROM Person p WHERE (:typeId IS NULL OR p.personType.id = :typeId)")
+//    List<Person> findByPersonType(Integer typeId);
 
-    @Query("SELECT p FROM Person p WHERE (:typeId IS NULL OR p.personType.id = :typeId)")
-    List<Person> findByPersonType(Integer typeId);
+    @Query("SELECT p FROM Person p WHERE p.personType.type = :personType")
+    Page<Person> findByPersonType(Pageable pageable, String personType);
 
     //List<Person> findByPersonTypeId(Integer typeId);
 

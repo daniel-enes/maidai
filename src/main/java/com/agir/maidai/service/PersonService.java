@@ -10,8 +10,10 @@ public interface PersonService extends CrudService<Person, Integer> {
 
     Page<Person> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    Page<Person> findByPersonType(Integer typeId, Pageable pageable);
-    List<Person> findByPersonType(Integer typeId);
+//    Page<Person> findByPersonType(Integer typeId, Pageable pageable);
+//    List<Person> findByPersonType(Integer typeId);
+
+    Page<Person> findByPersonType(Pageable pageable, String personType);
 
     void addPersonToPpg(Integer personId, Integer ppgId);
     void removePersonFromPpg(Integer personId, Integer ppgId);

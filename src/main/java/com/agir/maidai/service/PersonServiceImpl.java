@@ -8,13 +8,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
+
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PersonServiceImpl extends AbstractCrudService<Person, Integer> implements PersonService{
@@ -30,19 +29,38 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     }
 
     @Override
+    public Page<Person> findAll(Pageable pageable, Map<String, String> parameters) {
+        // Verify if it's filtered by status
+        if(parameters.containsKey("name")) {
+            String name = parameters.get("name");
+            return this.findByNameContainingIgnoreCase(name, pageable);
+        } else if(parameters.containsKey("personType")) {
+            String personType = parameters.get("personType");
+            return this.findByPersonType(pageable, personType);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public Page<Person> findByNameContainingIgnoreCase(String name, Pageable pageable) {
         return personRepository.findByNameContainingIgnoreCase(name, pageable);
     }
 
     @Override
-    public Page<Person> findByPersonType(Integer typeId, Pageable pageable) {
-        return personRepository.findByPersonType(typeId, pageable);
+    public Page<Person> findByPersonType(Pageable pageable, String personType) {
+        return personRepository.findByPersonType(pageable, personType);
     }
 
-    @Override
-    public List<Person> findByPersonType(Integer typeId) {
-        return personRepository.findByPersonType(typeId);
-    }
+//    @Override
+//    public Page<Person> findByPersonType(Integer typeId, Pageable pageable) {
+//        return personRepository.findByPersonType(typeId, pageable);
+//    }
+//
+//    @Override
+//    public List<Person> findByPersonType(Integer typeId) {
+//        return personRepository.findByPersonType(typeId);
+//    }
 
     @Transactional
     public void addPersonToPpg(Integer personId, Integer ppgId) {
@@ -73,6 +91,5 @@ public class PersonServiceImpl extends AbstractCrudService<Person, Integer> impl
     public List<Person> findAllScholarshipHolders() {
         return personRepository.findAllScholarshipHolders();
     }
-
 
 }

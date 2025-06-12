@@ -11,10 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> implements ProjectService{
@@ -27,6 +24,22 @@ public class ProjectServiceImpl extends AbstractCrudService<Project, Integer> im
         super(projectRepository);
         this.projectRepository = projectRepository;
         this.personService = personService;
+    }
+
+    @Override
+    public Page<Project> findAll(Pageable pageable, Map<String, String> parameters) {
+        // Verify if it's filtered by status
+        if(parameters.containsKey("name")) {
+            String name = parameters.get("name");
+            return this.findByNameContainingIgnoreCase(name, pageable);
+        } else if(parameters.containsKey("yearNotice")) {
+            String yearNotice = parameters.get("yearNotice");
+            return this.findByYearNotice(yearNotice, pageable);
+        } else if(parameters.containsKey("filter") && "null".equals(parameters.get("filter"))) {
+            return this.findByYearNoticeIsNull(pageable);
+        }else {
+            return null;
+        }
     }
 
     @Transactional

@@ -17,11 +17,13 @@ public class FilteredParams {
     private Map<String, String> filters;
     private Map<String, String> parameters;
     private String sort;
+    private String queryParameters;
 
     public FilteredParams() {
         this.sort = "";
         this.filters = new HashMap<>();
         this.parameters = new HashMap<>();
+        this.queryParameters = "";
     }
 
     public String getSort() {
@@ -34,7 +36,6 @@ public class FilteredParams {
 
     // Obtain the filters to param filter
     public Map<String, String> getFilters(HttpServletRequest request) {
-
         if(request.getParameterMap().containsKey("filter")) {
             return filters = parseFilterGroups(request.getParameter("filter"));
         }
@@ -73,9 +74,18 @@ public class FilteredParams {
         return parameters;
     }
 
+    public String getQueryParameters(HttpServletRequest request) {
+        request.getParameterMap().forEach((key, values) -> {
+            if(!isExcludedParameter(key) && values.length > 0 && !values[0].isEmpty()) {
+                queryParameters += key + '=' + values[0];
+            }
+        });
+        return queryParameters;
+    }
+
     // Verify if the parameter it's pagination/sorting/filter
     private boolean isExcludedParameter(String param) {
-        return param.equals("page") || param.equals("size") || param.equals("sort") || param.equals("filter");
+        return param.equals("page") || param.equals("size") || param.equals("sort");
     }
 
     // Helper function to getFilters
@@ -98,4 +108,6 @@ public class FilteredParams {
 
         return filters;
     }
+
+
 }

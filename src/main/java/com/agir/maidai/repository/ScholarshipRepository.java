@@ -14,22 +14,22 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Intege
     Page<Scholarship> findByStatus(Pageable pageable, String status);
 
     @Query("SELECT s FROM Scholarship s " +
-            "WHERE s.person.name LIKE CONCAT('%', :name, '%') " +
+            "WHERE s.person.name LIKE CONCAT('%', :name, '%')" +
             "ORDER BY s.person.name ASC")
     Page<Scholarship> findByScholarshipHolder(Pageable pageable, String name);
 
     @Query("SELECT s FROM Scholarship s " +
-            "WHERE s.project.advisor.name LIKE CONCAT('%', :name, '%') " +
+            "WHERE s.project.advisor.name LIKE CONCAT('%', :name, '%')" +
             "ORDER BY s.project.advisor.name ASC")
     Page<Scholarship> findByAdvisor(Pageable pageable, String name);
 
     @Query("SELECT s FROM Scholarship s " +
-            "WHERE s.project.name LIKE CONCAT('%', :name, '%') " +
+            "WHERE s.project.name LIKE CONCAT('%', :name, '%')" +
             "ORDER BY s.project.name ASC")
     Page<Scholarship> findByProject(Pageable pageable, String name);
 
     @Query("SELECT s FROM Scholarship s " +
-            "WHERE s.project.company.name LIKE CONCAT('%', :name, '%') " +
+            "WHERE s.project.company.name LIKE CONCAT('%', :name, '%')" +
             "ORDER BY s.project.company.name ASC")
     Page<Scholarship> findByCompany(Pageable pageable, String name);
 }

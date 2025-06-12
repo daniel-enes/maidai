@@ -26,28 +26,24 @@
             <div id="search" class="relative">
                 <i class="fas fa-search"></i>
                 <input type="search"
-                       class=""
+                       class="search"
                        name="name"
-                       th:value="${searchName}"
-                       placeholder="Pesquisar por nome">
+                       placeholder="Buscar pelo nome"
+                >
             </div>
-
-            <input type="hidden" name="page" th:value="${param.page}">
-            <input type="hidden" name="size" th:value="${param.size}">
-            <input type="hidden" name="sort" th:value="${param.sort}">
+<!--            <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">-->
+<!--            <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">-->
+                <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">
         </form>
 
         <!-- Filter Form -->
         <form th:action="@{'/' + ${baseViewPath} + '?sort=name,asc'}" method="get">
-            <label for="typeIdFilter">Filtrar por tipo: </label>
+            <label for="personType">Filtrar por tipo: </label>
             <div>
-                <select name="typeId" id="typeIdFilter">
+                <select name="filter" id="personType">
                     <option value="">Sem filtro</option>
-                    <option th:each="type : ${personTypeList}"
-                            th:value="${type.id}"
-                            th:text="${type.type}"
-                            th:selected="${type.id == typeId}">
-                    </option>
+                    <option value="personType:bolsista">Bolsista</option>
+                    <option value="personType:orientador">Orientador</option>
                 </select>
 
                 <input type="hidden" name="page" th:value="${param.page}">
@@ -61,8 +57,7 @@
         <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
 
         <!-- PAGINATION component -->
-        <div th:replace="~{people/people-pagination :: pagination}"></div>
-        <!--<div th:replace="~{components/pagination :: pagination}"></div>-->
+        <div th:replace="~{components/pagination :: pagination}"></div>
 
         <table>
             <thead>
@@ -146,8 +141,7 @@
         </table>
 
         <!-- PAGINATION component -->
-        <div th:replace="~{people/people-pagination :: pagination}"></div>
-        <!--<div th:replace="~{components/pagination :: pagination}"></div>-->
+        <div th:replace="~{components/pagination :: pagination}"></div>
 
         <!-- TOTAL AMOUNT FOUND component -->
         <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
