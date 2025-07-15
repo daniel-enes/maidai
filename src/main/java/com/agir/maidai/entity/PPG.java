@@ -22,9 +22,6 @@ public class PPG extends AuditableEntity {
     @ManyToMany(mappedBy = "ppgList")
     private List<Person> personList = new ArrayList<>();
 
-//    @OneToMany(targetEntity = Advisor.class, mappedBy ="ppg")
-//    private List<Advisor> advisorList = new ArrayList<>();
-
     public PPG() {
     }
 
@@ -56,14 +53,6 @@ public class PPG extends AuditableEntity {
     public void setPersonList(List<Person> personList) {
         this.personList = personList;
     }
-
-    //    public List<Advisor> getAdvisorList() {
-//        return advisorList;
-//    }
-//
-//    public void setAdvisorList(List<Advisor> advisorList) {
-//        this.advisorList = advisorList;
-//    }
 
     @Override
     public String toString() {

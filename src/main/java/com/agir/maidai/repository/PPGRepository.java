@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface PPGRepository extends JpaRepository<PPG, Integer> {
 
     //boolean existsByName(String name);
-    boolean existsById(Integer id);
+    //boolean existsById(Integer id);
     Optional<PPG> findByName(String name);
 
     @Query("SELECT p FROM PPG p ORDER BY p.name ASC")

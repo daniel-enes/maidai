@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "empresas")
-public class Company extends AuditableEntity implements NameUniqueEntity {
+public class Company extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

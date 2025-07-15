@@ -74,7 +74,6 @@ public class CompaniesControllerTest {
         String viewName = companiesController.show(1, model);
 
         assertEquals("companies/view", viewName);
-
         verify(model).addAttribute("company", testCompany);
     }
 
@@ -112,7 +111,7 @@ public class CompaniesControllerTest {
     }
 
     @Test
-    void edit_shouldReturnFormViewWIthExistingCompany() {
+    void edit_shouldReturnFormViewWithExistingCompany() {
 
         when(companyService.find(1)).thenReturn(testCompany);
 

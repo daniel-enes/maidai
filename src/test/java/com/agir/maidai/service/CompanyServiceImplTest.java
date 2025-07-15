@@ -55,7 +55,6 @@ public class CompanyServiceImplTest {
         companyService.validateSave(company, errors);
 
         assertTrue(errors.hasErrors());
-
         assertEquals("name.duplicate", errors.getFieldError("name").getCode());
     }
 
