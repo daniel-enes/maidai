@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{components/layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Empresa</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
+<main class="light flex-grow-8 padding-20"  layout:fragment="content">
+    <h1>Empresa: <span th:text="${company.name}"></span></h1>
+    <div th:replace="~{components/alert :: alert}"></div>
+    <div class="max-width-800px" th:if="${company.id != null}">
+        <dl th:object="${company}">
 
+<!--            <dt>Telefone:</dt>-->
+<!--            <dd th:text="*{} ?: 'Nenhum número registrado'"></dd>-->
+
+            <th:block th:if="${not #lists.isEmpty(company.projectList)}">
+                <dt>Projetos:</dt>
+                <dd th:each="project : ${company.projectList}">
+                    <a th:text="${project.name}"
+                       th:href="@{'/projects/'+${project.id}}"></a>
+                </dd>
+<!--                <th:block th:if="${not #lists.isEmpty(person.ppgList)}">-->
+<!--                    <dd th:each="ppg : ${person.ppgList}">-->
+<!--                        <span th:text="${ppg.name}"></span>-->
+<!--                        <a th:href="@{/people/{id}/ppgs/{ppgId}(id=${person.id}, ppgId=${ppg.id})}"-->
+<!--                           th:data-url="@{/people/{id}/ppgs/{ppgId}(id=${person.id}, ppgId=${ppg.id})}"-->
+<!--                           onclick="return deleteEntity(this.getAttribute('data-url'), event)"-->
+<!--                           role="button"-->
+<!--                           aria-label="Remover orientador o PGG"-->
+<!--                        >-->
+<!--                            <svg class="vertical-align-middle" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">&lt;!&ndash;!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.&ndash;&gt;<path fill="#03a696" d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg>-->
+<!--                        </a>-->
+<!--                    </dd>-->
+<!--                </th:block>-->
+                <dd th:if="${#lists.isEmpty(company.projectList)}">
+                    <mark>Nenhum projeto associado</mark>
+                </dd>
+            </th:block>
+        </dl>
+
+    </div>
+</main>
 </body>
 </html>

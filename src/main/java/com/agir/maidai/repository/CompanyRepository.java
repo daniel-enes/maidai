@@ -1,6 +1,8 @@
 package com.agir.maidai.repository;
 
 import com.agir.maidai.entity.Company;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,6 +13,9 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
     //boolean existsByName(String name);
     Optional<Company> findByName(String name);
+
+    Page<Company> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
 
     @Query("SELECT c FROM Company c ORDER BY c.name ASC")
     List<Company> findAll();

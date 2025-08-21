@@ -23,6 +23,21 @@
         <!-- ALERT component -->
         <div th:replace="~{components/alert :: alert}"></div>
 
+        <!-- Search Form -->
+        <!-- Simple Name Search Form -->
+        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+            <div id="search" class="relative">
+                <i class="fas fa-search"></i>
+                <input type="search"
+                       class=""
+                       name="name"
+                       th:value="${param.name != null ? param.name : ''}"
+                       placeholder="Pesquisar por nome">
+            </div>
+
+            <input type="hidden" name="sort" th:value="${param.sort}">
+        </form>
+
         <!-- TOTAL AMOUNT FOUND component -->
         <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
 
@@ -56,7 +71,7 @@
                     <td colspan="2">Nenhuma empresa encontrada</td>
                 </tr>
                 <tr th:each="company : ${entityList}">
-                    <td th:text="${company.name}">Nome</td>
+                    <td><a th:text="${company.name}" th:href="@{/companies/{id}(id = ${company.id})}"></a></td>
                     <td class="text-center">
                         <a th:href="@{/companies/{id}/edit(id=${company.id})}"
                            role="button"

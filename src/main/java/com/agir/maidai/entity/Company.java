@@ -20,7 +20,7 @@ public class Company extends AuditableEntity {
     private String name;
 
     @OneToMany(targetEntity = Project.class, mappedBy ="company")
-    private List<Project> projectListList = new ArrayList<>();
+    private List<Project> projectList = new ArrayList<>();
 
     public Company() {
     }
@@ -46,12 +46,12 @@ public class Company extends AuditableEntity {
         this.name = name;
     }
 
-    public List<Project> getProjectListList() {
-        return projectListList;
+    public List<Project> getProjectList() {
+        return projectList;
     }
 
-    public void setProjectListList(List<Project> projectListList) {
-        this.projectListList = projectListList;
+    public void setProjectList(List<Project> projectList) {
+        this.projectList = projectList;
     }
 
     @Override

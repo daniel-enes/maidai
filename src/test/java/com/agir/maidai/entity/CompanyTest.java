@@ -37,9 +37,9 @@ public class CompanyTest {
     void testAddProject() {
         Company company = new Company(1, "Test Company");
         Project project = new Project();
-        company.getProjectListList().add(project);
+        company.getProjectList().add(project);
 
-        assertEquals(1, company.getProjectListList().size());
-        assertEquals(project, company.getProjectListList().get(0));
+        assertEquals(1, company.getProjectList().size());
+        assertEquals(project, company.getProjectList().get(0));
     }
 }
