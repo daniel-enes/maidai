@@ -16,6 +16,8 @@
         <dl th:object="${person}">
             <dt>Nome:</dt>
             <dd th:text="*{name}"></dd>
+            <dt>CPF:</dt>
+            <dd th:text="*{cpf} ?: 'Nenhum CPF registrado'"></dd>
             <dt>Telefone:</dt>
             <dd th:text="*{phone} ?: 'Nenhum número registrado'"></dd>
             <dt>E-mail:</dt>

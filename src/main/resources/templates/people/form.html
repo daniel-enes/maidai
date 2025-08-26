@@ -29,9 +29,16 @@
             </div>
             <div>
                 <label for="phone">Telefone:
-                    <p class="input-description">Campo opcional. Deve conter apenas números.</p>
+                    <p class="input-description">Campo opcional. Deve conter apenas dígitos numéricos.</p>
                 </label>
                 <input type="text" name="phone" id="phone" th:field="*{phone}" maxlength="20">
+
+            </div>
+            <div>
+                <label for="phone">CPF:
+                    <p class="input-description">Campo opcional. Deve conter apenas dígitos numérticos, no máximo 11.</p>
+                </label>
+                <input type="text" name="cpf" id="cpf" th:field="*{cpf}" maxlength="11">
 
             </div>
             <div>

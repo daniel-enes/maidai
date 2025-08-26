@@ -76,6 +76,7 @@
                         </span>
                     </a>
                 </th>
+                <th>CPF</th>
                 <th>Telefone</th>
                 <th>Email</th>
                 <th>
@@ -104,6 +105,7 @@
                 <td>
                     <a th:text="${person.name}" th:href="@{/people/{id}(id=${person.id})}">Nome</a>
                 </td>
+                <td th:text="${person.cpf}">CPF</td>
                 <td th:text="${person.phone}">Telefone</td>
                 <td th:text="${person.email}">Email</td>
                 <td th:text="${person.personType.type}">Tipo</td>
