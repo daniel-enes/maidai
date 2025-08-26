@@ -10,12 +10,12 @@
 </head>
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content">
-    <h1>Pessoa</h1>
+    <h1 th:text="${person.name}">Pessoa</h1>
     <div th:replace="~{components/alert :: alert}"></div>
     <div class="max-width-800px" th:if="${person.id != null}">
         <dl th:object="${person}">
-            <dt>Nome:</dt>
-            <dd th:text="*{name}"></dd>
+<!--            <dt>Nome:</dt>-->
+<!--            <dd th:text="*{name}"></dd>-->
             <dt>CPF:</dt>
             <dd th:text="*{cpf} ?: 'Nenhum CPF registrado'"></dd>
             <dt>Telefone:</dt>
@@ -23,7 +23,16 @@
             <dt>E-mail:</dt>
             <dd th:text="*{email} ?: 'Nenhum e-mail registrado'"></dd>
             <dt>Tipo:</dt>
-            <dd th:text="*{personType.type}"></dd>
+            <dd>
+            <span th:text="*{personType.type}"></span>
+                <th:block th:if="${person.personType.type == 'bolsista'}">
+                    <th:block th:each="scholarship : ${person.scholarships}">
+                        <th:block th:each="scholarshipType : ${scholarship.scholarshipType}" >
+                            - <span th:text="${scholarshipType.type}"></span>
+                        </th:block>
+                    </th:block>
+                </th:block>
+            </dd>
             <th:block th:if="${person.personType.type == 'orientador'}">
                 <dt>PPG:</dt>
                 <th:block th:if="${not #lists.isEmpty(person.ppgList)}">

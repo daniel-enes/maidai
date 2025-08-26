@@ -68,6 +68,7 @@
             <div class="tab-content">
                 <div id="filter-name" class="tab-pane">
                     <fieldset>
+
                         <!-- Simple Name Search Form -->
                         <form th:action="@{'/' + ${baseViewPath}}" method="get">
                             <div id="search" class="relative">
@@ -242,9 +243,17 @@
             </tr>
             <tr th:each="scholarship : ${entityList}">
                 <td><a th:text="${scholarship.id}" th:href="@{/scholarships/{id}(id=${scholarship.id})}"></a></td>
-                <td th:text="${scholarship.person.name}"></td>
+                <td >
+                    <a th:href="@{/people/{id}(id=${scholarship.person.id})}"
+                       th:text="${scholarship.person.name}"
+                    ></a>
+                </td>
                 <td th:text="${scholarship.project.name}"></td>
-                <td th:text="${scholarship.project.advisor.name}"></td>
+                <td >
+                    <a th:href="@{/people/{id}(id=${scholarship.project.advisor.id})}"
+                       th:text="${scholarship.project.advisor.name}"
+                    ></a>
+                </td>
                 <td th:text="${scholarship.project.company.name}"></td>
                 <td th:text="${scholarship.scholarshipType.type}"></td>
                 <td th:text="${scholarship.start}"></td>

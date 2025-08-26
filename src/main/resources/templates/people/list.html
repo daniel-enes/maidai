@@ -18,23 +18,28 @@
                 <a th:href="@{/people/create}">Cadastrar nova Pessoa</a>
             </p>
         </div>
+
+        <!-- Alert component -->
         <div th:replace="~{components/alert :: alert}"></div>
+
+        <!-- Search name component -->
+        <div th:replace="~{components/search-name :: search-name}"></div>
 
         <!-- Search Form -->
         <!-- Simple Name Search Form -->
-        <form th:action="@{'/' + ${baseViewPath}}" method="get">
-            <div id="search" class="relative">
-                <i class="fas fa-search"></i>
-                <input type="search"
-                       class="search"
-                       name="name"
-                       placeholder="Buscar pelo nome"
-                >
-            </div>
-<!--            <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">-->
-<!--            <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">-->
-                <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">
-        </form>
+<!--        <form th:action="@{'/' + ${baseViewPath}}" method="get">-->
+<!--            <div id="search" class="relative">-->
+<!--                <i class="fas fa-search"></i>-->
+<!--                <input type="search"-->
+<!--                       class="search"-->
+<!--                       name="name"-->
+<!--                       placeholder="Buscar pelo nome"-->
+<!--                >-->
+<!--            </div>-->
+<!--&lt;!&ndash;            <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">&ndash;&gt;-->
+<!--                <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">-->
+<!--        </form>-->
 
         <!-- Filter Form -->
         <form th:action="@{'/' + ${baseViewPath} + '?sort=name,asc'}" method="get">

@@ -23,20 +23,23 @@
         <!-- ALERT component -->
         <div th:replace="~{components/alert :: alert}"></div>
 
-        <!-- Search Form -->
-        <!-- Simple Name Search Form -->
-        <form th:action="@{'/' + ${baseViewPath}}" method="get">
-            <div id="search" class="relative">
-                <i class="fas fa-search"></i>
-                <input type="search"
-                       class=""
-                       name="name"
-                       th:value="${param.name != null ? param.name : ''}"
-                       placeholder="Pesquisar por nome">
-            </div>
+        <!-- Search name component -->
+        <div th:replace="~{components/search-name :: search-name}"></div>
 
-            <input type="hidden" name="sort" th:value="${param.sort}">
-        </form>
+<!--        &lt;!&ndash; Search Form &ndash;&gt;-->
+<!--        &lt;!&ndash; Simple Name Search Form &ndash;&gt;-->
+<!--        <form th:action="@{'/' + ${baseViewPath}}" method="get">-->
+<!--            <div id="search" class="relative">-->
+<!--                <i class="fas fa-search"></i>-->
+<!--                <input type="search"-->
+<!--                       class=""-->
+<!--                       name="name"-->
+<!--                       th:value="${param.name != null ? param.name : ''}"-->
+<!--                       placeholder="Pesquisar por nome">-->
+<!--            </div>-->
+
+<!--            <input type="hidden" name="sort" th:value="${param.sort}">-->
+<!--        </form>-->
 
         <!-- TOTAL AMOUNT FOUND component -->
         <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>

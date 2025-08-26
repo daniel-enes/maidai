@@ -1,0 +1,31 @@
+<!-- src/main/resources/templates/components/alert.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Mensagem de alerta</title>
+</head>
+<body>
+<!-- Start the fragment -->
+<div id="alert" th:fragment="search-name">
+  <!-- Search Form -->
+  <!-- Simple Name Search Form -->
+  <form th:action="@{'/' + ${baseViewPath}}" method="get">
+    <div id="search" class="relative">
+      <i class="fas fa-search"></i>
+      <input type="search"
+             class="search"
+             name="name"
+             th:value="${param.name != null ? param.name : ''}"
+             placeholder="Buscar pelo nome"
+      >
+    </div>
+    <!--            <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">-->
+    <!--            <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">-->
+    <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">
+  </form>
+</div>
+</body>
+</html>

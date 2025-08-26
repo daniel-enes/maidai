@@ -20,22 +20,25 @@
         </div>
         <div th:replace="~{components/alert :: alert}"></div>
 
-        <!-- Search Form -->
-        <!-- Simple Name Search Form -->
-        <form th:action="@{'/' + ${baseViewPath}}" method="get">
-            <div id="search" class="relative">
-                <i class="fas fa-search"></i>
-                <input type="search"
-                       class=""
-                       name="name"
-                       th:value="${param.name != null ? param.name : ''}"
-                       placeholder="Pesquisar por nome">
-            </div>
+        <!-- Search name component -->
+        <div th:replace="~{components/search-name :: search-name}"></div>
 
-<!--            <input type="hidden" name="page" th:value="${param.page}">-->
-<!--            <input type="hidden" name="size" th:value="${param.size}">-->
-            <input type="hidden" name="sort" th:value="${param.sort}">
-        </form>
+<!--        &lt;!&ndash; Search Form &ndash;&gt;-->
+<!--        &lt;!&ndash; Simple Name Search Form &ndash;&gt;-->
+<!--        <form th:action="@{'/' + ${baseViewPath}}" method="get">-->
+<!--            <div id="search" class="relative">-->
+<!--                <i class="fas fa-search"></i>-->
+<!--                <input type="search"-->
+<!--                       class=""-->
+<!--                       name="name"-->
+<!--                       th:value="${param.name != null ? param.name : ''}"-->
+<!--                       placeholder="Pesquisar por nome">-->
+<!--            </div>-->
+
+<!--&lt;!&ndash;            <input type="hidden" name="page" th:value="${param.page}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="hidden" name="size" th:value="${param.size}">&ndash;&gt;-->
+<!--            <input type="hidden" name="sort" th:value="${param.sort}">-->
+<!--        </form>-->
 
         <!-- Filter Form -->
         <form th:action="@{'/' + ${baseViewPath}}" method="get">
