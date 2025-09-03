@@ -1,10 +1,11 @@
 package com.agir.maidai.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pessoas")
@@ -15,35 +16,56 @@ public class Person extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    //@NotBlank
+    @NotBlank(message = "Nome não pode estar em branco.")
     @Column(name = "nome")
     private String name;
 
+    @Pattern(regexp = "^(|\\d+)$", message = "Telefone deve conter apenas números.")
     @Column(name = "telefone", nullable = true )
     private String phone;
 
-    @Email
+    @Email(message = "Email deve ser válido.")
     @Column(name = "email", nullable = true)
     private String email;
 
-    @OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Advisor advisor;
+    @Pattern(regexp = "^(|\\d+)$", message = "CPF deve conter apenas números.")
+    //@Size(min=11, max = 11, message = "CPF deve conter apenas números e com 11 dígitos.")
+    @Column(name = "cpf", nullable = true )
+    private String cpf;
 
+    @ManyToMany
+    @JoinTable(
+        name = "pessoas_ppg",
+        joinColumns = @JoinColumn(name = "pessoas_id"),
+        inverseJoinColumns =    @JoinColumn(name = "ppg_id")
+    )
+    private List<PPG> ppgList = new ArrayList<>();
+
+    @NotNull(message = "Tipo de pessoas precisa ser definido.")
     @ManyToOne
     @JoinColumn(name = "tipos_pessoa_id", referencedColumnName = "id")
     private PersonType personType;
 
-    @OneToOne(targetEntity = Scholarship.class, mappedBy = "person", cascade = {CascadeType.REMOVE})
-    private Scholarship scholarship;
+    @OneToMany(targetEntity = Scholarship.class, mappedBy = "person", cascade = {CascadeType.REMOVE})
+    private List<Scholarship> scholarships;
+
+    // 1:N inverse side (projects where this person is advisor)
+    @OneToMany(mappedBy = "advisor")
+    private List<Project> advisedProjects = new ArrayList<>();
+
+    // N:M inverse side (projects where this person is co-advisor)
+    @ManyToMany(mappedBy = "coAdvisors")
+    private List<Project> coAdvisedProjects = new ArrayList<>();
 
     public Person() {
     }
 
-    public Person(Integer id, String name, String phone, String email) {
+    public Person(Integer id, String name, String phone, String email, String cpf) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.cpf = cpf;
     }
 
     public Integer getId() {
@@ -78,6 +100,14 @@ public class Person extends AuditableEntity {
         this.email = (email == null || email.trim().isEmpty()) ? null : email.trim();
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     public PersonType getPersonType() {
         return personType;
     }
@@ -86,12 +116,41 @@ public class Person extends AuditableEntity {
         this.personType = personType;
     }
 
-    public Advisor getAdvisor() {
-        return advisor;
+    public List<PPG> getPpgList() {
+        return ppgList;
     }
 
-    public void setAdvisor(Advisor advisor) {
-        this.advisor = advisor;
+    public void setPpgList(List<PPG> ppgList) {
+        this.ppgList = ppgList;
+    }
+
+    public List<Scholarship> getScholarships() {
+        return scholarships;
+    }
+
+    public void setScholarships(List<Scholarship> scholarships) {
+        this.scholarships = scholarships;
+    }
+
+    // Helper methods for managing the relationship
+    public void addPpg(PPG ppg) {
+        if(!this.ppgList.contains(ppg)) {
+            this.ppgList.add(ppg);
+            ppg.getPersonList().add(this);
+        }
+    }
+
+    public void removePpg(PPG ppg) {
+        this.ppgList.remove(ppg);
+        ppg.getPersonList().remove(this);
+    }
+
+    public List<Project> getAdvisedProjects() {
+        return advisedProjects;
+    }
+
+    public List<Project> getCoAdvisedProjects() {
+        return coAdvisedProjects;
     }
 
     @Override
@@ -101,6 +160,7 @@ public class Person extends AuditableEntity {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", cpf='" + cpf + '\'' +
                 '}';
     }
 }

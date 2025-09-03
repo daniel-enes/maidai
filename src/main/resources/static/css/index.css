@@ -127,6 +127,23 @@ li {
 }
 /*******
 
+POSITION
+
+********/
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.absolute-center {
+    top: 50%;
+    bottom: 50%;
+}
+
+/*******
 
 FLEX
 
@@ -156,6 +173,10 @@ FLEX
     justify-content: space-between;
 }
 
+.flex-justify-space-around {
+    justify-content: space-around;
+}
+
 .flex-align-center {
     align-items: center;
 }
@@ -172,6 +193,10 @@ FLEX
     flex-grow: 6;
 }
 
+.flex-grow-5 {
+    flex-grow: 5;
+}
+
 .flex-grow-4 {
     flex-grow: 4;
 }
@@ -179,12 +204,17 @@ FLEX
 .flex-grow-2 {
     flex-grow: 2;
 }
+
 /*******
 
 
 MARGIN
 
 ********/
+
+.margin-y-40 {
+    margin: 40px 0;
+}
 
 .margin-y-20 {
     margin: 20px 0;

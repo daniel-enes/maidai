@@ -8,24 +8,24 @@ import java.util.List;
 
 @Entity
 @Table(name = "empresas")
-public class Company extends AuditableEntity implements NameUniqueEntity {
+public class Company extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "Nome não pode ficar em branco")
     @Column(name = "nome", unique = true)
     private String name;
 
     @OneToMany(targetEntity = Project.class, mappedBy ="company")
-    private List<Project> projectListList = new ArrayList<>();
+    private List<Project> projectList = new ArrayList<>();
 
     public Company() {
     }
 
-    public Company(int id, String name) {
+    public Company(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -46,12 +46,12 @@ public class Company extends AuditableEntity implements NameUniqueEntity {
         this.name = name;
     }
 
-    public List<Project> getProjectListList() {
-        return projectListList;
+    public List<Project> getProjectList() {
+        return projectList;
     }
 
-    public void setProjectListList(List<Project> projectListList) {
-        this.projectListList = projectListList;
+    public void setProjectList(List<Project> projectList) {
+        this.projectList = projectList;
     }
 
     @Override

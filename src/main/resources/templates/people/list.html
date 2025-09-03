@@ -7,35 +7,6 @@
     <title>Pessoas</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script>
-        function deletePerson(url, event) {
-
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
-
-            if(confirm('Tem certeza que deseja apagar esta pessoa?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.href = '/people';
-                    } else {
-                        alert("Erro ao apagar a pessoa");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert('Erro ao apagar a pessoa');
-                    });
-            }
-            return false;
-        }
-    </script>
 </head>
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content">
@@ -47,36 +18,111 @@
                 <a th:href="@{/people/create}">Cadastrar nova Pessoa</a>
             </p>
         </div>
+
+        <!-- Alert component -->
         <div th:replace="~{components/alert :: alert}"></div>
+
+        <!-- Search name component -->
+        <div th:replace="~{components/search-name :: search-name}"></div>
+
+        <!-- Search Form -->
+        <!-- Simple Name Search Form -->
+<!--        <form th:action="@{'/' + ${baseViewPath}}" method="get">-->
+<!--            <div id="search" class="relative">-->
+<!--                <i class="fas fa-search"></i>-->
+<!--                <input type="search"-->
+<!--                       class="search"-->
+<!--                       name="name"-->
+<!--                       placeholder="Buscar pelo nome"-->
+<!--                >-->
+<!--            </div>-->
+<!--&lt;!&ndash;            <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">&ndash;&gt;-->
+<!--                <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">-->
+<!--        </form>-->
+
+        <!-- Filter Form -->
+        <form th:action="@{'/' + ${baseViewPath} + '?sort=name,asc'}" method="get">
+            <label for="personType">Filtrar por tipo: </label>
+            <div>
+                <select name="filter" id="personType">
+                    <option value="">Sem filtro</option>
+                    <option value="personType:bolsista">Bolsista</option>
+                    <option value="personType:orientador">Orientador</option>
+                </select>
+
+                <input type="hidden" name="page" th:value="${param.page}">
+                <input type="hidden" name="size" th:value="${param.size}">
+
+                <button type="submit" class="button success font-light">Buscar</button>
+            </div>
+        </form>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION component -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
 
         <table>
             <thead>
             <tr>
-                <th>Nome</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=name,' +
+                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' } +
+                        ${typeId != null ? '&typeId='+typeId : ''}
+                        }">
+                        Nome
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'name,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
+                <th>CPF</th>
                 <th>Telefone</th>
                 <th>Email</th>
-                <th>Tipo</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=personTypeType,' +
+                        ${(sort == '' || sort == 'personTypeType,asc') ? 'desc' : 'asc' }
+                        }">
+                        Tipo
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'personTypeType,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <th>Status</th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(personList)}">
+            <tr th:if="${entityList.totalElements == 0}">
                 <td colspan="2">Nenhuma pessoa encontrada</td>
             </tr>
-            <tr th:each="person : ${personList}">
-                <td><a th:text="${person.name}" th:href="@{/people/{id}(id=${person.id})}">Nome</a></td>
+            <tr th:each="person : ${entityList}">
+                <td>
+                    <a th:text="${person.name}" th:href="@{/people/{id}(id=${person.id})}">Nome</a>
+                </td>
+                <td th:text="${person.cpf}">CPF</td>
                 <td th:text="${person.phone}">Telefone</td>
                 <td th:text="${person.email}">Email</td>
                 <td th:text="${person.personType.type}">Tipo</td>
                 <td>
-                    <th:block th:if="${person.advisor}">
-                        <span th:switch="${person.advisor.ppg == null}">
-                            <a th:case="true" th:href="@{/people/{id}(id=${person.id})}">Cadastrar PPG</a>
-                            <span th:case="false">sem pendência</span>
-                        </span>
+                    <th:block th:if="${person.personType.id == 1 and #lists.isEmpty((person.ppgList))}">
+                        <a th:href="@{/people/{id}(id=${person.id})}">
+                            Cadastar em PPG
+                        </a>
                     </th:block>
+                    <span th:if="${person.personType.id == 1 and not #lists.isEmpty((person.ppgList))}">
+                        sem pendências
+                    </span>
                 </td>
                 <td class="text-center">
                     <a th:href="@{/people/{id}/edit(id=${person.id})}"
@@ -89,7 +135,7 @@
                 <td class="text-center">
                     <a th:href="@{/people/{id}(id=${person.id})}"
                        th:data-url="@{/people/{id}(id=${person.id})}"
-                       onclick="return deletePerson(this.getAttribute('data-url'), event)"
+                       onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                        role="button"
                        aria-label="Apagar pessoa"
                     >
@@ -100,6 +146,13 @@
             </tr>
             </tbody>
         </table>
+
+        <!-- PAGINATION component -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
     </div>
 </main>
 </body>

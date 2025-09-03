@@ -1,0 +1,16 @@
+<!-- src/main/resources/templates/components/alert.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Quantidade encontrada</title>
+</head>
+<body>
+  <!-- Start the fragment -->
+  <div id="alert" th:fragment="total-amount-found">
+      <p><b>Total encontrado</b>: <span th:text="${entityList.totalElements}"></span></p>
+  </div>
+</body>
+</html>

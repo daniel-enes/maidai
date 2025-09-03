@@ -7,35 +7,6 @@
     <title>Empresas</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script>
-        function deleteCompany(url, event) {
-
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
-
-            if(confirm('Tem certeza que deseja apagar esta empresa?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.href = '/companies';
-                    } else {
-                        alert("Erro ao apagar a empresa");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert('Erro ao apagar a empresa');
-                    });
-            }
-            return false;
-        }
-    </script>
 </head>
 
 <body>
@@ -48,25 +19,62 @@
                 <a th:href="@{/companies/create}">Cadastrar nova empresa.</a>
             </p>
         </div>
+
+        <!-- ALERT component -->
         <div th:replace="~{components/alert :: alert}"></div>
-        <!--<div th:if="${success}" class="alert alert-success">
-            <p class="font-bold">Sucesso!</p>
-            <p th:text="${success}"></p>
-        </div>-->
+
+        <!-- Search name component -->
+        <div th:replace="~{components/search-name :: search-name}"></div>
+
+<!--        &lt;!&ndash; Search Form &ndash;&gt;-->
+<!--        &lt;!&ndash; Simple Name Search Form &ndash;&gt;-->
+<!--        <form th:action="@{'/' + ${baseViewPath}}" method="get">-->
+<!--            <div id="search" class="relative">-->
+<!--                <i class="fas fa-search"></i>-->
+<!--                <input type="search"-->
+<!--                       class=""-->
+<!--                       name="name"-->
+<!--                       th:value="${param.name != null ? param.name : ''}"-->
+<!--                       placeholder="Pesquisar por nome">-->
+<!--            </div>-->
+
+<!--            <input type="hidden" name="sort" th:value="${param.sort}">-->
+<!--        </form>-->
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION component -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+
         <table>
             <thead>
             <tr>
-                <th>Nome</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=name,' +
+                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' } +
+                        ${typeId != null ? '&typeId='+typeId : ''}
+                        }">
+                        Nome
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'name,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
             </thead>
             <tbody>
-                <tr th:if="${#lists.isEmpty(companyList)}">
+                <!--<tr th:if="${#lists.isEmpty(entityList)}">-->
+                <tr th:if="${entityList.totalElements == 0}">
                     <td colspan="2">Nenhuma empresa encontrada</td>
                 </tr>
-                <tr th:each="company : ${companyList}">
-                    <td th:text="${company.name}">Nome</td>
+                <tr th:each="company : ${entityList}">
+                    <td><a th:text="${company.name}" th:href="@{/companies/{id}(id = ${company.id})}"></a></td>
                     <td class="text-center">
                         <a th:href="@{/companies/{id}/edit(id=${company.id})}"
                            role="button"
@@ -78,7 +86,7 @@
                     <td class="text-center">
                         <a th:href="@{/companies/{id}(id=${company.id})}"
                            th:data-url="@{/companies/{id}(id=${company.id})}"
-                           onclick="return deleteCompany(this.getAttribute('data-url'), event)"
+                           onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                            role="button"
                            aria-label="Apagar empresa"
                         >
@@ -89,6 +97,14 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- PAGINATION component -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+    </div>
 </main>
 </body>
 </html>

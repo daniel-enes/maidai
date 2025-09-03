@@ -3,6 +3,7 @@ package com.agir.maidai.controller;
 import com.agir.maidai.entity.*;
 import com.agir.maidai.service.*;
 import com.agir.maidai.util.ModelAttributes;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,26 +17,36 @@ import java.util.List;
 @RequestMapping("/projects")
 public class ProjectsController extends AbstractCrudController<Project, Integer> implements CrudController<Project, Integer> {
 
-    private final ProjectServiceImpl projectServiceImpl;
+    private final ProjectService projectService;
     private final CompanyServiceImpl companyService;
-    private final AdvisorService advisorService;
-
+    private final PersonService personService;
 
     @Autowired
-    public ProjectsController(ProjectServiceImpl projectServiceImpl,
+    public ProjectsController(ProjectService projectService,
                               CompanyServiceImpl companyService,
-                              AdvisorService advisorService) {
-        super(projectServiceImpl, "project", "projects");
-        this.projectServiceImpl = projectServiceImpl;
+                              PersonService personService) {
+        super(projectService, "project", "projects");
+        this.projectService = projectService;
         this.companyService = companyService;
-        this.advisorService = advisorService;
+        this.personService = personService;
+    }
+
+    @Override
+    public String index(Model model, HttpServletRequest request) {
+
+        List<String> yearNoticeList =  projectService.findDistinctByYearNotice();
+
+        new ModelAttributes(model)
+                .add("yearNoticeList", yearNoticeList)
+                .apply();
+        return super.index(model, request);
     }
 
     @Override
     @GetMapping("/{id}")
     public String show(@PathVariable Integer id, Model model) {
 
-        List<Advisor> advisorList = advisorService.findAll();
+        List<Person> advisorList = personService.findAllAdvisors();
         new ModelAttributes(model)
                 .add("advisorList", advisorList)
                 .apply();
@@ -47,7 +58,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     public String create(Model model, RedirectAttributes redirectAttributes) {
 
         List<Company> companyList  = companyService.findAll();
-        List<Advisor> advisorList = advisorService.findAll();
+        List<Person> advisorList = personService.findAllAdvisors();
 
         new ModelAttributes(model)
                 .add("companyList", companyList)
@@ -60,7 +71,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
         List<Company> companyList = companyService.findAll();
-        List<Advisor> advisorList = advisorService.findAll();
+        List<Person> advisorList = personService.findAllAdvisors();
         new ModelAttributes(model)
                 .add("companyList", companyList)
                 .add("advisorList", advisorList)
@@ -68,7 +79,7 @@ public class ProjectsController extends AbstractCrudController<Project, Integer>
         return super.edit(id, model, redirectAttributes);
     }
 
-    // Used to convert LocalDate to String and vice-versa
+    // Used to convert LocalDate to String and vice versa
     @InitBinder
     public void initBinder(WebDataBinder binder) {}
 

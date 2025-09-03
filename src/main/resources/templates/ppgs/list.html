@@ -7,35 +7,6 @@
     <title>PPG - Programa de Pós-graduação</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script>
-        function deletePpg(url, event) {
-
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
-
-            if(confirm('Tem certeza que deseja apagar este PPG?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.href = '/ppgs';
-                    } else {
-                        alert("Erro ao apagar o PPG");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert('Erro ao apagar o PPG');
-                    });
-            }
-            return false;
-        }
-    </script>
 </head>
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content">
@@ -47,22 +18,43 @@
                 <a th:href="@{/ppgs/create}">Cadastrar novo Programa de Pós-graduação</a>
             </p>
         </div>
+
+        <!-- ALERT component -->
         <div th:replace="~{components/alert :: alert}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION component -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
 
         <table>
             <thead>
             <tr>
-                <th>Nome</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=name,' +
+                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' } +
+                        ${typeId != null ? '&typeId='+typeId : ''}
+                        }">
+                        Nome
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'name,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <!--<th>Orientadores</th>-->
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(ppgList)}">
+            <tr th:if="${entityList.totalElements == 0}">
                 <td colspan="2">Nenhum PPG foi encontrado</td>
             </tr>
-            <tr th:each="ppg : ${ppgList}">
+            <tr th:each="ppg : ${entityList}">
                 <td th:text="${ppg.name}">Nome</td>
                 <td class="text-center">
                     <a th:href="@{/ppgs/{id}/edit(id=${ppg.id})}"
@@ -75,7 +67,7 @@
                 <td class="text-center">
                     <a th:href="@{/ppgs/{id}(id=${ppg.id})}"
                        th:data-url="@{/ppgs/{id}(id=${ppg.id})}"
-                       onclick="return deletePpg(this.getAttribute('data-url'), event)"
+                       onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                        role="button"
                        aria-label="Apagar Programa de Pós-graduação"
                     >
@@ -86,6 +78,14 @@
             </tr>
             </tbody>
         </table>
+
+        <!-- PAGINATION component -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+    </div>
 </main>
 </body>
 </html>

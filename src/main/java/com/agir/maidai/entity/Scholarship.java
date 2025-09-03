@@ -14,33 +14,40 @@ public class Scholarship extends AuditableEntity {
     @Column(name = "id")
     private Integer id;
 
-    //@NotNull
+    @NotNull(message="A data de início precisa ser definida.")
     @Column(name = "inicio")
     private LocalDate start;
 
-    //@NotNull
+    @NotNull(message="A data do fim precisa ser definida.")
     @Column(name = "fim")
     private LocalDate end;
 
+    @Column(name = "status")
+    private String status;
+
+    @NotNull(message="O tipo de bolsa precisa ser definido.")
     @OneToOne
     @JoinColumn(name = "tipos_bolsa_id", referencedColumnName = "id", nullable = false)
     private ScholarshipType scholarshipType;
 
+    @NotNull(message="O Projeto que a bolsa pertence precisa ser definido.")
     @ManyToOne
     @JoinColumn(name = "projetos_id", referencedColumnName = "id", nullable = false)
     private Project project;
 
-    @OneToOne
+    @NotNull(message="Um bolsista precisa ser definido para a bolsa.")
+    @ManyToOne
     @JoinColumn(name = "pessoas_id", referencedColumnName = "id", nullable = false)
     private Person person;
 
     public Scholarship() {
     }
 
-    public Scholarship(Integer id, @NotNull LocalDate start, @NotNull LocalDate end) {
+    public Scholarship(Integer id, @NotNull LocalDate start, @NotNull LocalDate end, String status) {
         this.id = id;
         this.start = start;
         this.end = end;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -65,6 +72,14 @@ public class Scholarship extends AuditableEntity {
 
     public void setEnd(LocalDate end) {
         this.end = end;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ScholarshipType getScholarshipType() {
@@ -97,6 +112,7 @@ public class Scholarship extends AuditableEntity {
                 "id=" + id +
                 ", start=" + start +
                 ", end=" + end +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

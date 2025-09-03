@@ -1,13 +1,9 @@
 package com.agir.maidai.controller;
 
-import com.agir.maidai.entity.Advisor;
 import com.agir.maidai.entity.PPG;
 import com.agir.maidai.entity.Person;
 import com.agir.maidai.entity.PersonType;
-import com.agir.maidai.service.AdvisorService;
-import com.agir.maidai.service.PPGService;
-import com.agir.maidai.service.PersonService;
-import com.agir.maidai.service.PersonTypeService;
+import com.agir.maidai.service.*;
 import com.agir.maidai.util.ModelAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,17 +20,14 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
     private PersonService personService;
     private PersonTypeService personTypeService;
     private PPGService ppgService;
-    private AdvisorService advisorService;
 
     @Autowired
-    public PeopleController(PersonService personService, PersonTypeService personTypeService, PPGService ppgService, AdvisorService advisorService) {
+    public PeopleController(PersonService personService, PersonTypeService personTypeService, PPGService ppgService) {
         super(personService, "person", "people");
         this.personService = personService;
         this.personTypeService = personTypeService;
         this.ppgService = ppgService;
-        this.advisorService = advisorService;
     }
-
 
     @Override
     @GetMapping("/{id}")
@@ -47,12 +40,10 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
             PersonType personType = person.getPersonType();
 
             if("orientador".equals(personType.getType())) {
-                Advisor advisor = advisorService.find(id);
                 List<PPG> ppgList = ppgService.findAll();
 
                 new ModelAttributes(model)
                     .add("ppgList", ppgList)
-                    .add("advisor", advisor)
                     .apply();
             }
         }

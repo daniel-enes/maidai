@@ -38,7 +38,19 @@
             </div>
 
             <div class="margin-y-20">
-                <label for="project">Projetos: </label> <br>
+                <label for="status">Status da bolsa:
+                    <p class="input-description">Campo opcional.</p>
+                </label>
+                <select id="status" name="status" th:field="*{status}">
+                    <option value="">--- Selecione um status ---</option>
+                    <option value="vigente">Vigente</option>
+                    <option value="cancelada">Cancelada</option>
+                    <option value="vigência expirada">Vigência expirada</option>
+                </select>
+            </div>
+
+            <div class="margin-y-20">
+                <label for="project">Projeto: </label> <br>
                 <p th:if="${projectList.isEmpty()}"><b>Nenhum projeto encontrado</b>. <a th:href="@{/projects}">Certifique-se
                     de ter cadastado algum projeto</a>.</p>
                 <select id="project" name="project" th:field="*{project}" th:if="${!projectList.isEmpty()}" >

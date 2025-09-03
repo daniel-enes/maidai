@@ -7,35 +7,6 @@
     <title>Tipos de Bolsa</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script>
-        function deleteProject(url, event) {
-
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
-
-            if(confirm('Tem certeza que deseja apagar este Tipo de Bolsa?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.href = '/scholarshipTypes';
-                    } else {
-                        alert("Erro ao apagar o Tipo de Bolsa");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert('Erro ao apagar o Tipo de Bolsa');
-                    });
-            }
-            return false;
-        }
-    </script>
 </head>
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content">
@@ -58,10 +29,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(scholarshipTypeList)}">
+            <tr th:if="${entityList.totalElements == 0}">
                 <td colspan="2">Nenhum tipo de bolsa encontrado</td>
             </tr>
-            <tr th:each="scholarshipType : ${scholarshipTypeList}">
+            <tr th:each="scholarshipType : ${entityList}">
                 <td><a th:text="${scholarshipType.type}" th:href="@{/scholarshipTypes/{id}(id=${scholarshipType.id})}">Nome</a></td>
 
                 <td class="text-center">
@@ -75,7 +46,7 @@
                 <td class="text-center">
                     <a th:href="@{/scholarshipTypes/{id}(id=${scholarshipType.id})}"
                        th:data-url="@{/scholarshipTypes/{id}(id=${scholarshipType.id})}"
-                       onclick="return deleteProject(this.getAttribute('data-url'), event)"
+                       onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                        role="button"
                        aria-label="Apagar tipo de bolsa"
                     >
@@ -86,6 +57,9 @@
             </tr>
             </tbody>
         </table>
+        <!-- Pagination controls -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+    </div>
 </main>
 </body>
 </html>

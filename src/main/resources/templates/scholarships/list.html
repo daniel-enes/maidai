@@ -7,72 +7,258 @@
     <title>Bolsas</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <script>
-        function deleteProject(url, event) {
+        document.addEventListener('DOMContentLoaded', function() {
+          const tabLinks = document.querySelectorAll('.nav-link');
+          const tabContents = document.querySelectorAll('.tab-pane');
 
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
+          tabLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+              e.preventDefault();
 
-            if(confirm('Tem certeza que deseja apagar esta Bolsa?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.href = '/scholarships';
-                    } else {
-                        alert("Erro ao apagar a Bolsa");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert('Erro ao apagar a Bolsa');
-                    });
-            }
-            return false;
-        }
+              // Remove active class from all tabs and hide all content
+              tabLinks.forEach(tab => tab.classList.remove('active'));
+              tabContents.forEach(content => content.classList.remove('active'));
+
+              // Add active class to clicked tab
+              this.classList.add('active');
+
+              // Show corresponding content
+              const targetId = this.getAttribute('href');
+              document.querySelector(targetId).classList.add('active');
+            });
+          });
+
+          // Activate first tab by default
+          if (tabLinks.length > 0) {
+            tabLinks[0].click();
+          }
+        });
     </script>
+
 </head>
 <body>
-<main class="light flex-grow-8 padding-20"  layout:fragment="content">
+<main class="light flex-grow-8 padding-20"  layout:fragment="content" tabindex="0" autofocus>
     <h1>Bolsas</h1>
-    <div class="max-width-800px">
+    <div class="">
         <div>
             <p>
                 <svg class="vertical-align-middle" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#03a696" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg>
                 <a th:href="@{/scholarships/create}">Cadastrar uma nova Bolsa</a>
             </p>
         </div>
+
+        <!-- ALERT component -->
         <div th:replace="~{components/alert :: alert}"></div>
+
+        <h2>Filtros</h2>
+
+        <div id="filters" class="">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="#filter-name">Nome</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#filter-status">Status</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div id="filter-name" class="tab-pane">
+                    <fieldset>
+
+                        <!-- Simple Name Search Form -->
+                        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+                            <div id="search" class="relative">
+                                <i class="fas fa-search"></i>
+                                <input type="search"
+                                       class="search"
+                                       name="query"
+                                       placeholder="Buscar pelo nome"
+                                       th:value="${param.search != null ? param.query : ''}"
+                                >
+                            </div>
+                            <div>
+                                <select name="search">
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'scholarshipHolder')}" th:value="scholarshipHolder">Bolsista</option>
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'advisor')}" th:value="advisor">Orientador</option>
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'project')}" th:value="project">Projeto</option>
+                                    <option th:selected="${(param.search != null) && (param.search[0] == 'company')}" th:value="company">Empresa</option>
+                                </select>
+
+                                <button type="submit" class="button success font-light">Buscar</button>
+                            </div>
+<!--                            <input th:if="${param.page != null}" type="hidden" name="page" th:value="${param.page}">-->
+<!--                            <input th:if="${param.size != null}" type="hidden" name="size" th:value="${param.size}">-->
+                            <input th:if="${param.sort != null}" type="hidden" name="sort" th:value="${param.sort}">
+                        </form>
+                    </fieldset>
+                </div>
+                <div id="filter-status" class="tab-pane">
+                    <fieldset>
+                        <legend>Filtrar pelo status:</legend>
+                        <form th:action="@{'/' + ${baseViewPath} + '?sort=name,asc'}" method="get">
+                            <div>
+                                <select name="filter" id="filter">
+                                    <option value="">--- Selecione um status ---</option>
+                                    <option value="status:vigente">Vigente</option>
+                                    <option value="status:cancelada">Cancelada</option>
+                                    <option value="status:vigência expirada">Vigência expirada</option>
+                                </select>
+                            </div>
+                            <div>
+                                <button type="submit" class="button success font-light">Buscar</button>
+                            </div>
+                            <input type="hidden" name="page" th:value="${param.page}">
+                            <input type="hidden" name="size" th:value="${param.size}">
+                        </form>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION componenet -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
 
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Bolsista</th>
-                    <th>Projeto</th>
-                    <th>Tipo de Bolsa</th>
-                    <th>Início</th>
-                    <th>Fim</th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=personName,' +
+                        ${(sort == '' || sort == 'personName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Bolsista
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'personName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=projectName,' +
+                        ${(sort == '' || sort == 'projectName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Projeto
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'projectName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=projectAdvisorName,' +
+                        ${(sort == '' || sort == 'projectAdvisorName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Orientador
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'projectAdvisorName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=projectCompanyName,' +
+                        ${(sort == '' || sort == 'projectCompanyName,asc') ? 'desc' : 'asc' }
+                        }">
+                            Empresa
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'projectCompanyName,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=scholarshipTypeType,' +
+                        ${(sort == '' || sort == 'scholarshipTypeType,asc') ? 'desc' : 'asc' }
+                        }">
+                            Tipo de Bolsa
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'scholarshipTypeType,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=start,' +
+                        ${(sort == '' || sort == 'start,asc') ? 'desc' : 'asc' }
+                        }">
+                            Início
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'start,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=end,' +
+                        ${(sort == '' || sort == 'end,asc') ? 'desc' : 'asc' }
+                        }">
+                            Fim
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'end,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=status,' +
+                        ${(sort == '' || sort == 'status,asc') ? 'desc' : 'asc' }
+                        }">
+                            Status
+                            <span>
+                            <i th:class="${(sort == '' || sort == 'status,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                        </a>
+                    </th>
                     <th>Editar</th>
                     <th>Apagar</th>
                 </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(scholarshipList)}">
+            <tr th:if="${entityList.totalElements == 0}">
                 <td colspan="2">Nenhuma bolsa encontrada</td>
             </tr>
-            <tr th:each="scholarship : ${scholarshipList}">
+            <tr th:each="scholarship : ${entityList}">
                 <td><a th:text="${scholarship.id}" th:href="@{/scholarships/{id}(id=${scholarship.id})}"></a></td>
-                <td th:text="${scholarship.person.name}"></td>
+                <td >
+                    <a th:href="@{/people/{id}(id=${scholarship.person.id})}"
+                       th:text="${scholarship.person.name}"
+                    ></a>
+                </td>
                 <td th:text="${scholarship.project.name}"></td>
+                <td >
+                    <a th:href="@{/people/{id}(id=${scholarship.project.advisor.id})}"
+                       th:text="${scholarship.project.advisor.name}"
+                    ></a>
+                </td>
+                <td th:text="${scholarship.project.company.name}"></td>
                 <td th:text="${scholarship.scholarshipType.type}"></td>
-                <td th:text="${scholarship.start}">Início</td>
-                <td th:text="${scholarship.end}">Fim</td>
+                <td th:text="${scholarship.start}"></td>
+                <td th:text="${scholarship.end}"></td>
+                <td th:text="${scholarship.status}"></td>
                 <td class="text-center">
                     <a th:href="@{/scholarships/{id}/edit(id=${scholarship.id})}"
                        role="button"
@@ -84,7 +270,7 @@
                 <td class="text-center">
                     <a th:href="@{/scholarships/{id}(id=${scholarship.id})}"
                        th:data-url="@{/scholarships/{id}(id=${scholarship.id})}"
-                       onclick="return deleteProject(this.getAttribute('data-url'), event)"
+                       onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                        role="button"
                        aria-label="Apagar bolsa"
                     >
@@ -95,6 +281,14 @@
             </tr>
             </tbody>
         </table>
+
+        <!-- PAGINATION componenet -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+    </div>
 </main>
 </body>
 </html>

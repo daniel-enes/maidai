@@ -25,13 +25,11 @@ public class PPGController extends AbstractCrudController<PPG, Integer> implemen
 
     @Override
     protected String getUpdateSuccessMessage() {
-
         return "Programa de Pós-graduação editado com sucesso.";
     }
 
     @Override
     protected String getDeleteSuccessMessage() {
-
         return "Programa de Pós-graduação removido";
     }
 }

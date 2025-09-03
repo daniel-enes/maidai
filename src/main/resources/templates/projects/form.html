@@ -42,6 +42,22 @@
                        pattern="\d{4}-\d{2}-\d{2}">
             </div>
 
+            <div>
+                <label for="yearNotice">
+                    Ano do edital:
+                    <p class="input-description">Campo opcional. Formato: YYYY (ex: 2023).</p>
+                </label> <br>
+                <input type="number"
+                       name="yearNotice"
+                       id="yearNotice"
+                       th:field="*{yearNotice}"
+                       min="1900"
+                       max="2099"
+                       step="1"
+                       placeholder="YYYY"
+                >
+            </div>
+
             <div class="margin-y-20">
                 <label for="company">Empresa: </label> <br>
                 <p th:if="${companyList.isEmpty()}"><b>Nenhuma empresa encontrada</b>. <a th:href="@{/companies}">Certifique-se
@@ -60,24 +76,26 @@
                 <label for="advisorId">Orientador: </label> <br>
                 <p th:if="${advisorList.isEmpty()}"><b>Nenhum orientador encontrado</b>. <a th:href="@{/people}">Certifique-se
                     de ter já ter cadastado algum orientador</a>.</p>
-                <select id="advisorId" name="advisorId" th:field="*{advisorId}" th:if="${!advisorList.isEmpty()}" >
+                <select id="advisorId" name="advisorId" th:field="*{advisor}" th:if="${!advisorList.isEmpty()}" >
 
                     <option value="">--- Selecione um orientador ---</option>
                     <option th:each="advisor : ${advisorList}"
                             th:value="${advisor.id}"
-                            th:text="${advisor.person.name}"
+                            th:text="${advisor.name}"
                     >
                     </option>
                 </select>
             </div>
 
             <div class="margin-y-20" th:if="${!advisorList.isEmpty()}">
-                <label for="coAdvisorId">Coorientador: </label> <br>
-                <select id="coAdvisorId" name="coAdvisorId" th:field="*{coAdvisorId}">
+                <label for="coAdvisors">Coorientador:
+                    <p class="input-description">Campo opcional.</p>
+                </label>
+                <select id="coAdvisors" name="coAdvisors" multiple th:field="*{coAdvisors}">
                     <option value="">--- Selecione um coorientador ---</option>
                     <option th:each="advisor : ${advisorList}"
                             th:value="${advisor.id}"
-                            th:text="${advisor.person.name}">
+                            th:text="${advisor.name}">
                     </option>
                 </select>
             </div>

@@ -2,6 +2,7 @@ package com.agir.maidai.controller;
 
 import com.agir.maidai.entity.Company;
 
+import com.agir.maidai.service.CompanyService;
 import com.agir.maidai.service.CompanyServiceImpl;
 import com.agir.maidai.util.ModelAttributes;
 import org.springframework.stereotype.Controller;
@@ -14,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/companies")
 public class CompaniesController extends AbstractCrudController<Company, Integer> implements CrudController<Company, Integer>{
 
-    public CompaniesController(CompanyServiceImpl companyService) {
-        super(companyService, "company", "companies");
-    }
+    private CompanyService companyService;
 
-    @Override
-    @GetMapping("/{id}")
-    public String show(Integer id, Model model) {
-        return "redirect:/"+ super.baseViewPath;
+    public CompaniesController(CompanyService companyService) {
+        super(companyService, "company", "companies");
+        this.companyService = companyService;
     }
 
     @Override

@@ -1,0 +1,3 @@
+ALTER TABLE `maidai`.`pessoas`
+    ADD COLUMN `cpf` VARCHAR(255) NULL AFTER `email`,
+ADD UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC) VISIBLE;

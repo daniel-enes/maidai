@@ -12,7 +12,7 @@ public class ScholarshipType {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank
+    @NotBlank(message = "Não deixe o campo 'Tipo' em branco.")
     @Column(name = "tipo", unique = true)
     private String type;
 

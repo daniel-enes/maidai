@@ -7,35 +7,6 @@
     <title>Projetos</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <script>
-        function deleteProject(url, event) {
-
-            event.preventDefault();
-            event.stopPropagation(); // prevent any parent handlers
-
-            if(confirm('Tem certeza que deseja apagar este projeto?')) {
-                fetch(url, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if(response) {
-                        //alert('Usuário apagado com sucesso');
-                        window.location.href = '/projects';
-                    } else {
-                        alert("Erro ao apagar o projeto");
-                    }
-                })
-                    .catch(error => {
-                        console.error('Error: ', error);
-                        alert('Erro ao apagar o projeto');
-                    });
-            }
-            return false;
-        }
-    </script>
 </head>
 <body>
 <main class="light flex-grow-8 padding-20"  layout:fragment="content">
@@ -49,21 +20,98 @@
         </div>
         <div th:replace="~{components/alert :: alert}"></div>
 
+        <!-- Search name component -->
+        <div th:replace="~{components/search-name :: search-name}"></div>
+
+<!--        &lt;!&ndash; Search Form &ndash;&gt;-->
+<!--        &lt;!&ndash; Simple Name Search Form &ndash;&gt;-->
+<!--        <form th:action="@{'/' + ${baseViewPath}}" method="get">-->
+<!--            <div id="search" class="relative">-->
+<!--                <i class="fas fa-search"></i>-->
+<!--                <input type="search"-->
+<!--                       class=""-->
+<!--                       name="name"-->
+<!--                       th:value="${param.name != null ? param.name : ''}"-->
+<!--                       placeholder="Pesquisar por nome">-->
+<!--            </div>-->
+
+<!--&lt;!&ndash;            <input type="hidden" name="page" th:value="${param.page}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="hidden" name="size" th:value="${param.size}">&ndash;&gt;-->
+<!--            <input type="hidden" name="sort" th:value="${param.sort}">-->
+<!--        </form>-->
+
+        <!-- Filter Form -->
+        <form th:action="@{'/' + ${baseViewPath}}" method="get">
+            <label for="yearNoticeFilter">Filtrar por edital: </label>
+            <div>
+                <select name="filter" id="yearNoticeFilter">
+                    <option value="">Sem filtro</option>
+                    <option value="null"
+                            th:selected="${(restOfParameters['filter'] != null) && (restOfParameters['filter'] == 'null')}"
+                    >Projeto sem o ano do edital</option>
+                    <option th:each="year : ${yearNoticeList}"
+                            th:value="'yearNotice:' + ${year}"
+                            th:selected="${(filters['yearNotice'] != null) && (filters['yearNotice'] == year)}">
+                            Edital do ano <span th:text="${year}"></span>
+                    </option>
+                </select>
+
+                <input type="hidden" name="page" th:value="${param.page}">
+                <input type="hidden" name="size" th:value="${param.size}">
+                <input type="hidden" name="sort" th:value="${param.sort}">
+
+                <button type="submit" class="button success font-light">Buscar</button>
+            </div>
+        </form>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+        <!-- PAGINATION componenet -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+
         <table>
             <thead>
             <tr>
-                <th>Nome</th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=name,' +
+                        ${(sort == '' || sort == 'name,asc') ? 'desc' : 'asc' }
+                        }">
+                        Nome
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'name,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{'/' + ${baseViewPath} +
+                        '?page=' + ${entityList.number} +
+                        '&size=' + ${entityList.size} +
+                        '&sort=yearNotice,' +
+                        ${(sort == '' || sort == 'yearNotice,asc') ? 'desc' : 'asc' }
+                        }">
+                        Ano do edital
+                        <span>
+                            <i th:class="${(sort == '' || sort == 'yearNotice,asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'}"></i>
+                        </span>
+                    </a>
+                </th>
                 <th>Editar</th>
                 <th>Apagar</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(projectList)}">
+            <tr th:if="${entityList.totalElements == 0}">
                 <td colspan="2">Nenhum projeto encontrado</td>
             </tr>
-            <tr th:each="project : ${projectList}">
+            <tr th:each="project : ${entityList}">
                 <td><a th:text="${project.name}" th:href="@{/projects/{id}(id=${project.id})}">Nome</a></td>
-
+                <td>
+                    <span th:if="${project.yearNotice != null}" th:text="${project.yearNotice}"></span>
+                </td>
                 <td class="text-center">
                     <a th:href="@{/projects/{id}/edit(id=${project.id})}"
                        role="button"
@@ -75,7 +123,7 @@
                 <td class="text-center">
                     <a th:href="@{/projects/{id}(id=${project.id})}"
                        th:data-url="@{/projects/{id}(id=${project.id})}"
-                       onclick="return deleteProject(this.getAttribute('data-url'), event)"
+                       onclick="return deleteEntity(this.getAttribute('data-url'), event)"
                        role="button"
                        aria-label="Apagar projeto"
                     >
@@ -86,6 +134,14 @@
             </tr>
             </tbody>
         </table>
+
+        <!-- PAGINATION componenet -->
+        <div th:replace="~{components/pagination :: pagination}"></div>
+
+        <!-- TOTAL AMOUNT FOUND component -->
+        <div th:replace="~{components/total-amount-found :: total-amount-found}"></div>
+
+    </div>
 </main>
 </body>
 </html>
