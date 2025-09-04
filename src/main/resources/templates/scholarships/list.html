@@ -128,7 +128,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+<!--                    <th>ID</th>-->
                     <th>
                         <a th:href="@{'/' + ${baseViewPath} +
                         '?page=' + ${entityList.number} +
@@ -242,13 +242,13 @@
                 <td colspan="2">Nenhuma bolsa encontrada</td>
             </tr>
             <tr th:each="scholarship : ${entityList}">
-                <td><a th:text="${scholarship.id}" th:href="@{/scholarships/{id}(id=${scholarship.id})}"></a></td>
+<!--                <td><a th:text="${scholarship.id}" th:href="@{/scholarships/{id}(id=${scholarship.id})}"></a></td>-->
                 <td >
                     <a th:href="@{/people/{id}(id=${scholarship.person.id})}"
                        th:text="${scholarship.person.name}"
                     ></a>
                 </td>
-                <td th:text="${scholarship.project.name}"></td>
+                <td><a th:text="${scholarship.project.name}" th:href="@{/projects/{id}(id=${scholarship.project.id})}"></a></td>
                 <td >
                     <a th:href="@{/people/{id}(id=${scholarship.project.advisor.id})}"
                        th:text="${scholarship.project.advisor.name}"

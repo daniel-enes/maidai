@@ -1,29 +1,22 @@
 package com.agir.maidai.controller;
 
 import com.agir.maidai.entity.*;
+import com.agir.maidai.repository.ScholarshipRepository;
 import com.agir.maidai.service.PersonService;
 import com.agir.maidai.service.ProjectService;
 import com.agir.maidai.service.ScholarshipService;
 import com.agir.maidai.service.ScholarshipTypeService;
 import com.agir.maidai.util.ModelAttributes;
-import com.agir.maidai.util.RedirectAttributesWrapper;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.web.bind.ServletRequestUtils.getIntParameter;
 
 @Controller
 @RequestMapping("/scholarships")
@@ -69,6 +62,31 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
                 .add("personList", scholarshipHolders)
                 .add("scholarshipTypeList", scholarshipTypeList)
                 .apply();
+    }
+
+    @GetMapping("/vigencia")
+    public String vigencia() {
+
+        //System.out.println("CHegou aqui INICIO");
+        List<Scholarship> scholarships = scholarshipService.findAll();
+
+        LocalDate currentDate = LocalDate.now();
+
+        scholarships.stream().filter(scholarship -> scholarship.getStatus() != null)
+                .forEach(scholarship -> {
+                    //System.out.println("CHegou aqui");
+                    String newStatus = scholarship.getEnd().isBefore(currentDate)
+                            ? "vigência expirada"
+                            : "vigente";
+//                    scholarship.setStatus(newStatus);
+//                    scholarshipService.update(scholarship);
+                    // Only update if status has changed
+                    if (!newStatus.equals(scholarship.getStatus())) {
+                        scholarship.setStatus(newStatus);
+                        scholarshipService.update(scholarship); // Use service instead of repository directly
+                    }
+                });
+        return "redirect:/scholarships";
     }
 
     @InitBinder

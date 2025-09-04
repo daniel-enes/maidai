@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{components/layout}">
+<head>
+    <title>Pessoa</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<main th:object="${scholarshiper}" class="light flex-grow-8 padding-20"  layout:fragment="content">
+
+<div class="profile-header">
+    <div class="avatar">
+        <i class="fas fa-user"></i>
+    </div>
+    <div class="user-info">
+        <h1 th:text="*{name}"></h1>
+        <p>Bolsista</p>
+    </div>
+</div>
+
+<div class="profile-content">
+    <!-- PERSONAL INFORMATIONS -->
+    <div class="card">
+        <h2><i class="fas fa-user-circle"></i> Informações pessoais </h2>
+        <div class="info-group">
+            <label>Nome completo</label>
+            <span th:text="*{name}"></span>
+        </div>
+        <div class="info-group">
+            <label>Telefone</label>
+            <span th:text="*{phone}"></span>
+        </div>
+        <div class="info-group">
+            <label>Email</label>
+            <span th:text="*{email}"></span>
+        </div>
+        <div class="info-group">
+            <label>CPF</label>
+            <span th:if="*{cpf == null}"><mark>CPF não registrado</mark></span>
+            <span th:text="*{cpf}"></span>
+        </div>
+    </div>
+
+    <!-- Project Information related to Scholarship -->
+    <div class="card">
+        <h2><i class="fas fa-briefcase"></i> Projetos </h2>
+        <div th:each="scholarship : ${scholarshiper.scholarships}" class="project-item">
+            <h3 th:text="${scholarship.project.name}"></h3>
+            <div class="info-group">
+                <label>Início</label>
+                <span th:text="${scholarship.project.start}"></span>
+            </div>
+            <div class="info-group">
+                <label>Fim</label>
+                <span th:text="${scholarship.project.end}"></span>
+            </div>
+            <div class="info-group">
+                <label>Ano do Edital</label>
+                <span th:text="${scholarship.project.yearNotice}"></span>
+                <span th:if="${scholarship.project.yearNotice == null}"><mark>Edital não registrado</mark></span>
+            </div>
+
+            <div class="card-subcontainer">
+                <div class="card-item">
+                    <h4>Orientador</h4>
+                    <div class="info-group">
+                        <label>Nome</label>
+                        <span th:text="${scholarship.project.advisor.name}"></span>
+                    </div>
+                    <div class="info-group">
+                        <label>Pós-graduação</label>
+                        <ul>
+                            <li th:each="postGraduation : ${scholarship.project.advisor.ppgList}">
+                                <span th:text="${postGraduation.name}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-item" th:each="coAdvisor : ${scholarship.project.coAdvisors}">
+                    <h4>Coorientador</h4>
+                    <div class="info-group">
+                        <label>Nome</label>
+                        <span th:text="${coAdvisor.name}"></span>
+                    </div>
+
+                    <div class="info-group">
+                        <label>Pós-graduação</label>
+                        <ul>
+                            <li th:each="postGraduation : ${coAdvisor.ppgList}">
+                                <span th:text="${postGraduation.name}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-group">
+                <h4><i class="fas fa-industry"></i> Empresa</h4>
+                <p>TechResearch Inc.</p>
+            </div>
+
+            <div class="info-group">
+                <h4><i class="fas fa-graduation-cap"></i> Bolsa</h4>
+                <div class="info-group">
+                    <label>Tipo</label>
+                    <span th:text="${scholarship.scholarshipType.type}"></span>
+                </div>
+                <div class="info-group">
+                    <label>Início</label>
+                    <span th:text="${scholarship.start}"></span>
+                </div>
+                <div class="info-group">
+                    <label>Fim</label>
+                    <span th:text="${scholarship.end}"></span>
+                </div>
+                <div class="info-group">
+                    <label>Status</label>
+                    <span th:if="${scholarship.status == 'Vigente'}" class="status active">Vigente</span>
+                    <span th:if="${scholarship.status == 'Cancelada'}" class="status inactive">Cancelada</span>
+                    <span th:if="${scholarship.status == 'Vigência expirada'}" class="status inactive">Vigência expirada</span>
+                    <span th:if="${scholarship.status == null}"><mark>Sem status declarado</mark></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</main>
+</body>
+</html>

@@ -1,6 +1,5 @@
 package com.agir.maidai.service;
 
-import com.agir.maidai.entity.Project;
 import com.agir.maidai.entity.Scholarship;
 import com.agir.maidai.repository.ScholarshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.thymeleaf.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @Service
@@ -21,6 +20,20 @@ public class ScholarshipServiceImpl extends AbstractCrudService<Scholarship, Int
     protected ScholarshipServiceImpl(ScholarshipRepository scholarshipRepository) {
         super(scholarshipRepository);
         this.scholarshipRepository = scholarshipRepository;
+    }
+
+    @Override
+    public void create(Scholarship entity) {
+
+        LocalDate currentDate = LocalDate.now();
+
+        if (entity.getEnd().isBefore(currentDate)) {
+            entity.setStatus("vigente");
+        } else {
+            entity.setStatus("vigência expirada");
+        }
+
+        super.create(entity);
     }
 
     @Override

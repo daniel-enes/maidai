@@ -20,6 +20,8 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
     private PersonService personService;
     private PersonTypeService personTypeService;
     private PPGService ppgService;
+    private String baseViewPath = "people";
+    private String entityName = "person";
 
     @Autowired
     public PeopleController(PersonService personService, PersonTypeService personTypeService, PPGService ppgService) {
@@ -41,13 +43,24 @@ public class PeopleController extends AbstractCrudController<Person, Integer>  i
 
             if("orientador".equals(personType.getType())) {
                 List<PPG> ppgList = ppgService.findAll();
-
+                this.entityName = "advisor";
                 new ModelAttributes(model)
                     .add("ppgList", ppgList)
                     .apply();
+            } else {
+                this.entityName = "scholarshiper";
             }
         }
-        return super.show(id, model);
+
+        new ModelAttributes(model)
+                .add(entityName, personService.find(id))
+                .apply();
+
+        if("scholarshiper".equals(entityName)) {
+            return this.baseViewPath + "/scholarshiperView";
+        }
+        return this.baseViewPath + "/advisorView";
+//        return super.show(id, model);
     }
 
     @Override
