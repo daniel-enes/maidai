@@ -31,16 +31,15 @@
         </div>
         <div class="info-group">
             <label>Telefone</label>
-            <span th:text="*{phone}"></span>
+            <span th:text="*{phone} ?: 'Nenhum número registrado'"></span>
         </div>
         <div class="info-group">
             <label>Email</label>
-            <span th:text="*{email}"></span>
+            <span th:text="*{email} ?: 'Nenhum e-mail registrado'"></span>
         </div>
         <div class="info-group">
             <label>CPF</label>
-            <span th:if="*{cpf == null}"><mark>CPF não registrado</mark></span>
-            <span th:text="*{cpf}"></span>
+            <span th:text="*{cpf} ?: 'Nenhum CPF registrado'"></span>
         </div>
     </div>
 
@@ -51,11 +50,11 @@
             <h3 th:text="${scholarship.project.name}"></h3>
             <div class="info-group">
                 <label>Início</label>
-                <span th:text="${scholarship.project.start}"></span>
+                <span th:text="*{scholarship.project.start} ?: 'Data não encontrada'"></span>
             </div>
             <div class="info-group">
                 <label>Fim</label>
-                <span th:text="${scholarship.project.end}"></span>
+                <span th:text="*{scholarship.project.end} ?: 'Data não encontrada'"></span>
             </div>
             <div class="info-group">
                 <label>Ano do Edital</label>
@@ -119,9 +118,9 @@
                 </div>
                 <div class="info-group">
                     <label>Status</label>
-                    <span th:if="${scholarship.status == 'Vigente'}" class="status active">Vigente</span>
-                    <span th:if="${scholarship.status == 'Cancelada'}" class="status inactive">Cancelada</span>
-                    <span th:if="${scholarship.status == 'Vigência expirada'}" class="status inactive">Vigência expirada</span>
+                    <span th:if="${scholarship.status == 'vigente'}" class="status active">Vigente</span>
+                    <span th:if="${scholarship.status == 'cancelada'}" class="status inactive">Cancelada</span>
+                    <span th:if="${scholarship.status == 'vigência expirada'}" class="status inactive">Vigência expirada</span>
                     <span th:if="${scholarship.status == null}"><mark>Sem status declarado</mark></span>
                 </div>
             </div>
