@@ -72,19 +72,19 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
 
         LocalDate currentDate = LocalDate.now();
 
-        scholarships.stream().filter(scholarship -> scholarship.getStatus() != null)
+        scholarships.stream().filter(scholarship -> scholarship.getStatus() == null)
                 .forEach(scholarship -> {
                     //System.out.println("CHegou aqui");
                     String newStatus = scholarship.getEnd().isBefore(currentDate)
                             ? "vigência expirada"
                             : "vigente";
-//                    scholarship.setStatus(newStatus);
-//                    scholarshipService.update(scholarship);
+                    scholarship.setStatus(newStatus);
+                    scholarshipService.update(scholarship);
                     // Only update if status has changed
-                    if (!newStatus.equals(scholarship.getStatus())) {
-                        scholarship.setStatus(newStatus);
-                        scholarshipService.update(scholarship); // Use service instead of repository directly
-                    }
+//                    if (!newStatus.equals(scholarship.getStatus())) {
+//                        scholarship.setStatus(newStatus);
+//                        scholarshipService.update(scholarship); // Use service instead of repository directly
+//                    }
                 });
         return "redirect:/scholarships";
     }
