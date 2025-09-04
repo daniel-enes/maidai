@@ -50,11 +50,11 @@
             <h3 th:text="${scholarship.project.name}"></h3>
             <div class="info-group">
                 <label>Início</label>
-                <span th:text="*{scholarship.project.start} ?: 'Data não encontrada'"></span>
+                <span th:text="${scholarship.project.start} ?: 'Data não encontrada'"></span>
             </div>
             <div class="info-group">
                 <label>Fim</label>
-                <span th:text="*{scholarship.project.end} ?: 'Data não encontrada'"></span>
+                <span th:text="${scholarship.project.end} ?: 'Data não encontrada'"></span>
             </div>
             <div class="info-group">
                 <label>Ano do Edital</label>
