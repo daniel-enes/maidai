@@ -64,30 +64,30 @@ public class ScholarshipsController extends AbstractCrudController<Scholarship, 
                 .apply();
     }
 
-    @GetMapping("/vigencia")
-    public String vigencia() {
-
-        //System.out.println("CHegou aqui INICIO");
-        List<Scholarship> scholarships = scholarshipService.findAll();
-
-        LocalDate currentDate = LocalDate.now();
-
-        scholarships.stream().filter(scholarship -> scholarship.getStatus() == null)
-                .forEach(scholarship -> {
-                    //System.out.println("CHegou aqui");
-                    String newStatus = scholarship.getEnd().isBefore(currentDate)
-                            ? "vigência expirada"
-                            : "vigente";
-                    scholarship.setStatus(newStatus);
-                    scholarshipService.update(scholarship);
-                    // Only update if status has changed
-//                    if (!newStatus.equals(scholarship.getStatus())) {
-//                        scholarship.setStatus(newStatus);
-//                        scholarshipService.update(scholarship); // Use service instead of repository directly
-//                    }
-                });
-        return "redirect:/scholarships";
-    }
+//    @GetMapping("/vigencia")
+//    public String vigencia() {
+//
+//        //System.out.println("CHegou aqui INICIO");
+//        List<Scholarship> scholarships = scholarshipService.findAll();
+//
+//        LocalDate currentDate = LocalDate.now();
+//
+//        scholarships.stream().filter(scholarship -> scholarship.getStatus() == null)
+//                .forEach(scholarship -> {
+//                    //System.out.println("CHegou aqui");
+//                    String newStatus = scholarship.getEnd().isBefore(currentDate)
+//                            ? "vigência expirada"
+//                            : "vigente";
+//                    scholarship.setStatus(newStatus);
+//                    scholarshipService.update(scholarship);
+//                    // Only update if status has changed
+////                    if (!newStatus.equals(scholarship.getStatus())) {
+////                        scholarship.setStatus(newStatus);
+////                        scholarshipService.update(scholarship); // Use service instead of repository directly
+////                    }
+//                });
+//        return "redirect:/scholarships";
+//    }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {}
